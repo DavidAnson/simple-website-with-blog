@@ -13,9 +13,13 @@
   },
   "bugs": "https://github.com/DavidAnson/simple-website-with-blog/issues",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
     "node": "8.x"
+  },
+  "dependencies": {
+    "express": "~4.16.3"
   }
 }
