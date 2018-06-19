@@ -1,7 +1,18 @@
 const compression = require("compression");
 const express = require("express");
+const helmet = require("helmet");
 
 const app = express();
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"]
+    }
+  },
+  hsts: {
+    maxAge: 60 * 60 * 24 * 7
+  }
+}));
 app.use(compression({
   level: 9,
   threshold: 0
