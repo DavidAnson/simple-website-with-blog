@@ -5,6 +5,10 @@ const express = require("express");
 const helmet = require("helmet");
 const app = express();
 
+// Configure app
+app.set("case sensitive routing", true);
+app.set("strict routing", true);
+
 // Fix protocol for HTTPS requests under iisnode
 app.set("trust proxy", true);
 app.use((req, res, next) => {
