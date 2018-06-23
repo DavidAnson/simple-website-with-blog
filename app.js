@@ -56,7 +56,14 @@ app.use(compression({
 }));
 
 // Handle static content
-app.use(express.static("static"));
+app.use(express.static("static", {
+  "index": [
+    "index.html",
+    "index.htm",
+    "default.html",
+    "default.htm"
+  ]
+}));
 
 // Handle HTTP 404/500
 // eslint-disable-next-line no-unused-vars
