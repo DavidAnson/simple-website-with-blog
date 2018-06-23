@@ -28,6 +28,17 @@ if (process.env.SWWB_REDIRECT_TO_HTTPS) {
   });
 }
 
+// Redirect to remove "www." prefix from host name
+app.use((req, res, next) => {
+  const originalHostUrl = `//${req.headers.host}${req.originalUrl}`;
+  const redirectHost = req.headers.host.replace(/^www\./i, "");
+  const redirectHostUrl = `//${redirectHost}${req.originalUrl}`;
+  if (redirectHostUrl === originalHostUrl) {
+    return next();
+  }
+  return res.redirect(redirectHostUrl);
+});
+
 // Add security headers and compression
 app.use(helmet({
   "contentSecurityPolicy": {
