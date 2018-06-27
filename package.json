@@ -14,7 +14,8 @@
   "bugs": "https://github.com/DavidAnson/simple-website-with-blog/issues",
   "scripts": {
     "lint": "eslint *.js",
-    "start": "node app.js",
+    "server": "node app.js",
+    "start": "nodemon npm server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
@@ -26,6 +27,7 @@
     "helmet": "~3.12.1"
   },
   "devDependencies": {
-    "eslint": "~4.19.1"
+    "eslint": "~4.19.1",
+    "nodemon": "~1.17.5"
   }
 }
