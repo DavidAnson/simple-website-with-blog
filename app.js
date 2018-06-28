@@ -3,6 +3,7 @@
 const compression = require("compression");
 const express = require("express");
 const helmet = require("helmet");
+const blog = require("./blog");
 const app = express();
 
 // Configure app
@@ -54,6 +55,9 @@ app.use(compression({
   "level": 9,
   "threshold": 0
 }));
+
+// Handle blog content
+app.use("/blog", blog);
 
 // Handle static content
 app.use(express.static("static", {
