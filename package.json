@@ -13,9 +13,10 @@
   },
   "bugs": "https://github.com/DavidAnson/simple-website-with-blog/issues",
   "scripts": {
-    "lint": "eslint *.js",
-    "server": "node app.js",
-    "start": "nodemon npm server",
+    "lint": "eslint *.js *.jsx",
+    "compile": "tsc --allowJs --jsx react --target ES2015 --outdir generated render.jsx",
+    "server": "npm run compile && node app.js",
+    "start": "nodemon --ext js,jsx --ignore generated --exec npm run server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
@@ -30,6 +31,7 @@
   },
   "devDependencies": {
     "eslint": "~4.19.1",
-    "nodemon": "~1.17.5"
+    "nodemon": "~1.17.5",
+    "typescript": "~2.9.2"
   }
 }
