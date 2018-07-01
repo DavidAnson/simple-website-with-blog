@@ -19,6 +19,7 @@
     "no-process-env": "off",
     "object-curly-newline": ["error", "always"],
     "one-var": ["error", "never"],
-    "padded-blocks": ["error", "never"]
+    "padded-blocks": ["error", "never"],
+    "sort-keys": "off"
   }
 }
