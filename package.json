@@ -16,7 +16,7 @@
     "lint": "eslint *.js *.jsx",
     "compile": "tsc --allowJs --jsx react --target ES2015 --outdir generated render.jsx",
     "server": "npm run compile && node app.js",
-    "start": "nodemon --ext js,jsx --ignore generated --exec npm run server",
+    "start": "nodemon --ext js,jsx,json --ignore generated --exec npm run server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
@@ -26,6 +26,7 @@
     "compression": "~1.7.2",
     "express": "~4.16.3",
     "helmet": "~3.12.1",
+    "pify": "~3.0.0",
     "react": "~16.4.1",
     "react-dom": "~16.4.1"
   },

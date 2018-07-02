@@ -2,7 +2,7 @@
 // eslint-disable-next-line no-unused-vars
 const React = require("react");
 module.exports = (props) => {
-    const posts = props.posts.map((post) => (React.createElement("section", { key: post.title },
+    const posts = props.posts.map((post) => (React.createElement("section", { key: post.id },
         React.createElement("hr", null),
         React.createElement("h2", null, post.title),
         React.createElement("time", { dateTime: post.date.toISOString() }, post.date.toDateString()),

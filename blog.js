@@ -1,27 +1,40 @@
 "use strict";
 
+const fs = require("fs");
+const path = require("path");
+const pify = require("pify");
 const express = require("express");
 const ReactDOMServer = require("react-dom/server");
 const render = require("./generated/render.js");
 const router = express.Router();
+const readdir = pify(fs.readdir);
+const readFile = pify(fs.readFile);
 
-const posts = [
-  {
-    "title": "Title 0",
-    "date": new Date(2018, 1, 1),
-    "content": "Content 0..."
-  },
-  {
-    "title": "Title 1",
-    "date": new Date(2018, 3, 9),
-    "content": "Content 1..."
-  },
-  {
-    "title": "Title 2",
-    "date": new Date(2018, 5, 25),
-    "content": "Content 2..."
-  }
-];
+const postsDir = "./posts";
+const postExtension = /\.json$/i;
+const posts = [];
+readdir(postsDir).
+  then((files) => Promise.all(files.
+    filter((file) => postExtension.test(file)).
+    map((file) => {
+      const id = file.replace(postExtension, "");
+      const filePath = path.join(postsDir, file);
+      return readFile(filePath, "utf8").
+        then((content) => {
+          const post = JSON.parse(content);
+          if (!post.title || !post.date || !post.content) {
+            throw new Error(`Post id "${id}" missing required field.`);
+          } else if (Object.keys(post).length !== 3) {
+            throw new Error(`Post id "${id}" has extra field.`);
+          }
+          post.id = id;
+          post.date = new Date(post.date);
+          posts.push(post);
+        });
+    }))).
+  then(() => {
+    posts.sort((left, right) => (left.date - right.date) || left.id.localeCompare(right.id));
+  });
 
 router.get("/", (req, res) => {
   const elements = render({

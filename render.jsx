@@ -5,7 +5,7 @@ const React = require("react");
 
 module.exports = (props) => {
   const posts = props.posts.map((post) => (
-    <section key={post.title}>
+    <section key={post.id}>
       <hr/>
       <h2>{post.title}</h2>
       <time dateTime={post.date.toISOString()}>{post.date.toDateString()}</time>
