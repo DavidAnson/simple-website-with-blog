@@ -1,10 +1,10 @@
 "use strict";
 
+const {port, redirectToHttps, siteRoot} = require("./config");
 const compression = require("compression");
 const express = require("express");
 const helmet = require("helmet");
 const blog = require("./blog");
-const {port, redirectToHttps} = require("./config");
 const app = express();
 
 // Configure app
@@ -61,7 +61,7 @@ app.use(compression({
 app.use("/blog", blog);
 
 // Handle static content
-app.use(express.static("static", {
+app.use(express.static(`${siteRoot}/static`, {
   "index": [
     "index.html",
     "index.htm",

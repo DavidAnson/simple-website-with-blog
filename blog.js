@@ -1,16 +1,17 @@
 "use strict";
 
+const {siteRoot} = require("./config");
 const fs = require("fs");
 const path = require("path");
 const pify = require("pify");
 const express = require("express");
 const ReactDOMServer = require("react-dom/server");
-const render = require("./generated/render.js");
+const render = require(`${siteRoot}/generated/render.js`);
 const router = express.Router();
 const readdir = pify(fs.readdir);
 const readFile = pify(fs.readFile);
 
-const postsDir = "./posts";
+const postsDir = `${siteRoot}/posts`;
 const postExtension = /\.json$/i;
 const posts = [];
 readdir(postsDir).

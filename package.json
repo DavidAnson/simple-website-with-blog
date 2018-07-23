@@ -14,9 +14,9 @@
   "bugs": "https://github.com/DavidAnson/simple-website-with-blog/issues",
   "scripts": {
     "lint": "eslint *.js *.jsx",
-    "compile": "tsc --allowJs --jsx react --target ES2015 --outdir generated render.jsx",
+    "compile": "tsc --allowJs --jsx react --target ES2015 --outdir sites/sample-text/generated sites/sample-text/render.jsx",
     "server": "npm run compile && node app.js",
-    "start": "nodemon --ext js,jsx,json --ignore generated --exec npm run server",
+    "start": "nodemon --ext js,jsx,json --ignore **/generated --exec npm run server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
