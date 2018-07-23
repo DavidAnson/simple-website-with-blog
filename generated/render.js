@@ -2,11 +2,14 @@
 // eslint-disable-next-line no-unused-vars
 const React = require("react");
 module.exports = (props) => {
-    const posts = props.posts.map((post) => (React.createElement("section", { key: post.id },
-        React.createElement("hr", null),
-        React.createElement("h2", null, post.title),
-        React.createElement("time", { dateTime: post.date.toISOString() }, post.date.toDateString()),
-        React.createElement("p", null, post.content))));
+    const posts = props.posts.map((post) => {
+        const content = post.contentJson.map((line, index) => React.createElement("p", { key: index }, line));
+        return (React.createElement("section", { key: post.id },
+            React.createElement("hr", null),
+            React.createElement("h2", null, post.title),
+            React.createElement("time", { dateTime: post.date.toISOString() }, post.date.toDateString()),
+            content));
+    });
     return (React.createElement("html", { lang: "en" },
         React.createElement("head", null,
             React.createElement("title", null, "simple-website-with-blog"),

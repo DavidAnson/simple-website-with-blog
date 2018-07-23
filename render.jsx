@@ -4,14 +4,19 @@
 const React = require("react");
 
 module.exports = (props) => {
-  const posts = props.posts.map((post) => (
-    <section key={post.id}>
-      <hr/>
-      <h2>{post.title}</h2>
-      <time dateTime={post.date.toISOString()}>{post.date.toDateString()}</time>
-      <p>{post.content}</p>
-    </section>
-  ));
+  const posts = props.posts.map((post) => {
+    const content = post.contentJson.map((line, index) =>
+      <p key={index}>{line}</p>
+    );
+    return (
+      <section key={post.id}>
+        <hr/>
+        <h2>{post.title}</h2>
+        <time dateTime={post.date.toISOString()}>{post.date.toDateString()}</time>
+        {content}
+      </section>
+    );
+  });
   return (
     <html lang="en">
       <head>

@@ -1,5 +1,7 @@
 {
   "title": "Title 1",
   "date": "2018-01-01T12:00Z",
-  "content": "Content 1..."
+  "contentJson": [
+    "Content 1"
+  ]
 }

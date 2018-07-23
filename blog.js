@@ -22,7 +22,7 @@ readdir(postsDir).
       return readFile(filePath, "utf8").
         then((content) => {
           const post = JSON.parse(content);
-          if (!post.title || !post.date || !post.content) {
+          if (!post.title || !post.date || !post.contentJson) {
             throw new Error(`Post id "${id}" missing required field.`);
           } else if (Object.keys(post).length !== 3) {
             throw new Error(`Post id "${id}" has extra field.`);
@@ -33,7 +33,7 @@ readdir(postsDir).
         });
     }))).
   then(() => {
-    posts.sort((left, right) => (left.date - right.date) || left.id.localeCompare(right.id));
+    posts.sort((left, right) => (right.date - left.date) || left.id.localeCompare(right.id));
   });
 
 router.get("/", (req, res) => {
