@@ -18,7 +18,12 @@
     "no-extra-parens": ["error", "functions"],
     "no-magic-numbers": "off",
     "no-process-env": "off",
-    "object-curly-newline": ["error", "always"],
+    "object-curly-newline": ["error", {
+      "ObjectExpression": "always",
+      "ObjectPattern": {"multiline": true},
+      "ImportDeclaration": "always",
+      "ExportDeclaration": "always"
+      }],
     "one-var": ["error", "never"],
     "padded-blocks": ["error", "never"],
     "sort-keys": "off"

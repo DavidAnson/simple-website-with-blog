@@ -5,9 +5,7 @@ const React = require("react");
 
 module.exports = (props) => {
   const posts = props.posts.map((post) => {
-    const content = post.contentJson.map((line, index) =>
-      <p key={index}>{line}</p>
-    );
+    const content = post.contentJson.map((line, index) => <p key={index}>{line}</p>);
     return (
       <section key={post.id}>
         <hr/>

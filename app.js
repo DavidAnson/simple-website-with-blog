@@ -4,6 +4,7 @@ const compression = require("compression");
 const express = require("express");
 const helmet = require("helmet");
 const blog = require("./blog");
+const {port, redirectToHttps} = require("./config");
 const app = express();
 
 // Configure app
@@ -20,7 +21,7 @@ app.use((req, res, next) => {
 });
 
 // Redirect HTTP traffic to HTTPS
-if (process.env.SWWB_REDIRECT_TO_HTTPS) {
+if (redirectToHttps) {
   app.use((req, res, next) => {
     if (req.secure) {
       return next();
@@ -82,7 +83,6 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-const port = process.env.PORT || 3000;
 app.listen(port, () => {
   // eslint-disable-next-line no-console
   console.log(`Example app listening on port ${port}!`);
