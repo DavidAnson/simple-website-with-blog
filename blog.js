@@ -23,14 +23,27 @@ readdir(postsDir).
       return readFile(filePath, "utf8").
         then((content) => {
           const post = JSON.parse(content);
-          if (!post.title || !post.date || !post.contentJson) {
-            throw new Error(`Post id "${id}" missing required field.`);
-          } else if (Object.keys(post).length !== 3) {
-            throw new Error(`Post id "${id}" has extra field.`);
+          if (!post.title || !post.date) {
+            throw new Error(`Post id "${id}" missing 'title' or 'date'.`);
           }
           post.id = id;
           post.date = new Date(post.date);
-          posts.push(post);
+          return post;
+        }).
+        then((post) => {
+          let promise = Promise.resolve();
+          if (!post.contentJson) {
+            const htmlFile = `${id}.html`;
+            if (!files.includes(htmlFile)) {
+              throw new Error(`Post id "${id}" missing 'contentJson'/${htmlFile}.`);
+            }
+            promise = readFile(path.join(postsDir, htmlFile), "utf8").
+              then((contentHtml) => {
+                post.contentHtml = contentHtml;
+              });
+          }
+          return promise.
+            then(() => posts.push(post));
         });
     }))).
   then(() => {

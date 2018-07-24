@@ -5,12 +5,14 @@ const React = require("react");
 
 module.exports = (props) => {
   const posts = props.posts.map((post) => {
-    const content = post.contentJson.map((line, index) => <p key={index}>{line}</p>);
+    const content = post.contentJson ?
+      <div>{post.contentJson.map((line, index) => <p key={index}>{line}</p>)}</div> :
+      <div dangerouslySetInnerHTML={{__html: post.contentHtml}}></div>;
     return (
       <section key={post.id}>
         <hr/>
         <h2>{post.title}</h2>
-        <time dateTime={post.date.toISOString()}>{post.date.toDateString()}</time>
+        <p><time dateTime={post.date.toISOString()}>{post.date.toDateString()}</time></p>
         {content}
       </section>
     );

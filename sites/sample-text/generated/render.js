@@ -3,11 +3,14 @@
 const React = require("react");
 module.exports = (props) => {
     const posts = props.posts.map((post) => {
-        const content = post.contentJson.map((line, index) => React.createElement("p", { key: index }, line));
+        const content = post.contentJson ?
+            React.createElement("div", null, post.contentJson.map((line, index) => React.createElement("p", { key: index }, line))) :
+            React.createElement("div", { dangerouslySetInnerHTML: { __html: post.contentHtml } });
         return (React.createElement("section", { key: post.id },
             React.createElement("hr", null),
             React.createElement("h2", null, post.title),
-            React.createElement("time", { dateTime: post.date.toISOString() }, post.date.toDateString()),
+            React.createElement("p", null,
+                React.createElement("time", { dateTime: post.date.toISOString() }, post.date.toDateString())),
             content));
     });
     return (React.createElement("html", { lang: "en" },
