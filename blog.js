@@ -4,13 +4,23 @@ const {siteRoot} = require("./config");
 const fs = require("fs");
 const path = require("path");
 const express = require("express");
-const markdownIt = require("markdown-it")();
+const highlightJs = require("highlight.js");
+const MarkdownIt = require("markdown-it");
 const pify = require("pify");
 const ReactDOMServer = require("react-dom/server");
 const render = require(`${siteRoot}/generated/render.js`);
 const router = express.Router();
 const readdir = pify(fs.readdir);
 const readFile = pify(fs.readFile);
+const markdownIt = new MarkdownIt({
+  "highlight": (str, lang) => {
+    if (lang && highlightJs.getLanguage(lang)) {
+      return highlightJs.highlight(lang, str).value;
+    }
+    return "";
+  }
+});
+
 
 const postsDir = `${siteRoot}/posts`;
 const postExtension = /\.json$/;

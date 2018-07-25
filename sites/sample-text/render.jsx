@@ -23,6 +23,7 @@ module.exports = (props) => {
         <title>simple-website-with-blog</title>
         <meta name="viewport" content="width=device-width"/>
         <meta name="description" content="The blog of a simple web site"/>
+        <link rel="stylesheet" href="/xcode.css"/>
       </head>
       <body>
         <h1><a href="/blog">The blog of simple-website-with-blog</a></h1>
