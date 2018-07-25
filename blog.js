@@ -3,8 +3,9 @@
 const {siteRoot} = require("./config");
 const fs = require("fs");
 const path = require("path");
-const pify = require("pify");
 const express = require("express");
+const markdownIt = require("markdown-it")();
+const pify = require("pify");
 const ReactDOMServer = require("react-dom/server");
 const render = require(`${siteRoot}/generated/render.js`);
 const router = express.Router();
@@ -12,7 +13,7 @@ const readdir = pify(fs.readdir);
 const readFile = pify(fs.readFile);
 
 const postsDir = `${siteRoot}/posts`;
-const postExtension = /\.json$/i;
+const postExtension = /\.json$/;
 const posts = [];
 readdir(postsDir).
   then((files) => Promise.all(files.
@@ -34,12 +35,15 @@ readdir(postsDir).
           let promise = Promise.resolve();
           if (!post.contentJson) {
             const htmlFile = `${id}.html`;
-            if (!files.includes(htmlFile)) {
-              throw new Error(`Post id "${id}" missing 'contentJson'/${htmlFile}.`);
+            const includesHtmlFile = files.includes(htmlFile);
+            const mdFile = `${id}.md`;
+            const includesMdFile = files.includes(mdFile);
+            if (!includesHtmlFile && !includesMdFile) {
+              throw new Error(`Post id "${id}" missing 'contentJson'/${htmlFile}/${mdFile}.`);
             }
-            promise = readFile(path.join(postsDir, htmlFile), "utf8").
-              then((contentHtml) => {
-                post.contentHtml = contentHtml;
+            promise = readFile(path.join(postsDir, includesHtmlFile ? htmlFile : mdFile), "utf8").
+              then((content) => {
+                post.contentHtml = includesHtmlFile ? content : markdownIt.render(content);
               });
           }
           return promise.

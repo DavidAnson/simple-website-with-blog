@@ -27,6 +27,7 @@
     "compression": "~1.7.2",
     "express": "~4.16.3",
     "helmet": "~3.12.1",
+    "markdown-it": "~8.4.2",
     "pify": "~3.0.0",
     "react": "~16.4.1",
     "react-dom": "~16.4.1"

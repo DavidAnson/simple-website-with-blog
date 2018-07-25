@@ -14,10 +14,12 @@
     "indent": ["error", 2],
     "linebreak-style": "off",
     "max-len": ["error", 100],
+    "multiline-ternary": ["error", "always-multiline"],
     "new-cap": ["error", {"capIsNew": false}],
     "no-extra-parens": ["error", "functions"],
     "no-magic-numbers": "off",
     "no-process-env": "off",
+    "no-ternary": "off",
     "object-curly-newline": ["error", {
       "ObjectExpression": "always",
       "ObjectPattern": {"multiline": true},
