@@ -24,7 +24,7 @@ const markdownIt = new MarkdownIt({
 
 const postsDir = `${siteRoot}/posts`;
 const postExtension = /\.json$/;
-const posts = [];
+const allPosts = [];
 readdir(postsDir).
   then((files) => Promise.all(files.
     filter((file) => postExtension.test(file)).
@@ -57,20 +57,30 @@ readdir(postsDir).
               });
           }
           return promise.
-            then(() => posts.push(post));
+            then(() => allPosts.push(post));
         });
     }))).
   then(() => {
-    posts.sort((left, right) => (right.date - left.date) || left.id.localeCompare(right.id));
+    allPosts.sort((left, right) => (right.date - left.date) || left.id.localeCompare(right.id));
   });
 
-router.get("/", (req, res) => {
+const renderPosts = (posts, res) => {
   const elements = render({
     posts
   });
   const staticMarkup = ReactDOMServer.renderToStaticMarkup(elements);
   const body = `<!DOCTYPE html>${staticMarkup}`;
   res.send(body);
+};
+
+router.get("/", (req, res) => renderPosts(allPosts, res));
+
+router.get("/post/:id", (req, res, next) => {
+  const posts = allPosts.filter((post) => post.id === req.params.id);
+  if (posts.length === 0) {
+    return next();
+  }
+  return renderPosts(posts, res);
 });
 
 module.exports = router;

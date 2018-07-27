@@ -11,7 +11,7 @@ module.exports = (props) => {
     return (
       <section key={post.id}>
         <hr/>
-        <h2>{post.title}</h2>
+        <h2><a href={`/blog/post/${post.id}`}>{post.title}</a></h2>
         <p><time dateTime={post.date.toISOString()}>{post.date.toDateString()}</time></p>
         {content}
       </section>

@@ -8,7 +8,8 @@ module.exports = (props) => {
             React.createElement("div", { dangerouslySetInnerHTML: { __html: post.contentHtml } });
         return (React.createElement("section", { key: post.id },
             React.createElement("hr", null),
-            React.createElement("h2", null, post.title),
+            React.createElement("h2", null,
+                React.createElement("a", { href: `/blog/post/${post.id}` }, post.title)),
             React.createElement("p", null,
                 React.createElement("time", { dateTime: post.date.toISOString() }, post.date.toDateString())),
             content));
