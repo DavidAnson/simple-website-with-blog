@@ -14,11 +14,11 @@
   "bugs": "https://github.com/DavidAnson/simple-website-with-blog/issues",
   "scripts": {
     "lint": "eslint *.js *.jsx",
-    "compile": "tsc --allowJs --jsx react --target ES2015 --outdir sites/sample-text/generated sites/sample-text/render.jsx && tsc --allowJs --jsx react --target ES2015 --outdir sites/sample-photo/generated sites/sample-photo/render.jsx",
+    "compile": "tsc --allowJs --jsx react --target ES2015 sites/sample-text/render.jsx sites/sample-photo/render.jsx",
     "server": "npm run compile && node app.js",
     "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "nodemon --ext js,jsx,json,html,md --ignore **/generated --exec npm run server"
+    "watch": "nodemon --ext js,jsx,json,html,md --ignore **/render.js --exec npm run server"
   },
   "engines": {
     "node": "8.x"
