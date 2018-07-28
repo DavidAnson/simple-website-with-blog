@@ -3,9 +3,13 @@
 const React = require("react");
 module.exports = (props) => {
     const posts = props.posts.map((post) => {
-        const content = post.contentJson.map((photo, index) => (React.createElement("div", { key: index },
-            React.createElement("img", { src: `/photos/${photo.image}`, title: photo.caption }),
-            React.createElement("p", null, photo.caption))));
+        const content = post.contentJson.map((photo, index) => {
+            const src = `/photos/${photo.image}`;
+            const srcSet = photo.image2x ? `/photos/${photo.image2x} 2x` : null;
+            return (React.createElement("div", { key: index },
+                React.createElement("img", { src: src, srcSet: srcSet, alt: photo.caption }),
+                React.createElement("p", null, photo.caption)));
+        });
         return (React.createElement("section", { key: post.id },
             React.createElement("hr", null),
             React.createElement("h2", null,

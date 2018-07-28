@@ -4,6 +4,7 @@
   "contentJson": [
     {
       "image": "portrait.jpg",
+      "image2x": "portrait-2x.jpg",
       "caption": "A photograph in portrait orientation"
     }
   ]

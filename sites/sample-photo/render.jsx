@@ -5,12 +5,16 @@ const React = require("react");
 
 module.exports = (props) => {
   const posts = props.posts.map((post) => {
-    const content = post.contentJson.map((photo, index) => (
-      <div key={index}>
-        <img src={`/photos/${photo.image}`} title={photo.caption}/>
-        <p>{photo.caption}</p>
-      </div>
-    ));
+    const content = post.contentJson.map((photo, index) => {
+      const src = `/photos/${photo.image}`;
+      const srcSet = photo.image2x ? `/photos/${photo.image2x} 2x` : null;
+      return (
+        <div key={index}>
+          <img src={src} srcSet={srcSet} alt={photo.caption}/>
+          <p>{photo.caption}</p>
+        </div>
+      );
+    });
     return (
       <section key={post.id}>
         <hr/>
