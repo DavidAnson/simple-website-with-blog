@@ -1,0 +1,10 @@
+{
+  "title": "Portrait Photo",
+  "date": "2018-01-01T12:00Z",
+  "contentJson": [
+    {
+      "image": "portrait.jpg",
+      "caption": "A photograph in portrait orientation"
+    }
+  ]
+}

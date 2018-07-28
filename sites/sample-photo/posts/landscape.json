@@ -1,0 +1,10 @@
+{
+  "title": "Landscape Photo",
+  "date": "2018-02-02T12:00Z",
+  "contentJson": [
+    {
+      "image": "landscape.jpg",
+      "caption": "A photograph in landscape orientation"
+    }
+  ]
+}
