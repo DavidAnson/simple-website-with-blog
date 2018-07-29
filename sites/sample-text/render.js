@@ -1,17 +1,24 @@
 "use strict";
 // eslint-disable-next-line no-unused-vars
 const React = require("react");
+const dateFormatOptions = {
+    "weekday": "long",
+    "year": "numeric",
+    "month": "long",
+    "day": "numeric"
+};
+const dateTimeFormat = new Intl.DateTimeFormat("en-US", dateFormatOptions);
 module.exports = (props) => {
     const posts = props.posts.map((post) => {
-        const content = post.contentJson ?
-            React.createElement("div", null, post.contentJson.map((line, index) => React.createElement("p", { key: index }, line))) :
-            React.createElement("div", { dangerouslySetInnerHTML: { __html: post.contentHtml } });
+        const content = post.contentJson
+            ? React.createElement("div", null, post.contentJson.map((line, index) => React.createElement("p", { key: index }, line)))
+            : React.createElement("div", { dangerouslySetInnerHTML: { "__html": post.contentHtml } });
         return (React.createElement("section", { key: post.id },
             React.createElement("hr", null),
             React.createElement("h2", null,
                 React.createElement("a", { href: `/blog/post/${post.id}` }, post.title)),
             React.createElement("p", null,
-                React.createElement("time", { dateTime: post.date.toISOString() }, post.date.toDateString())),
+                React.createElement("time", { dateTime: post.date.toISOString() }, dateTimeFormat.format(post.date))),
             content));
     });
     return (React.createElement("html", { lang: "en" },

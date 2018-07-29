@@ -21,8 +21,8 @@
     "no-process-env": "off",
     "no-ternary": "off",
     "object-curly-newline": ["error", {
-      "ObjectExpression": "always",
-      "ObjectPattern": {"multiline": true},
+      "ObjectExpression": {"consistent": true},
+      "ObjectPattern": {"consistent": true},
       "ImportDeclaration": "always",
       "ExportDeclaration": "always"
       }],

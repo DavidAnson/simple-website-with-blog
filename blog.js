@@ -40,6 +40,9 @@ router["postsLoaded"] = readdir(postsDir).
           }
           post.id = id;
           post.date = new Date(post.date);
+          if (post.contentDate) {
+            post.contentDate = new Date(post.contentDate);
+          }
           return post;
         }).
         then((post) => {

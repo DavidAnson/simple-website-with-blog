@@ -13,7 +13,7 @@
   },
   "bugs": "https://github.com/DavidAnson/simple-website-with-blog/issues",
   "scripts": {
-    "lint": "eslint *.js *.jsx",
+    "lint": "eslint *.js *.jsx sites/**/*.jsx",
     "compile": "tsc --allowJs --jsx react --target ES2015 sites/sample-text/render.jsx sites/sample-photo/render.jsx",
     "server": "npm run compile && node app.js",
     "start": "node app.js",

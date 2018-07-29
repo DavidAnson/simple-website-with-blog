@@ -3,6 +3,20 @@
 // eslint-disable-next-line no-unused-vars
 const React = require("react");
 
+const dateFormatOptionsWeekday = {
+  "weekday": "long",
+  "year": "numeric",
+  "month": "long",
+  "day": "numeric"
+};
+const dateFormatOptionsNoWeekday = {
+  "year": "numeric",
+  "month": "long",
+  "day": "numeric"
+};
+const dateTimeFormatWeekday = new Intl.DateTimeFormat("en-US", dateFormatOptionsWeekday);
+const dateTimeFormatNoWeekday = new Intl.DateTimeFormat("en-US", dateFormatOptionsNoWeekday);
+
 module.exports = (props) => {
   const posts = props.posts.map((post) => {
     const content = post.contentJson.map((photo, index) => {
@@ -15,12 +29,14 @@ module.exports = (props) => {
         </div>
       );
     });
+    const contentDate = dateTimeFormatNoWeekday.format(post.contentDate);
+    const date = dateTimeFormatWeekday.format(post.date);
     return (
       <section key={post.id}>
         <hr/>
-        <h2><a href={`/blog/post/${post.id}`}>{post.title}</a></h2>
-        <p><time dateTime={post.date.toISOString()}>{post.date.toDateString()}</time></p>
+        <h2><a href={`/blog/post/${post.id}`}>{contentDate} - {post.title}</a></h2>
         {content}
+        <p>Posted <time dateTime={post.date.toISOString()}>{date}</time></p>
       </section>
     );
   });
