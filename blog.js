@@ -21,11 +21,12 @@ const markdownIt = new MarkdownIt({
   }
 });
 
-
 const postsDir = `${siteRoot}/posts`;
 const postExtension = /\.json$/;
 const allPosts = [];
-readdir(postsDir).
+
+// eslint-disable-next-line dot-notation
+router["postsLoaded"] = readdir(postsDir).
   then((files) => Promise.all(files.
     filter((file) => postExtension.test(file)).
     map((file) => {

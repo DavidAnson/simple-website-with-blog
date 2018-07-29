@@ -82,8 +82,12 @@ app.use((err, req, res, next) => {
   res.sendStatus(500);
 });
 
-// Start server
-app.listen(port, () => {
-  // eslint-disable-next-line no-console
-  console.log(`simple-website-with-blog listening on port ${port}!`);
-});
+// eslint-disable-next-line dot-notation
+blog["postsLoaded"].
+  then(() => {
+    // Start server
+    app.listen(port, () => {
+      // eslint-disable-next-line no-console
+      console.log(`simple-website-with-blog listening on port ${port}!`);
+    });
+  });
