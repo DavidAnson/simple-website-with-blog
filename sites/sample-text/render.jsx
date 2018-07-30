@@ -16,11 +16,14 @@ module.exports = (props) => {
     const content = post.contentJson
       ? <div>{post.contentJson.map((line, index) => <p key={index}>{line}</p>)}</div>
       : <div dangerouslySetInnerHTML={{"__html": post.contentHtml}}></div>;
+    const date = (post.date.getTime() > 0)
+      ? <p><time dateTime={post.date.toISOString()}>{dateTimeFormat.format(post.date)}</time></p>
+      : null;
     return (
       <section key={post.id}>
         <hr/>
         <h2><a href={`/blog/post/${post.id}`}>{post.title}</a></h2>
-        <p><time dateTime={post.date.toISOString()}>{dateTimeFormat.format(post.date)}</time></p>
+        {date}
         {content}
       </section>
     );
@@ -35,6 +38,7 @@ module.exports = (props) => {
       </head>
       <body>
         <h1><a href="/blog">The blog of simple-website-with-blog</a></h1>
+        <p><a href="/blog/post/about">About this blog</a></p>
         {posts}
       </body>
     </html>

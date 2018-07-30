@@ -13,12 +13,15 @@ module.exports = (props) => {
         const content = post.contentJson
             ? React.createElement("div", null, post.contentJson.map((line, index) => React.createElement("p", { key: index }, line)))
             : React.createElement("div", { dangerouslySetInnerHTML: { "__html": post.contentHtml } });
+        const date = (post.date.getTime() > 0)
+            ? React.createElement("p", null,
+                React.createElement("time", { dateTime: post.date.toISOString() }, dateTimeFormat.format(post.date)))
+            : null;
         return (React.createElement("section", { key: post.id },
             React.createElement("hr", null),
             React.createElement("h2", null,
                 React.createElement("a", { href: `/blog/post/${post.id}` }, post.title)),
-            React.createElement("p", null,
-                React.createElement("time", { dateTime: post.date.toISOString() }, dateTimeFormat.format(post.date))),
+            date,
             content));
     });
     return (React.createElement("html", { lang: "en" },
@@ -30,5 +33,7 @@ module.exports = (props) => {
         React.createElement("body", null,
             React.createElement("h1", null,
                 React.createElement("a", { href: "/blog" }, "The blog of simple-website-with-blog")),
+            React.createElement("p", null,
+                React.createElement("a", { href: "/blog/post/about" }, "About this blog")),
             posts)));
 };

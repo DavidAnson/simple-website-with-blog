@@ -35,14 +35,9 @@ router["postsLoaded"] = readdir(postsDir).
       return readFile(filePath, "utf8").
         then((content) => {
           const post = JSON.parse(content);
-          if (!post.title || !post.date) {
-            throw new Error(`Post id "${id}" missing 'title' or 'date'.`);
-          }
           post.id = id;
-          post.date = new Date(post.date);
-          if (post.contentDate) {
-            post.contentDate = new Date(post.contentDate);
-          }
+          post.date = new Date(post.date || 0);
+          post.contentDate = new Date(post.contentDate || 0);
           return post;
         }).
         then((post) => {
@@ -77,7 +72,10 @@ const renderPosts = (posts, res) => {
   res.send(body);
 };
 
-router.get("/", (req, res) => renderPosts(allPosts, res));
+router.get("/", (req, res) => {
+  const posts = allPosts.filter((post) => post.date.getTime() > 0);
+  return renderPosts(posts, res);
+});
 
 router.get("/post/:id", (req, res, next) => {
   const posts = allPosts.filter((post) => post.id === req.params.id);
