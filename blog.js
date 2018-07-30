@@ -73,7 +73,11 @@ const renderPosts = (posts, res) => {
 };
 
 router.get("/", (req, res) => {
-  const posts = allPosts.filter((post) => post.date.getTime() > 0);
+  const now = Date.now();
+  const posts = allPosts.filter((post) => {
+    const postDate = post.date.getTime();
+    return (postDate > 0) && (postDate <= now);
+  });
   return renderPosts(posts, res);
 });
 
