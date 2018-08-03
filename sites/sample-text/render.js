@@ -1,41 +1,19 @@
 "use strict";
 const React = require("react");
-const dateFormatOptionsWeekday = {
-    "weekday": "long",
-    "year": "numeric",
-    "month": "long",
-    "day": "numeric"
-};
-const dateFormatOptionsMonth = {
-    "year": "numeric",
-    "month": "long"
-};
-const dateTimeFormatWeekday = new Intl.DateTimeFormat("en-US", dateFormatOptionsWeekday);
-const dateTimeFormatMonth = new Intl.DateTimeFormat("en-US", dateFormatOptionsMonth);
+const shared = require("../" + "shared.js");
 module.exports = (props) => {
-    const archives = props.archives.map((period) => {
-        const year = period.
-            getFullYear().
-            toString().
-            padStart(4, "0");
-        const month = (period.getMonth() + 1).
-            toString().
-            padStart(2, "0");
-        const archiveLink = `${year}${month}`;
-        return (React.createElement("li", { key: archiveLink },
-            React.createElement("a", { href: `/blog/archive/${archiveLink}` }, dateTimeFormatMonth.format(period))));
-    });
+    const archives = shared.getArchiveList(props.archives);
     const heading = props.period
         ? React.createElement("h2", null,
             "Posts from ",
-            dateTimeFormatMonth.format(props.period))
+            shared.dateTimeFormatMonth.format(props.period))
         : null;
     const posts = props.posts.map((post) => {
         const content = post.contentJson
             ? React.createElement("div", null, post.contentJson.map((line, index) => React.createElement("p", { key: index }, line)))
             : React.createElement("div", { dangerouslySetInnerHTML: { "__html": post.contentHtml } });
         const postDateIso = post.date.toISOString();
-        const postDateFormat = dateTimeFormatWeekday.format(post.date);
+        const postDateFormat = shared.dateTimeFormatWeekday.format(post.date);
         const date = (post.date.getTime() > 0)
             ? React.createElement("p", null,
                 React.createElement("time", { dateTime: postDateIso }, postDateFormat))

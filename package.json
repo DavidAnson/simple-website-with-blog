@@ -13,12 +13,12 @@
   },
   "bugs": "https://github.com/DavidAnson/simple-website-with-blog/issues",
   "scripts": {
-    "lint": "eslint *.js *.jsx sites/**/*.jsx",
-    "compile": "tsc --allowJs --jsx react --target ES2015 --removeComments sites/sample-text/render.jsx sites/sample-photo/render.jsx",
+    "lint": "eslint *.js **/*.jsx",
+    "compile": "tsc --allowJs --jsx react --target ES2015 --removeComments sites/shared.jsx sites/sample-text/render.jsx sites/sample-photo/render.jsx",
     "server": "npm run compile && node app.js",
     "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "nodemon --ext js,jsx,json,html,md --ignore **/render.js --exec npm run server"
+    "watch": "nodemon --ext js,jsx,json,html,md --ignore sites/shared.js --ignore **/render.js --exec npm run server"
   },
   "engines": {
     "node": "8.x"

@@ -1,40 +1,12 @@
 "use strict";
 const React = require("react");
-const dateFormatOptionsWeekday = {
-    "weekday": "long",
-    "year": "numeric",
-    "month": "long",
-    "day": "numeric"
-};
-const dateFormatOptionsDay = {
-    "year": "numeric",
-    "month": "long",
-    "day": "numeric"
-};
-const dateFormatOptionsMonth = {
-    "year": "numeric",
-    "month": "long"
-};
-const dateTimeFormatWeekday = new Intl.DateTimeFormat("en-US", dateFormatOptionsWeekday);
-const dateTimeFormatDay = new Intl.DateTimeFormat("en-US", dateFormatOptionsDay);
-const dateTimeFormatMonth = new Intl.DateTimeFormat("en-US", dateFormatOptionsMonth);
+const shared = require("../" + "shared.js");
 module.exports = (props) => {
-    const archives = props.archives.map((period) => {
-        const year = period.
-            getFullYear().
-            toString().
-            padStart(4, "0");
-        const month = (period.getMonth() + 1).
-            toString().
-            padStart(2, "0");
-        const archiveLink = `${year}${month}`;
-        return (React.createElement("li", { key: archiveLink },
-            React.createElement("a", { href: `/blog/archive/${archiveLink}` }, dateTimeFormatMonth.format(period))));
-    });
+    const archives = shared.getArchiveList(props.archives);
     const heading = props.period
         ? React.createElement("h2", null,
             "Posts from ",
-            dateTimeFormatMonth.format(props.period))
+            shared.dateTimeFormatMonth.format(props.period))
         : null;
     const posts = props.posts.map((post) => {
         const content = post.contentJson.map((photo, index) => {
@@ -44,8 +16,8 @@ module.exports = (props) => {
                 React.createElement("img", { src: src, srcSet: srcSet, alt: photo.caption }),
                 React.createElement("p", null, photo.caption)));
         });
-        const contentDate = dateTimeFormatDay.format(post.contentDate);
-        const date = dateTimeFormatWeekday.format(post.date);
+        const contentDate = shared.dateTimeFormatDay.format(post.contentDate);
+        const date = shared.dateTimeFormatWeekday.format(post.date);
         return (React.createElement("section", { key: post.id },
             React.createElement("hr", null),
             React.createElement("h2", null,

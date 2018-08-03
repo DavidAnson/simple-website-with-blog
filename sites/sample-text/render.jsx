@@ -2,45 +2,20 @@
 
 // eslint-disable-next-line no-unused-vars
 const React = require("react");
-
-const dateFormatOptionsWeekday = {
-  "weekday": "long",
-  "year": "numeric",
-  "month": "long",
-  "day": "numeric"
-};
-const dateFormatOptionsMonth = {
-  "year": "numeric",
-  "month": "long"
-};
-const dateTimeFormatWeekday = new Intl.DateTimeFormat("en-US", dateFormatOptionsWeekday);
-const dateTimeFormatMonth = new Intl.DateTimeFormat("en-US", dateFormatOptionsMonth);
+// eslint-disable-next-line no-useless-concat
+const shared = require("../" + "shared.js");
 
 module.exports = (props) => {
-  const archives = props.archives.map((period) => {
-    const year = period.
-      getFullYear().
-      toString().
-      padStart(4, "0");
-    const month = (period.getMonth() + 1).
-      toString().
-      padStart(2, "0");
-    const archiveLink = `${year}${month}`;
-    return (
-      <li key={archiveLink}>
-        <a href={`/blog/archive/${archiveLink}`}>{dateTimeFormatMonth.format(period)}</a>
-      </li>
-    );
-  });
+  const archives = shared.getArchiveList(props.archives);
   const heading = props.period
-    ? <h2>Posts from {dateTimeFormatMonth.format(props.period)}</h2>
+    ? <h2>Posts from {shared.dateTimeFormatMonth.format(props.period)}</h2>
     : null;
   const posts = props.posts.map((post) => {
     const content = post.contentJson
       ? <div>{post.contentJson.map((line, index) => <p key={index}>{line}</p>)}</div>
       : <div dangerouslySetInnerHTML={{"__html": post.contentHtml}}></div>;
     const postDateIso = post.date.toISOString();
-    const postDateFormat = dateTimeFormatWeekday.format(post.date);
+    const postDateFormat = shared.dateTimeFormatWeekday.format(post.date);
     const date = (post.date.getTime() > 0)
       ? <p><time dateTime={postDateIso}>{postDateFormat}</time></p>
       : null;

@@ -2,44 +2,13 @@
 
 // eslint-disable-next-line no-unused-vars
 const React = require("react");
-
-const dateFormatOptionsWeekday = {
-  "weekday": "long",
-  "year": "numeric",
-  "month": "long",
-  "day": "numeric"
-};
-const dateFormatOptionsDay = {
-  "year": "numeric",
-  "month": "long",
-  "day": "numeric"
-};
-const dateFormatOptionsMonth = {
-  "year": "numeric",
-  "month": "long"
-};
-const dateTimeFormatWeekday = new Intl.DateTimeFormat("en-US", dateFormatOptionsWeekday);
-const dateTimeFormatDay = new Intl.DateTimeFormat("en-US", dateFormatOptionsDay);
-const dateTimeFormatMonth = new Intl.DateTimeFormat("en-US", dateFormatOptionsMonth);
+// eslint-disable-next-line no-useless-concat
+const shared = require("../" + "shared.js");
 
 module.exports = (props) => {
-  const archives = props.archives.map((period) => {
-    const year = period.
-      getFullYear().
-      toString().
-      padStart(4, "0");
-    const month = (period.getMonth() + 1).
-      toString().
-      padStart(2, "0");
-    const archiveLink = `${year}${month}`;
-    return (
-      <li key={archiveLink}>
-        <a href={`/blog/archive/${archiveLink}`}>{dateTimeFormatMonth.format(period)}</a>
-      </li>
-    );
-  });
+  const archives = shared.getArchiveList(props.archives);
   const heading = props.period
-    ? <h2>Posts from {dateTimeFormatMonth.format(props.period)}</h2>
+    ? <h2>Posts from {shared.dateTimeFormatMonth.format(props.period)}</h2>
     : null;
   const posts = props.posts.map((post) => {
     const content = post.contentJson.map((photo, index) => {
@@ -52,8 +21,8 @@ module.exports = (props) => {
         </div>
       );
     });
-    const contentDate = dateTimeFormatDay.format(post.contentDate);
-    const date = dateTimeFormatWeekday.format(post.date);
+    const contentDate = shared.dateTimeFormatDay.format(post.contentDate);
+    const date = shared.dateTimeFormatWeekday.format(post.date);
     return (
       <section key={post.id}>
         <hr/>
