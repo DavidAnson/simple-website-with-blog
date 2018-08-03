@@ -9,15 +9,38 @@ const dateFormatOptionsWeekday = {
   "month": "long",
   "day": "numeric"
 };
-const dateFormatOptionsNoWeekday = {
+const dateFormatOptionsDay = {
   "year": "numeric",
   "month": "long",
   "day": "numeric"
 };
+const dateFormatOptionsMonth = {
+  "year": "numeric",
+  "month": "long"
+};
 const dateTimeFormatWeekday = new Intl.DateTimeFormat("en-US", dateFormatOptionsWeekday);
-const dateTimeFormatNoWeekday = new Intl.DateTimeFormat("en-US", dateFormatOptionsNoWeekday);
+const dateTimeFormatDay = new Intl.DateTimeFormat("en-US", dateFormatOptionsDay);
+const dateTimeFormatMonth = new Intl.DateTimeFormat("en-US", dateFormatOptionsMonth);
 
 module.exports = (props) => {
+  const archives = props.archives.map((period) => {
+    const year = period.
+      getFullYear().
+      toString().
+      padStart(4, "0");
+    const month = (period.getMonth() + 1).
+      toString().
+      padStart(2, "0");
+    const archiveLink = `${year}${month}`;
+    return (
+      <li key={archiveLink}>
+        <a href={`/blog/archive/${archiveLink}`}>{dateTimeFormatMonth.format(period)}</a>
+      </li>
+    );
+  });
+  const heading = props.period
+    ? <h2>Posts from {dateTimeFormatMonth.format(props.period)}</h2>
+    : null;
   const posts = props.posts.map((post) => {
     const content = post.contentJson.map((photo, index) => {
       const src = `/photos/${photo.image}`;
@@ -29,7 +52,7 @@ module.exports = (props) => {
         </div>
       );
     });
-    const contentDate = dateTimeFormatNoWeekday.format(post.contentDate);
+    const contentDate = dateTimeFormatDay.format(post.contentDate);
     const date = dateTimeFormatWeekday.format(post.date);
     return (
       <section key={post.id}>
@@ -49,6 +72,8 @@ module.exports = (props) => {
       </head>
       <body>
         <h1><a href="/blog">The photo blog of simple-website-with-blog</a></h1>
+        <ul>{archives}</ul>
+        {heading}
         {posts}
       </body>
     </html>

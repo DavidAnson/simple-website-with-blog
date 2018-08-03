@@ -24,6 +24,15 @@ const markdownIt = new MarkdownIt({
 const postsDir = `${siteRoot}/posts`;
 const postExtension = /\.json$/;
 const allPosts = [];
+const archives = [];
+
+const getVisiblePostFilter = () => {
+  const now = Date.now();
+  return (post) => {
+    const postDate = post.date.getTime();
+    return (postDate > 0) && (postDate <= now);
+  };
+};
 
 // eslint-disable-next-line dot-notation
 router["postsLoaded"] = readdir(postsDir).
@@ -61,11 +70,23 @@ router["postsLoaded"] = readdir(postsDir).
     }))).
   then(() => {
     allPosts.sort((left, right) => (right.date - left.date) || left.id.localeCompare(right.id));
+    let lastPeriod = null;
+    allPosts.
+      filter(getVisiblePostFilter()).
+      forEach((post) => {
+        const postPeriod = new Date(post.date.getFullYear(), post.date.getMonth());
+        if (postPeriod !== lastPeriod) {
+          archives.push(postPeriod);
+          lastPeriod = postPeriod;
+        }
+      });
   });
 
-const renderPosts = (posts, res) => {
+const renderPosts = (posts, res, period) => {
   const elements = render({
-    posts
+    posts,
+    archives,
+    period
   });
   const staticMarkup = ReactDOMServer.renderToStaticMarkup(elements);
   const body = `<!DOCTYPE html>${staticMarkup}`;
@@ -73,11 +94,7 @@ const renderPosts = (posts, res) => {
 };
 
 router.get("/", (req, res) => {
-  const now = Date.now();
-  const posts = allPosts.filter((post) => {
-    const postDate = post.date.getTime();
-    return (postDate > 0) && (postDate <= now);
-  });
+  const posts = allPosts.filter(getVisiblePostFilter());
   return renderPosts(posts, res);
 });
 
@@ -87,6 +104,18 @@ router.get("/post/:id", (req, res, next) => {
     return next();
   }
   return renderPosts(posts, res);
+});
+
+router.get("/archive/:period(\\d{6})", (req, res, next) => {
+  const year = parseInt(req.params.period.slice(0, 4), 10);
+  const month = parseInt(req.params.period.slice(4, 6), 10) - 1;
+  const posts = allPosts.
+    filter(getVisiblePostFilter()).
+    filter((post) => (post.date.getFullYear() === year) && (post.date.getMonth() === month));
+  if (posts.length === 0) {
+    return next();
+  }
+  return renderPosts(posts, res, new Date(year, month));
 });
 
 module.exports = router;
