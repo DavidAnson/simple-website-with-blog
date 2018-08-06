@@ -1,6 +1,6 @@
 "use strict";
 
-const {siteRoot} = require("./config");
+const {redirectToHttps, siteRoot} = require("./config");
 const fs = require("fs");
 const path = require("path");
 const express = require("express");
@@ -8,6 +8,7 @@ const highlightJs = require("highlight.js");
 const MarkdownIt = require("markdown-it");
 const pify = require("pify");
 const ReactDOMServer = require("react-dom/server");
+const RSS = require("rss");
 const render = require(`${siteRoot}/render.js`);
 const router = express.Router();
 const readdir = pify(fs.readdir);
@@ -51,7 +52,11 @@ router["postsLoaded"] = readdir(postsDir).
         }).
         then((post) => {
           let promise = Promise.resolve();
-          if (!post.contentJson) {
+          if (post.contentJson) {
+            const contentElements = render.getContentElements(post);
+            post.contentHtml = ReactDOMServer.renderToStaticMarkup(contentElements);
+            delete post.contentJson;
+          } else {
             const htmlFile = `${id}.html`;
             const includesHtmlFile = files.includes(htmlFile);
             const mdFile = `${id}.md`;
@@ -83,7 +88,7 @@ router["postsLoaded"] = readdir(postsDir).
   });
 
 const renderPosts = (posts, res, period) => {
-  const elements = render({
+  const elements = render.getHtmlElements({
     posts,
     archives,
     period
@@ -116,6 +121,37 @@ router.get("/archive/:period(\\d{6})", (req, res, next) => {
     return next();
   }
   return renderPosts(posts, res, new Date(year, month));
+});
+
+router.get("/rss", (req, res, next) => {
+  const posts = allPosts.
+    filter(getVisiblePostFilter()).
+    filter((post, index) => index < 20);
+  if (posts.length === 0) {
+    return next();
+  }
+  const siteUrl = `${redirectToHttps ? "https" : "http"}://${req.headers.host}`;
+  const {title, description, author, copyright} = render.getRssMetadata();
+  const feed = new RSS({
+    title,
+    description,
+    "feed_url": `${siteUrl}/blog/rss`,
+    "site_url": siteUrl,
+    copyright,
+    "pubDate": posts[0].date,
+    "ttl": 60
+  });
+  posts.forEach((post) => {
+    feed.item({
+      "title": render.getTitle(post),
+      "url": `${siteUrl}/blog/post/${post.id}`,
+      "description": post.contentHtml,
+      "date": post.date,
+      author
+    });
+  });
+  res.setHeader("Content-Type", "application/rss+xml");
+  return res.send(feed.xml());
 });
 
 module.exports = router;

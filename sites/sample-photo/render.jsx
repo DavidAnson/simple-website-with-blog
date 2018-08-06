@@ -5,29 +5,38 @@ const React = require("react");
 // eslint-disable-next-line no-useless-concat
 const shared = require("../" + "shared.js");
 
-module.exports = (props) => {
+const getTitle = (post) => {
+  const contentDate = shared.dateTimeFormatDay.format(post.contentDate);
+  return `${contentDate} - ${post.title}`;
+};
+module.exports.getTitle = getTitle;
+
+module.exports.getContentElements = (post) => {
+  const content = post.contentJson.map((photo, index) => {
+    const src = `/photos/${photo.image}`;
+    const srcSet = photo.image2x ? `/photos/${photo.image2x} 2x` : null;
+    return (
+      <div key={index}>
+        <img src={src} srcSet={srcSet} alt={photo.caption}/>
+        <p>{photo.caption}</p>
+      </div>
+    );
+  });
+  return <div>{content}</div>;
+};
+
+module.exports.getHtmlElements = (props) => {
   const archives = shared.getArchiveList(props.archives);
   const heading = props.period
     ? <h2>Posts from {shared.dateTimeFormatMonth.format(props.period)}</h2>
     : null;
   const posts = props.posts.map((post) => {
-    const content = post.contentJson.map((photo, index) => {
-      const src = `/photos/${photo.image}`;
-      const srcSet = photo.image2x ? `/photos/${photo.image2x} 2x` : null;
-      return (
-        <div key={index}>
-          <img src={src} srcSet={srcSet} alt={photo.caption}/>
-          <p>{photo.caption}</p>
-        </div>
-      );
-    });
-    const contentDate = shared.dateTimeFormatDay.format(post.contentDate);
     const date = shared.dateTimeFormatWeekday.format(post.date);
     return (
       <section key={post.id}>
         <hr/>
-        <h2><a href={`/blog/post/${post.id}`}>{contentDate} - {post.title}</a></h2>
-        {content}
+        <h2><a href={`/blog/post/${post.id}`}>{getTitle(post)}</a></h2>
+        <div dangerouslySetInnerHTML={{"__html": post.contentHtml}}></div>
         <p>Posted <time dateTime={post.date.toISOString()}>{date}</time></p>
       </section>
     );
@@ -38,6 +47,8 @@ module.exports = (props) => {
         <title>simple-website-with-blog/sample-photo</title>
         <meta name="viewport" content="width=device-width"/>
         <meta name="description" content="The photo blog of a simple web site"/>
+        <link rel="alternate" type="application/rss+xml" href="/blog/rss"
+          title="simple-website-with-blog/sample-photo"/>
       </head>
       <body>
         <h1><a href="/blog">The photo blog of simple-website-with-blog</a></h1>
@@ -47,4 +58,14 @@ module.exports = (props) => {
       </body>
     </html>
   );
+};
+
+module.exports.getRssMetadata = () => {
+  const author = "David Anson";
+  return {
+    "title": "simple-website-with-blog/sample-photo",
+    "description": "The photo blog of a simple web site",
+    author,
+    "copyright": `Copyright \u00a9 2004-${new Date().getFullYear()} by ${author}`
+  };
 };
