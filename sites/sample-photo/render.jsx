@@ -33,13 +33,13 @@ module.exports.getHtmlElements = (props) => {
     ? `Posts from ${shared.dateTimeFormatMonth.format(props.period)}`
     : null;
   const posts = props.posts.map((post) => {
-    const date = shared.dateTimeFormatWeekday.format(post.date);
+    const publishDate = shared.dateTimeFormatWeekday.format(post.publishDate);
     return (
       <section key={post.id}>
         <hr/>
         <h2><a href={`/blog/post/${post.id}`}>{getTitle(post)}</a></h2>
         <div dangerouslySetInnerHTML={{"__html": post.contentHtml}}></div>
-        <p>Posted <time dateTime={post.date.toISOString()}>{date}</time></p>
+        <p>Posted <time dateTime={post.publishDate.toISOString()}>{publishDate}</time></p>
       </section>
     );
   });

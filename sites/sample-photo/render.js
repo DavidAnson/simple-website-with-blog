@@ -23,7 +23,7 @@ module.exports.getHtmlElements = (props) => {
         ? `Posts from ${shared.dateTimeFormatMonth.format(props.period)}`
         : null;
     const posts = props.posts.map((post) => {
-        const date = shared.dateTimeFormatWeekday.format(post.date);
+        const publishDate = shared.dateTimeFormatWeekday.format(post.publishDate);
         return (React.createElement("section", { key: post.id },
             React.createElement("hr", null),
             React.createElement("h2", null,
@@ -31,7 +31,7 @@ module.exports.getHtmlElements = (props) => {
             React.createElement("div", { dangerouslySetInnerHTML: { "__html": post.contentHtml } }),
             React.createElement("p", null,
                 "Posted ",
-                React.createElement("time", { dateTime: post.date.toISOString() }, date))));
+                React.createElement("time", { dateTime: post.publishDate.toISOString() }, publishDate))));
     });
     const titlePrefix = heading || props.title;
     const title = (titlePrefix ? `${titlePrefix} - ` : "") + blogName;
