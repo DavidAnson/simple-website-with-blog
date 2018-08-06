@@ -74,15 +74,15 @@ router["postsLoaded"] = readdir(postsDir).
         });
     }))).
   then(() => {
-    allPosts.sort((left, right) => (right.date - left.date) || left.id.localeCompare(right.id));
-    let lastPeriod = null;
+    allPosts.sort((left, right) => (right.date - left.date) || right.id.localeCompare(left.id));
+    let lastPeriodValue = 0;
     allPosts.
       filter(getVisiblePostFilter()).
       forEach((post) => {
         const postPeriod = new Date(post.date.getFullYear(), post.date.getMonth());
-        if (postPeriod !== lastPeriod) {
+        if (postPeriod.valueOf() !== lastPeriodValue) {
           archives.push(postPeriod);
-          lastPeriod = postPeriod;
+          lastPeriodValue = postPeriod.valueOf();
         }
       });
   });
