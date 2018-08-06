@@ -5,6 +5,8 @@ const React = require("react");
 // eslint-disable-next-line no-useless-concat
 const shared = require("../" + "shared.js");
 
+const blogName = "simple-website-with-blog/sample-text";
+
 const getTitle = (post) => post.title;
 module.exports.getTitle = getTitle;
 
@@ -16,7 +18,7 @@ module.exports.getContentElements = (post) => {
 module.exports.getHtmlElements = (props) => {
   const archives = shared.getArchiveList(props.archives);
   const heading = props.period
-    ? <h2>Posts from {shared.dateTimeFormatMonth.format(props.period)}</h2>
+    ? `Posts from ${shared.dateTimeFormatMonth.format(props.period)}`
     : null;
   const posts = props.posts.map((post) => {
     const postDateIso = post.date.toISOString();
@@ -33,21 +35,23 @@ module.exports.getHtmlElements = (props) => {
       </section>
     );
   });
+  const titlePrefix = heading || props.title;
+  const title = (titlePrefix ? `${titlePrefix} - ` : "") + blogName;
   return (
     <html lang="en">
       <head>
-        <title>simple-website-with-blog/sample-text</title>
+        <title>{title}</title>
         <meta name="viewport" content="width=device-width"/>
         <meta name="description" content="The blog of a simple web site"/>
         <link rel="alternate" type="application/rss+xml" href="/blog/rss"
-          title="simple-website-with-blog/sample-text"/>
+          title={blogName}/>
         <link rel="stylesheet" href="/xcode.css"/>
       </head>
       <body>
         <h1><a href="/blog">The blog of simple-website-with-blog</a></h1>
         <ul>{archives}</ul>
         <p><a href="/blog/post/about">About this blog</a></p>
-        {heading}
+        {props.period ? <h2>{heading}</h2> : null}
         {posts}
       </body>
     </html>
@@ -57,7 +61,7 @@ module.exports.getHtmlElements = (props) => {
 module.exports.getRssMetadata = () => {
   const author = "David Anson";
   return {
-    "title": "simple-website-with-blog/sample-text",
+    "title": blogName,
     "description": "The blog of a simple web site",
     author,
     "copyright": `Copyright \u00a9 2006-${new Date().getFullYear()} by ${author}`

@@ -87,10 +87,11 @@ router["postsLoaded"] = readdir(postsDir).
       });
   });
 
-const renderPosts = (posts, res, period) => {
+const renderPosts = (posts, res, title, period) => {
   const elements = render.getHtmlElements({
     posts,
     archives,
+    title,
     period
   });
   const staticMarkup = ReactDOMServer.renderToStaticMarkup(elements);
@@ -108,7 +109,7 @@ router.get("/post/:id", (req, res, next) => {
   if (posts.length === 0) {
     return next();
   }
-  return renderPosts(posts, res);
+  return renderPosts(posts, res, render.getTitle(posts[0]));
 });
 
 router.get("/archive/:period(\\d{6})", (req, res, next) => {
@@ -120,7 +121,7 @@ router.get("/archive/:period(\\d{6})", (req, res, next) => {
   if (posts.length === 0) {
     return next();
   }
-  return renderPosts(posts, res, new Date(year, month));
+  return renderPosts(posts, res, null, new Date(year, month));
 });
 
 router.get("/rss", (req, res, next) => {

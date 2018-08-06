@@ -1,6 +1,7 @@
 "use strict";
 const React = require("react");
 const shared = require("../" + "shared.js");
+const blogName = "simple-website-with-blog/sample-text";
 const getTitle = (post) => post.title;
 module.exports.getTitle = getTitle;
 module.exports.getContentElements = (post) => {
@@ -10,9 +11,7 @@ module.exports.getContentElements = (post) => {
 module.exports.getHtmlElements = (props) => {
     const archives = shared.getArchiveList(props.archives);
     const heading = props.period
-        ? React.createElement("h2", null,
-            "Posts from ",
-            shared.dateTimeFormatMonth.format(props.period))
+        ? `Posts from ${shared.dateTimeFormatMonth.format(props.period)}`
         : null;
     const posts = props.posts.map((post) => {
         const postDateIso = post.date.toISOString();
@@ -28,12 +27,14 @@ module.exports.getHtmlElements = (props) => {
             date,
             React.createElement("div", { dangerouslySetInnerHTML: { "__html": post.contentHtml } })));
     });
+    const titlePrefix = heading || props.title;
+    const title = (titlePrefix ? `${titlePrefix} - ` : "") + blogName;
     return (React.createElement("html", { lang: "en" },
         React.createElement("head", null,
-            React.createElement("title", null, "simple-website-with-blog/sample-text"),
+            React.createElement("title", null, title),
             React.createElement("meta", { name: "viewport", content: "width=device-width" }),
             React.createElement("meta", { name: "description", content: "The blog of a simple web site" }),
-            React.createElement("link", { rel: "alternate", type: "application/rss+xml", href: "/blog/rss", title: "simple-website-with-blog/sample-text" }),
+            React.createElement("link", { rel: "alternate", type: "application/rss+xml", href: "/blog/rss", title: blogName }),
             React.createElement("link", { rel: "stylesheet", href: "/xcode.css" })),
         React.createElement("body", null,
             React.createElement("h1", null,
@@ -41,13 +42,13 @@ module.exports.getHtmlElements = (props) => {
             React.createElement("ul", null, archives),
             React.createElement("p", null,
                 React.createElement("a", { href: "/blog/post/about" }, "About this blog")),
-            heading,
+            props.period ? React.createElement("h2", null, heading) : null,
             posts)));
 };
 module.exports.getRssMetadata = () => {
     const author = "David Anson";
     return {
-        "title": "simple-website-with-blog/sample-text",
+        "title": blogName,
         "description": "The blog of a simple web site",
         author,
         "copyright": `Copyright \u00a9 2006-${new Date().getFullYear()} by ${author}`
