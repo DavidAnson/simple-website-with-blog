@@ -45,6 +45,8 @@ module.exports.getHtmlElements = (props) => {
   });
   const titlePrefix = heading || props.title;
   const title = (titlePrefix ? `${titlePrefix} - ` : "") + blogName;
+  const prevLink = props.prevLink ? <a href={props.prevLink}>Newer Posts</a> : null;
+  const nextLink = props.nextLink ? <a href={props.nextLink}>Older Posts</a> : null;
   return (
     <html lang="en">
       <head>
@@ -59,6 +61,7 @@ module.exports.getHtmlElements = (props) => {
         <ul>{archives}</ul>
         {props.period ? <h2>{heading}</h2> : null}
         {posts}
+        <div>{nextLink} {prevLink}</div>
       </body>
     </html>
   );

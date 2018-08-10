@@ -3,6 +3,7 @@
 const {redirectToHttps, siteRoot} = require("./config");
 const fs = require("fs");
 const path = require("path");
+const {URL} = require("url");
 const express = require("express");
 const highlightJs = require("highlight.js");
 const MarkdownIt = require("markdown-it");
@@ -28,7 +29,7 @@ const allPostsByCompareDate = [];
 const allPostsByPublishDate = [];
 const archives = [];
 
-const getVisiblePostFilter = () => {
+const getPublishedPostFilter = () => {
   const now = Date.now();
   return (post) => {
     const publishDate = post.publishDate.getTime();
@@ -83,7 +84,7 @@ router["postsLoaded"] = readdir(postsDir).
       right.id.localeCompare(left.id));
     let lastPeriodValue = 0;
     allPostsByCompareDate.
-      filter(getVisiblePostFilter()).
+      filter(getPublishedPostFilter()).
       forEach((post) => {
         const postPeriod = new Date(post.compareDate.getFullYear(), post.compareDate.getMonth());
         if (postPeriod.valueOf() !== lastPeriodValue) {
@@ -93,12 +94,44 @@ router["postsLoaded"] = readdir(postsDir).
       });
   });
 
-const renderPosts = (posts, res, title, period) => {
+const renderPosts = (req, res, posts, title, period) => {
+  const url = new URL(req.originalUrl, "https://example.org/");
+  const pageParam = "page";
+  const page = url.searchParams.get(pageParam);
+  let currIndex = 0;
+  if (page) {
+    posts.every((post, index) => {
+      if (post.id === page) {
+        currIndex = index;
+        return false;
+      }
+      return true;
+    });
+  }
+  const pageSize = 10;
+  const prevIndex = currIndex - pageSize;
+  const nextIndex = currIndex + pageSize;
+  let prevLink = null;
+  if (currIndex > 0) {
+    if (prevIndex > 0) {
+      url.searchParams.set(pageParam, posts[prevIndex].id);
+    } else {
+      url.searchParams.delete(pageParam);
+    }
+    prevLink = `${url.pathname}${url.search}`;
+  }
+  let nextLink = null;
+  if (nextIndex < posts.length) {
+    url.searchParams.set(pageParam, posts[nextIndex].id);
+    nextLink = `${url.pathname}${url.search}`;
+  }
   const elements = render.getHtmlElements({
-    posts,
+    "posts": posts.slice(currIndex, nextIndex),
     archives,
     title,
-    period
+    period,
+    prevLink,
+    nextLink
   });
   const staticMarkup = ReactDOMServer.renderToStaticMarkup(elements);
   const body = `<!DOCTYPE html>${staticMarkup}`;
@@ -106,8 +139,8 @@ const renderPosts = (posts, res, title, period) => {
 };
 
 router.get("/", (req, res) => {
-  const posts = allPostsByCompareDate.filter(getVisiblePostFilter());
-  return renderPosts(posts, res);
+  const posts = allPostsByCompareDate.filter(getPublishedPostFilter());
+  return renderPosts(req, res, posts);
 });
 
 router.get("/post/:id", (req, res, next) => {
@@ -115,25 +148,25 @@ router.get("/post/:id", (req, res, next) => {
   if (posts.length === 0) {
     return next();
   }
-  return renderPosts(posts, res, render.getTitle(posts[0]));
+  return renderPosts(req, res, posts, render.getTitle(posts[0]));
 });
 
 router.get("/archive/:period(\\d{6})", (req, res, next) => {
   const year = parseInt(req.params.period.slice(0, 4), 10);
   const month = parseInt(req.params.period.slice(4, 6), 10) - 1;
   const posts = allPostsByCompareDate.
-    filter(getVisiblePostFilter()).
+    filter(getPublishedPostFilter()).
     filter((post) => (post.compareDate.getFullYear() === year) &&
       (post.compareDate.getMonth() === month));
   if (posts.length === 0) {
     return next();
   }
-  return renderPosts(posts, res, null, new Date(year, month));
+  return renderPosts(req, res, posts, null, new Date(year, month));
 });
 
 router.get("/rss", (req, res, next) => {
   const posts = allPostsByPublishDate.
-    filter(getVisiblePostFilter()).
+    filter(getPublishedPostFilter()).
     filter((post, index) => index < 20);
   if (posts.length === 0) {
     return next();

@@ -35,6 +35,8 @@ module.exports.getHtmlElements = (props) => {
     });
     const titlePrefix = heading || props.title;
     const title = (titlePrefix ? `${titlePrefix} - ` : "") + blogName;
+    const prevLink = props.prevLink ? React.createElement("a", { href: props.prevLink }, "Newer Posts") : null;
+    const nextLink = props.nextLink ? React.createElement("a", { href: props.nextLink }, "Older Posts") : null;
     return (React.createElement("html", { lang: "en" },
         React.createElement("head", null,
             React.createElement("title", null, title),
@@ -46,7 +48,11 @@ module.exports.getHtmlElements = (props) => {
                 React.createElement("a", { href: "/blog" }, "The photo blog of simple-website-with-blog")),
             React.createElement("ul", null, archives),
             props.period ? React.createElement("h2", null, heading) : null,
-            posts)));
+            posts,
+            React.createElement("div", null,
+                nextLink,
+                " ",
+                prevLink))));
 };
 module.exports.getRssMetadata = () => {
     const author = "David Anson";
