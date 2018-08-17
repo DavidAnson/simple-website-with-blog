@@ -14,7 +14,7 @@
     "indent": ["error", 2],
     "linebreak-style": "off",
     "max-len": ["error", 100],
-    "max-params": ["error", 5],
+    "max-params": ["error", 6],
     "max-statements": ["error", 25],
     "multiline-ternary": ["error", "always-multiline"],
     "new-cap": ["error", {"capIsNew": false}],

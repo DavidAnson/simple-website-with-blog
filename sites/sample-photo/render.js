@@ -19,9 +19,13 @@ module.exports.getContentElements = (post) => {
 };
 module.exports.getHtmlElements = (props) => {
     const archives = shared.getArchiveList(props.archives);
-    const heading = props.period
-        ? `Posts from ${shared.dateTimeFormatMonth.format(props.period)}`
-        : null;
+    let headingText = null;
+    if (props.period) {
+        headingText = `Posts from ${shared.dateTimeFormatMonth.format(props.period)}`;
+    }
+    else if (props.query) {
+        headingText = `Search: ${props.query}`;
+    }
     const posts = props.posts.map((post) => {
         const publishDate = shared.dateTimeFormatWeekday.format(post.publishDate);
         return (React.createElement("section", { key: post.id },
@@ -33,8 +37,12 @@ module.exports.getHtmlElements = (props) => {
                 "Posted ",
                 React.createElement("time", { dateTime: post.publishDate.toISOString() }, publishDate))));
     });
-    const titlePrefix = heading || props.title;
-    const title = (titlePrefix ? `${titlePrefix} - ` : "") + blogName;
+    const title = [
+        props.title || headingText,
+        blogName
+    ].
+        filter((part) => Boolean(part)).
+        join(" - ");
     const prevLink = props.prevLink ? React.createElement("a", { href: props.prevLink }, "Newer Posts") : null;
     const nextLink = props.nextLink ? React.createElement("a", { href: props.nextLink }, "Older Posts") : null;
     return (React.createElement("html", { lang: "en" },
@@ -47,7 +55,9 @@ module.exports.getHtmlElements = (props) => {
             React.createElement("h1", null,
                 React.createElement("a", { href: "/blog" }, "The photo blog of simple-website-with-blog")),
             React.createElement("ul", null, archives),
-            props.period ? React.createElement("h2", null, heading) : null,
+            React.createElement("form", { action: "/blog/search" },
+                React.createElement("input", { type: "text", name: "query", placeholder: "Search", accessKey: "s" })),
+            headingText ? React.createElement("h2", null, headingText) : null,
             posts,
             React.createElement("div", null,
                 nextLink,

@@ -29,9 +29,12 @@ module.exports.getContentElements = (post) => {
 
 module.exports.getHtmlElements = (props) => {
   const archives = shared.getArchiveList(props.archives);
-  const heading = props.period
-    ? `Posts from ${shared.dateTimeFormatMonth.format(props.period)}`
-    : null;
+  let headingText = null;
+  if (props.period) {
+    headingText = `Posts from ${shared.dateTimeFormatMonth.format(props.period)}`;
+  } else if (props.query) {
+    headingText = `Search: ${props.query}`;
+  }
   const posts = props.posts.map((post) => {
     const publishDate = shared.dateTimeFormatWeekday.format(post.publishDate);
     return (
@@ -43,8 +46,12 @@ module.exports.getHtmlElements = (props) => {
       </section>
     );
   });
-  const titlePrefix = heading || props.title;
-  const title = (titlePrefix ? `${titlePrefix} - ` : "") + blogName;
+  const title = [
+    props.title || headingText,
+    blogName
+  ].
+    filter((part) => Boolean(part)).
+    join(" - ");
   const prevLink = props.prevLink ? <a href={props.prevLink}>Newer Posts</a> : null;
   const nextLink = props.nextLink ? <a href={props.nextLink}>Older Posts</a> : null;
   return (
@@ -53,13 +60,15 @@ module.exports.getHtmlElements = (props) => {
         <title>{title}</title>
         <meta name="viewport" content="width=device-width"/>
         <meta name="description" content="The photo blog of a simple web site"/>
-        <link rel="alternate" type="application/rss+xml" href="/blog/rss"
-          title={blogName}/>
+        <link rel="alternate" type="application/rss+xml" href="/blog/rss" title={blogName}/>
       </head>
       <body>
         <h1><a href="/blog">The photo blog of simple-website-with-blog</a></h1>
         <ul>{archives}</ul>
-        {props.period ? <h2>{heading}</h2> : null}
+        <form action="/blog/search">
+          <input type="text" name="query" placeholder="Search" accessKey="s"/>
+        </form>
+        {headingText ? <h2>{headingText}</h2> : null}
         {posts}
         <div>{nextLink} {prevLink}</div>
       </body>

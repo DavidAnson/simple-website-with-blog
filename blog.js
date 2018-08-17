@@ -94,7 +94,7 @@ router["postsLoaded"] = readdir(postsDir).
       });
   });
 
-const renderPosts = (req, res, posts, title, period) => {
+const renderPosts = (req, res, posts, title, period, query) => {
   const url = new URL(req.originalUrl, "https://example.org/");
   const pageParam = "page";
   const page = url.searchParams.get(pageParam);
@@ -130,6 +130,7 @@ const renderPosts = (req, res, posts, title, period) => {
     archives,
     title,
     period,
+    query,
     prevLink,
     nextLink
   });
@@ -162,6 +163,17 @@ router.get("/archive/:period(\\d{6})", (req, res, next) => {
     return next();
   }
   return renderPosts(req, res, posts, null, new Date(year, month));
+});
+
+router.get("/search", (req, res, next) => {
+  const {query} = req.query;
+  if (!query) {
+    return next();
+  }
+  const posts = allPostsByCompareDate.
+    filter(getPublishedPostFilter()).
+    filter((post) => post.title.includes(query) || post.contentHtml.includes(query));
+  return renderPosts(req, res, posts, null, null, query);
 });
 
 router.get("/rss", (req, res, next) => {
