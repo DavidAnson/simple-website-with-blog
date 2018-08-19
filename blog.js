@@ -29,8 +29,10 @@ const postExtension = /\.json$/;
 const postsSortedByCompareDate = [];
 const postsSortedByPublishDate = [];
 const postsIndexedById = {};
-const archives = [];
+const archivePeriods = [];
 let searchIndex = null;
+const commonHtmlStopWords =
+  "alt br div h1 h2 h3 h4 h5 h6 href img li ol pre src srcset ul".split(" ");
 
 const getPublishedPostFilter = () => {
   const now = Date.now();
@@ -95,17 +97,20 @@ router["postsLoaded"] = readdir(postsDir).
       forEach((post) => {
         const postPeriod = new Date(post.compareDate.getFullYear(), post.compareDate.getMonth());
         if (postPeriod.valueOf() !== lastPeriodValue) {
-          archives.push(postPeriod);
+          archivePeriods.push(postPeriod);
           lastPeriodValue = postPeriod.valueOf();
         }
       });
   }).
   then(() => {
     searchIndex = lunr(function Config () {
+      this.pipeline.after(lunr.stopWordFilter, lunr.generateStopWordFilter(commonHtmlStopWords));
       this.field("title");
       this.field("contentSearch");
       postsSortedByCompareDate.forEach((post) => {
+        post.contentSearch = post.contentSearch.replace(/[\W_]+/g, " ");
         this.add(post);
+        delete post.contentSearch;
       });
     });
   });
@@ -143,7 +148,7 @@ const renderPosts = (req, res, posts, title, period, query) => {
   }
   const elements = render.getHtmlElements({
     "posts": posts.slice(currIndex, nextIndex),
-    archives,
+    "archives": archivePeriods,
     title,
     period,
     query,
