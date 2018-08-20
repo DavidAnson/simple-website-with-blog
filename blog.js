@@ -42,6 +42,11 @@ const getPublishedPostFilter = () => {
   };
 };
 
+const getArchivePeriodsFilter = () => {
+  const now = Date.now();
+  return (period) => (period > 0) && (period <= now);
+};
+
 // eslint-disable-next-line dot-notation
 router["postsLoaded"] = readdir(postsDir).
   then((files) => Promise.all(files.
@@ -148,7 +153,7 @@ const renderPosts = (req, res, posts, title, period, query) => {
   }
   const elements = render.getHtmlElements({
     "posts": posts.slice(currIndex, nextIndex),
-    "archives": archivePeriods,
+    "archives": archivePeriods.filter(getArchivePeriodsFilter()),
     title,
     period,
     query,
