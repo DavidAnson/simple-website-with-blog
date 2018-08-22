@@ -67,7 +67,7 @@ router["postsLoaded"] = readdir(postsDir).
           let promise = Promise.resolve();
           if (post.contentJson) {
             post.contentSearch = JSON.stringify(post.contentJson);
-            const contentElements = render.getContentElements(post);
+            const contentElements = render.getContentJsonElements(post.contentJson);
             post.contentHtml = ReactDOMServer.renderToStaticMarkup(contentElements);
             delete post.contentJson;
           } else {
@@ -109,7 +109,9 @@ router["postsLoaded"] = readdir(postsDir).
   }).
   then(() => {
     searchIndex = lunr(function Config () {
-      this.pipeline.after(lunr.stopWordFilter, lunr.generateStopWordFilter(commonHtmlStopWords));
+      const commonHtmlStopWordFilter = lunr.generateStopWordFilter(commonHtmlStopWords);
+      lunr.Pipeline.registerFunction(commonHtmlStopWordFilter, "commonHtmlStopWords");
+      this.pipeline.after(lunr.stopWordFilter, commonHtmlStopWordFilter);
       this.field("title");
       this.field("contentSearch");
       postsSortedByCompareDate.forEach((post) => {
@@ -175,7 +177,7 @@ router.get("/post/:id", (req, res, next) => {
   if (posts.length === 0) {
     return next();
   }
-  return renderPosts(req, res, posts, render.getTitle(posts[0]));
+  return renderPosts(req, res, posts, render.getPostTitle(posts[0]));
 });
 
 router.get("/archive/:period(\\d{6})", (req, res, next) => {
@@ -223,7 +225,7 @@ router.get("/rss", (req, res, next) => {
   });
   posts.forEach((post) => {
     feed.item({
-      "title": render.getTitle(post),
+      "title": render.getPostTitle(post),
       "url": `${siteUrl}/blog/post/${post.id}`,
       "description": post.contentHtml,
       "date": post.publishDate,
