@@ -59,9 +59,11 @@ module.exports.getTitleHeading = (props, strings) => {
 };
 
 module.exports.getPrevNextLinks = (props) => {
-  const prevLink = props.prevLink ? <a href={props.prevLink}>Newer Posts</a> : null;
-  const nextLink = props.nextLink ? <a href={props.nextLink}>Older Posts</a> : null;
-  return <div>{nextLink} {prevLink}</div>;
+  const nextLink = props.nextLink ? <a href={props.nextLink}>{"\u00ab"} Older Posts</a> : null;
+  const prevLink = props.prevLink ? <a href={props.prevLink}>Newer Posts {"\u00bb"}</a> : null;
+  return (nextLink || prevLink)
+    ? <div>{nextLink} {nextLink && prevLink ? "-" : ""} {prevLink}</div>
+    : null;
 };
 
 module.exports.getRssMetadata = (strings) => {

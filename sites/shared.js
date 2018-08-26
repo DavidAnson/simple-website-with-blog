@@ -51,12 +51,20 @@ module.exports.getTitleHeading = (props, strings) => {
     };
 };
 module.exports.getPrevNextLinks = (props) => {
-    const prevLink = props.prevLink ? React.createElement("a", { href: props.prevLink }, "Newer Posts") : null;
-    const nextLink = props.nextLink ? React.createElement("a", { href: props.nextLink }, "Older Posts") : null;
-    return React.createElement("div", null,
-        nextLink,
-        " ",
-        prevLink);
+    const nextLink = props.nextLink ? React.createElement("a", { href: props.nextLink },
+        "\u00ab",
+        " Older Posts") : null;
+    const prevLink = props.prevLink ? React.createElement("a", { href: props.prevLink },
+        "Newer Posts ",
+        "\u00bb") : null;
+    return (nextLink || prevLink)
+        ? React.createElement("div", null,
+            nextLink,
+            " ",
+            nextLink && prevLink ? "-" : "",
+            " ",
+            prevLink)
+        : null;
 };
 module.exports.getRssMetadata = (strings) => {
     const { title, description, author, copyright } = strings;

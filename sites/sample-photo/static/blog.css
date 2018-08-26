@@ -1,0 +1,81 @@
+body {
+  background-color: #eeeeee;
+  color: #000000;
+  font-family: Calibri,GillSans,Helvetica,sans-serif;
+  margin: 0;
+}
+a:link, a:visited, a:hover {
+  color:#008800;
+  text-decoration: none;
+}
+.banner {
+  background-color: #ddffdd;
+  border-bottom-style: solid;
+  border-color: #008800;
+  border-width: 3px;
+}
+.banner h1 {
+  margin: 0;
+  padding: 0.5em;
+}
+@media (min-width: 700px) {
+  .content {
+    display: flex;
+    align-items: flex-start;
+  }
+}
+.posts {
+  flex: 1 1 auto;
+  margin-left: 5px;
+}
+.posts hr {
+  width: 95%;
+}
+.post div {
+  text-align: center;
+}
+.post img {
+  padding: 8px;
+  border: 1px solid #404040;
+  box-shadow: 4px 4px 5px #c0c0c0;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+.post p {
+  margin-bottom: 2em;
+}
+.detail {
+  font-size: 70%;
+}
+.copyright {
+  font-size: 70%;
+  margin-top: 3em;
+  margin-bottom: 3em;
+}
+.sidebar {
+  flex: 0 0;
+  margin: 5px;
+  font-size: 90%;
+}
+@media (min-width: 700px) {
+  .sidebar {
+    background-color: #e0e0e0;
+    padding: 5px;
+  }
+}
+.sidebar h2 {
+  background-color: #ddffdd;
+  color: #008800;
+  font-size: 100%;
+  padding:2px 5px;
+  margin: 0;
+}
+.sidebar input {
+  width: 120px;
+  margin: 5px 0 10px 0;
+}
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 5px 0;
+}

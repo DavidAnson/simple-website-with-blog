@@ -1,0 +1,17 @@
+{
+  "title": "Two Photos",
+  "publishDate": "2017-12-12T12:00Z",
+  "contentDate": "2015-06-07T12:00Z",
+  "contentJson": [
+    {
+      "image": "landscape.jpg",
+      "image2x": "landscape-2x.jpg",
+      "caption": "A photograph in landscape orientation"
+    },
+    {
+      "image": "portrait.jpg",
+      "image2x": "portrait-2x.jpg",
+      "caption": "A photograph in portrait orientation"
+    }
+  ]
+}
