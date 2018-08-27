@@ -25,7 +25,7 @@ const markdownIt = new MarkdownIt({
 });
 
 const postsDir = `${siteRoot}/posts`;
-const postExtension = /\.json$/;
+const postExtension = /\.json$/u;
 const postsSortedByCompareDate = [];
 const postsSortedByPublishDate = [];
 const postsIndexedById = {};
@@ -115,7 +115,7 @@ router["postsLoaded"] = readdir(postsDir).
       this.field("title");
       this.field("contentSearch");
       postsSortedByCompareDate.forEach((post) => {
-        post.contentSearch = post.contentSearch.replace(/[\W_]+/g, " ");
+        post.contentSearch = post.contentSearch.replace(/[\W_]+/gu, " ");
         this.add(post);
         delete post.contentSearch;
       });

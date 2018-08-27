@@ -33,7 +33,7 @@ if (redirectToHttps) {
 // Redirect to remove "www." prefix from host name
 app.use((req, res, next) => {
   const originalHostUrl = `//${req.headers.host}${req.originalUrl}`;
-  const redirectHost = req.headers.host.replace(/^www\./i, "");
+  const redirectHost = req.headers.host.replace(/^www\./iu, "");
   const redirectHostUrl = `//${redirectHost}${req.originalUrl}`;
   if (redirectHostUrl === originalHostUrl) {
     return next();
