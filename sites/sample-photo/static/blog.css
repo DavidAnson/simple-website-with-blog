@@ -5,7 +5,7 @@ body {
   margin: 0;
 }
 a:link, a:visited, a:hover {
-  color:#008800;
+  color: #008800;
   text-decoration: none;
 }
 .banner {
@@ -17,6 +17,8 @@ a:link, a:visited, a:hover {
 .banner h1 {
   margin: 0;
   padding: 0.5em;
+  font-size: 1.75em;
+  font-weight: normal;
 }
 @media (min-width: 700px) {
   .content {
@@ -26,22 +28,27 @@ a:link, a:visited, a:hover {
 }
 .posts {
   flex: 1 1 auto;
-  margin-left: 5px;
 }
 .posts hr {
   width: 95%;
 }
-.post div {
+.posts > h2, .post > h2 {
+  font-size: 1.25em;
+  font-weight: normal;
+  margin-left: 5px;
+}
+.post > div {
   text-align: center;
 }
-.post img {
+.post > div > img {
   padding: 8px;
   border: 1px solid #404040;
   box-shadow: 4px 4px 5px #c0c0c0;
   box-sizing: border-box;
   max-width: 100%;
 }
-.post p {
+.post > p {
+  margin-left: 5px;
   margin-bottom: 2em;
 }
 .detail {
@@ -63,18 +70,18 @@ a:link, a:visited, a:hover {
     padding: 5px;
   }
 }
-.sidebar h2 {
+.sidebar > h2 {
   background-color: #ddffdd;
   color: #008800;
   font-size: 100%;
-  padding:2px 5px;
+  padding: 2px 5px;
   margin: 0;
 }
-.sidebar input {
+.sidebar > form > input {
   width: 120px;
   margin: 5px 0 10px 0;
 }
-.sidebar ul {
+.sidebar > ul {
   list-style: none;
   padding: 0;
   margin: 5px 0;
