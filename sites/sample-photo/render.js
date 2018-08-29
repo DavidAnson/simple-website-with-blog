@@ -30,7 +30,7 @@ module.exports.getHtmlElements = (props) => {
             React.createElement("h2", null,
                 React.createElement("a", { href: `/blog/post/${post.id}` }, getPostTitle(post))),
             React.createElement("div", { dangerouslySetInnerHTML: { "__html": post.contentHtml } }),
-            React.createElement("p", { className: "detail" },
+            React.createElement("p", null,
                 "Posted ",
                 React.createElement("time", { dateTime: post.publishDate.toISOString() }, publishDate)),
             React.createElement("hr", null)));

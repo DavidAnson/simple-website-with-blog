@@ -40,7 +40,7 @@ module.exports.getHtmlElements = (props) => {
       <div key={post.id} className="post">
         <h2><a href={`/blog/post/${post.id}`}>{getPostTitle(post)}</a></h2>
         <div dangerouslySetInnerHTML={{"__html": post.contentHtml}}></div>
-        <p className="detail">
+        <p>
           Posted <time dateTime={post.publishDate.toISOString()}>{publishDate}</time>
         </p>
         <hr/>

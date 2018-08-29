@@ -47,15 +47,18 @@ a:link, a:visited, a:hover {
   box-sizing: border-box;
   max-width: 100%;
 }
+.post > div > p {
+  margin-top: 0.5em;
+  margin-bottom: 2em;
+}
 .post > p {
+  font-size: 70%;
   margin-left: 5px;
   margin-bottom: 2em;
 }
-.detail {
-  font-size: 70%;
-}
 .copyright {
   font-size: 70%;
+  margin-left: 5px;
   margin-top: 3em;
   margin-bottom: 3em;
 }
