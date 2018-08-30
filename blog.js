@@ -1,6 +1,6 @@
 "use strict";
 
-const {redirectToHttps, siteRoot} = require("./config");
+const {showFuturePosts, redirectToHttps, siteRoot} = require("./config");
 const fs = require("fs");
 const path = require("path");
 const {URL} = require("url");
@@ -29,7 +29,6 @@ const postExtension = /\.json$/u;
 const postsSortedByCompareDate = [];
 const postsSortedByPublishDate = [];
 const postsIndexedById = {};
-const archivePeriods = [];
 let searchIndex = null;
 const commonHtmlStopWords =
   "alt br div h1 h2 h3 h4 h5 h6 href img li ol pre src srcset ul".split(" ");
@@ -38,13 +37,23 @@ const getPublishedPostFilter = () => {
   const now = Date.now();
   return (post) => {
     const publishDate = post.publishDate.getTime();
-    return (publishDate > 0) && (publishDate <= now);
+    return ((publishDate > 0) && (publishDate <= now)) || showFuturePosts;
   };
 };
 
-const getArchivePeriodsFilter = () => {
-  const now = Date.now();
-  return (period) => (period > 0) && (period <= now);
+const getArchivePeriods = () => {
+  const archivePeriods = [];
+  let lastPeriodValue = 0;
+  postsSortedByCompareDate.
+    filter(getPublishedPostFilter()).
+    forEach((post) => {
+      const postPeriod = new Date(post.compareDate.getFullYear(), post.compareDate.getMonth());
+      if (postPeriod.valueOf() !== lastPeriodValue) {
+        archivePeriods.push(postPeriod);
+        lastPeriodValue = postPeriod.valueOf();
+      }
+    });
+  return archivePeriods;
 };
 
 // eslint-disable-next-line dot-notation
@@ -97,15 +106,6 @@ router["postsLoaded"] = readdir(postsDir).
     postsSortedByPublishDate.push(...postsSortedByCompareDate);
     postsSortedByPublishDate.sort((left, right) => (right.publishDate - left.publishDate) ||
       right.id.localeCompare(left.id));
-    let lastPeriodValue = 0;
-    postsSortedByCompareDate.
-      forEach((post) => {
-        const postPeriod = new Date(post.compareDate.getFullYear(), post.compareDate.getMonth());
-        if (postPeriod.valueOf() !== lastPeriodValue) {
-          archivePeriods.push(postPeriod);
-          lastPeriodValue = postPeriod.valueOf();
-        }
-      });
   }).
   then(() => {
     searchIndex = lunr(function Config () {
@@ -155,7 +155,7 @@ const renderPosts = (req, res, posts, title, period, query) => {
   }
   const elements = render.getHtmlElements({
     "posts": posts.slice(currIndex, nextIndex),
-    "archives": archivePeriods.filter(getArchivePeriodsFilter()),
+    "archives": getArchivePeriods(),
     title,
     period,
     query,

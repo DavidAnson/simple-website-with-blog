@@ -43,7 +43,7 @@ module.exports.getHtmlElements = (props) => {
       <head>
         <title>{title}</title>
         <meta name="viewport" content="width=device-width"/>
-        <meta name="description" content="The blog of a simple web site"/>
+        <meta name="description" content={strings.description}/>
         <link rel="alternate" type="application/rss+xml" href="/blog/rss" title={strings.title}/>
         <link rel="stylesheet" href="/xcode.css"/>
       </head>

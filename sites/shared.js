@@ -58,7 +58,7 @@ module.exports.getPrevNextLinks = (props) => {
         "Newer Posts ",
         "\u00bb") : null;
     return (nextLink || prevLink)
-        ? React.createElement("div", null,
+        ? React.createElement("div", { className: "navigation" },
             nextLink,
             " ",
             nextLink && prevLink ? "-" : "",

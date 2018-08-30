@@ -62,7 +62,7 @@ module.exports.getPrevNextLinks = (props) => {
   const nextLink = props.nextLink ? <a href={props.nextLink}>{"\u00ab"} Older Posts</a> : null;
   const prevLink = props.prevLink ? <a href={props.prevLink}>Newer Posts {"\u00bb"}</a> : null;
   return (nextLink || prevLink)
-    ? <div>{nextLink} {nextLink && prevLink ? "-" : ""} {prevLink}</div>
+    ? <div className="navigation">{nextLink} {nextLink && prevLink ? "-" : ""} {prevLink}</div>
     : null;
 };
 

@@ -34,7 +34,7 @@ module.exports.getHtmlElements = (props) => {
         React.createElement("head", null,
             React.createElement("title", null, title),
             React.createElement("meta", { name: "viewport", content: "width=device-width" }),
-            React.createElement("meta", { name: "description", content: "The blog of a simple web site" }),
+            React.createElement("meta", { name: "description", content: strings.description }),
             React.createElement("link", { rel: "alternate", type: "application/rss+xml", href: "/blog/rss", title: strings.title }),
             React.createElement("link", { rel: "stylesheet", href: "/xcode.css" })),
         React.createElement("body", null,
