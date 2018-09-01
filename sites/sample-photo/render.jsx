@@ -71,7 +71,7 @@ module.exports.getHtmlElements = (props) => {
           <div className="sidebar">
             <h2>Search</h2>
             <form action="/blog/search">
-              <input type="text" name="query" accessKey="s"/>
+              <input type="text" name="query" accessKey="s" placeholder="cat -dog title:pet"/>
             </form>
             <h2>Archive</h2>
             <ul>{archives}</ul>

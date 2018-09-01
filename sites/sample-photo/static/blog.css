@@ -43,9 +43,10 @@ a:link, a:visited, a:hover {
 .post > div > img {
   padding: 8px;
   border: 1px solid #404040;
+  background-color: #ffffff;
   box-shadow: 4px 4px 5px #c0c0c0;
   box-sizing: border-box;
-  max-width: 100%;
+  max-width: calc(100% - 4px);
 }
 .post > div > p {
   margin-top: 0.5em;
@@ -88,8 +89,15 @@ a:link, a:visited, a:hover {
   width: 120px;
   margin: 5px 0 10px 0;
 }
+.sidebar > form > ::placeholder {
+  font-style: italic;
+}
 .sidebar > ul {
   list-style: none;
   padding: 0;
   margin: 5px 0;
+}
+.post-left {
+  text-align: left;
+  margin-left: 5px;
 }
