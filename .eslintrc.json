@@ -16,6 +16,7 @@
     "max-len": ["error", 100],
     "max-params": ["error", 6],
     "max-statements": ["error", 25],
+    "multiline-comment-style": ["error", "separate-lines"],
     "multiline-ternary": ["error", "always-multiline"],
     "new-cap": ["error", {"capIsNew": false}],
     "no-extra-parens": ["error", "functions"],
