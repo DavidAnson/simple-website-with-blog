@@ -51,19 +51,17 @@ module.exports.getTitleHeading = (props, strings) => {
     };
 };
 module.exports.getPrevNextLinks = (props) => {
-    const nextLink = props.nextLink ? React.createElement("a", { href: props.nextLink },
-        "\u00ab",
-        " Older Posts") : null;
     const prevLink = props.prevLink ? React.createElement("a", { href: props.prevLink },
-        "Newer Posts ",
+        "\u00ab",
+        " Previous Posts") : null;
+    const nextLink = props.nextLink ? React.createElement("a", { href: props.nextLink },
+        "Next Posts ",
         "\u00bb") : null;
-    return (nextLink || prevLink)
+    return (prevLink || nextLink)
         ? React.createElement("div", { className: "navigation" },
-            nextLink,
-            " ",
-            nextLink && prevLink ? "-" : "",
-            " ",
-            prevLink)
+            prevLink,
+            nextLink && prevLink ? " | " : "",
+            nextLink)
         : null;
 };
 module.exports.getRssMetadata = (strings) => {
