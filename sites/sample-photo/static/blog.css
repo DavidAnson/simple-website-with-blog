@@ -68,7 +68,7 @@ a:link, a:visited, a:hover {
   margin-bottom: 3em;
 }
 .sidebar {
-  flex: 0 0;
+  flex: 0 0 125px;
   margin: 5px;
   font-size: 90%;
 }
@@ -86,7 +86,8 @@ a:link, a:visited, a:hover {
   margin: 0;
 }
 .sidebar > form > input {
-  width: 120px;
+  width: 100%;
+  box-sizing: border-box;
   margin: 5px 0 10px 0;
 }
 .sidebar > form > ::placeholder {
