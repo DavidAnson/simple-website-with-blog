@@ -45,7 +45,7 @@ app.use((req, res, next) => {
 app.use(helmet({
   "contentSecurityPolicy": {
     "directives": {
-      "defaultSrc": ["'self'"]
+      "defaultSrc": ["'self'"],
       // "scriptSrc": [
       //   "'self'",
       //   "'unsafe-inline'"
@@ -54,9 +54,13 @@ app.use(helmet({
       //   "'self'",
       //   "'unsafe-inline'"
       // ]
+      "baseUri": ["'none'"],
+      "frameAncestors": ["'none'"],
+      "formAction": ["'self'"]
     }
   },
   "hsts": {
+    // Set maxAge to 1 week to mitigate impact of certificate expiration
     "maxAge": 60 * 60 * 24 * 7
   }
 }));
