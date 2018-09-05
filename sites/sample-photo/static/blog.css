@@ -98,6 +98,10 @@ a:link, a:visited, a:hover {
   padding: 0;
   margin: 5px 0;
 }
+.sidebar > ul > li {
+  display: inline-block;
+  width: 125px;
+}
 .post-left {
   text-align: left;
   margin-left: 5px;

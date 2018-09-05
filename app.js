@@ -62,6 +62,9 @@ app.use(helmet({
   "hsts": {
     // Set maxAge to 1 week to mitigate impact of certificate expiration
     "maxAge": 60 * 60 * 24 * 7
+  },
+  "referrerPolicy": {
+    "policy": "no-referrer-when-downgrade"
   }
 }));
 app.use(compression({
