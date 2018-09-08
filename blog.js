@@ -58,6 +58,12 @@ const getArchivePeriods = () => {
 
 // eslint-disable-next-line dot-notation
 router["postsLoaded"] = readdir(postsDir).
+  catch((reason) => {
+    if (reason.code !== "ENOENT") {
+      throw reason;
+    }
+    return [];
+  }).
   then((files) => Promise.all(files.
     filter((file) => postExtension.test(file)).
     map((file) => {

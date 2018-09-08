@@ -46,14 +46,16 @@ app.use(helmet({
   "contentSecurityPolicy": {
     "directives": {
       "defaultSrc": ["'self'"],
-      // "scriptSrc": [
-      //   "'self'",
-      //   "'unsafe-inline'"
-      // ]
-      // "styleSrc": [
-      //   "'self'",
-      //   "'unsafe-inline'"
-      // ]
+      "scriptSrc": [
+        "'self'",
+        "'unsafe-inline'",
+        "code.jquery.com"
+      ],
+      "styleSrc": [
+        "'self'",
+        "'unsafe-inline'",
+        "code.jquery.com"
+      ],
       "baseUri": ["'none'"],
       "frameAncestors": ["'none'"],
       "formAction": ["'self'"]
