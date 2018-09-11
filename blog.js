@@ -26,28 +26,30 @@ const markdownIt = new MarkdownIt({
 
 const postsDir = `${siteRoot}/posts`;
 const postExtension = /\.json$/u;
-const postsSortedByCompareDate = [];
+const postsSortedByContentDate = [];
 const postsSortedByPublishDate = [];
 const postsIndexedById = {};
 let searchIndex = null;
 const commonHtmlStopWords =
   "alt br div h1 h2 h3 h4 h5 h6 href img li ol pre src srcset ul".split(" ");
 
-const getPublishedPostFilter = () => {
+const getPublishedPostFilter = (includeDateless) => {
   const now = Date.now();
   return (post) => {
     const publishDate = post.publishDate.getTime();
-    return ((publishDate > 0) && (publishDate <= now)) || showFuturePosts;
+    return ((publishDate > 0) && (publishDate <= now)) ||
+      (includeDateless && (publishDate === 0)) ||
+      showFuturePosts;
   };
 };
 
 const getArchivePeriods = () => {
   const archivePeriods = [];
   let lastPeriodValue = 0;
-  postsSortedByCompareDate.
+  postsSortedByContentDate.
     filter(getPublishedPostFilter()).
     forEach((post) => {
-      const postPeriod = new Date(post.compareDate.getFullYear(), post.compareDate.getMonth());
+      const postPeriod = new Date(post.contentDate.getFullYear(), post.contentDate.getMonth());
       if (postPeriod.valueOf() !== lastPeriodValue) {
         archivePeriods.push(postPeriod);
         lastPeriodValue = postPeriod.valueOf();
@@ -73,9 +75,8 @@ router["postsLoaded"] = readdir(postsDir).
         then((content) => {
           const post = JSON.parse(content);
           post.id = id;
-          post.compareDate = new Date(post.contentDate || post.publishDate || 0);
+          post.contentDate = new Date(post.contentDate || post.publishDate || 0);
           post.publishDate = new Date(post.publishDate || 0);
-          post.contentDate = new Date(post.contentDate || 0);
           return post;
         }).
         then((post) => {
@@ -101,15 +102,15 @@ router["postsLoaded"] = readdir(postsDir).
           }
           return promise.
             then(() => {
-              postsSortedByCompareDate.push(post);
+              postsSortedByContentDate.push(post);
               postsIndexedById[post.id] = post;
             });
         });
     }))).
   then(() => {
-    postsSortedByCompareDate.sort((left, right) => (right.compareDate - left.compareDate) ||
+    postsSortedByContentDate.sort((left, right) => (right.contentDate - left.contentDate) ||
       right.id.localeCompare(left.id));
-    postsSortedByPublishDate.push(...postsSortedByCompareDate);
+    postsSortedByPublishDate.push(...postsSortedByContentDate);
     postsSortedByPublishDate.sort((left, right) => (right.publishDate - left.publishDate) ||
       right.id.localeCompare(left.id));
   }).
@@ -120,7 +121,7 @@ router["postsLoaded"] = readdir(postsDir).
       this.pipeline.after(lunr.stopWordFilter, commonHtmlStopWordFilter);
       this.field("title");
       this.field("contentSearch");
-      postsSortedByCompareDate.forEach((post) => {
+      postsSortedByContentDate.forEach((post) => {
         post.contentSearch = post.contentSearch.replace(/[\W_]+/gu, " ");
         this.add(post);
         delete post.contentSearch;
@@ -174,12 +175,14 @@ const renderPosts = (req, res, posts, title, period, query) => {
 };
 
 router.get("/", (req, res) => {
-  const posts = postsSortedByCompareDate.filter(getPublishedPostFilter());
+  const posts = postsSortedByContentDate.filter(getPublishedPostFilter());
   return renderPosts(req, res, posts);
 });
 
 router.get("/post/:id", (req, res, next) => {
-  const posts = postsSortedByCompareDate.filter((post) => post.id === req.params.id);
+  const posts = postsSortedByContentDate.
+    filter(getPublishedPostFilter(true)).
+    filter((post) => post.id === req.params.id);
   if (posts.length === 0) {
     return next();
   }
@@ -189,10 +192,10 @@ router.get("/post/:id", (req, res, next) => {
 router.get("/archive/:period(\\d{6})", (req, res, next) => {
   const year = parseInt(req.params.period.slice(0, 4), 10);
   const month = parseInt(req.params.period.slice(4, 6), 10) - 1;
-  const posts = postsSortedByCompareDate.
+  const posts = postsSortedByContentDate.
     filter(getPublishedPostFilter()).
-    filter((post) => (post.compareDate.getFullYear() === year) &&
-      (post.compareDate.getMonth() === month));
+    filter((post) => (post.contentDate.getFullYear() === year) &&
+      (post.contentDate.getMonth() === month));
   if (posts.length === 0) {
     return next();
   }

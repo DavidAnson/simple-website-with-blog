@@ -17,7 +17,7 @@ module.exports.getPostTitle = getPostTitle;
 
 module.exports.getContentJsonElements = (contentJson) => {
   const content = contentJson.map((line, index) => <p key={index}>{line}</p>);
-  return <div>{content}</div>;
+  return <>{content}</>;
 };
 
 module.exports.getHtmlElements = (props) => {

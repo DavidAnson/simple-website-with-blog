@@ -11,7 +11,7 @@ const getPostTitle = (post) => `Test post - ${post.title}`;
 module.exports.getPostTitle = getPostTitle;
 module.exports.getContentJsonElements = (contentJson) => {
     const content = contentJson.map((line, index) => React.createElement("p", { key: index }, line));
-    return React.createElement("div", null, content);
+    return React.createElement(React.Fragment, null, content);
 };
 module.exports.getHtmlElements = (props) => {
     const archives = shared.getArchiveList(props.archives);
