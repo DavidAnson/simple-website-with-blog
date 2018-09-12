@@ -14,9 +14,43 @@ const assertElementNameText = (assert, element, name, text) => {
   assert.equal(element.textContent, text);
 };
 
+QUnit.module("Requirements");
+
 QUnit.test("Browser supports fetch API", (assert) => {
   assert.expect(1);
   assert.ok(fetch);
+});
+
+QUnit.module("Static");
+
+QUnit.test("Get of / returns expected HTTP headers", (assert) => {
+  assert.expect(13);
+  const done = assert.async();
+  fetch("/").
+    then((response) => {
+      const {headers} = response;
+      [
+        // Content headers
+        "Content-Encoding",
+        "Content-Type",
+        // Caching headers
+        "Cache-Control",
+        "ETag",
+        "Last-Modified",
+        // Security headers
+        "Content-Security-Policy",
+        "Referrer-Policy",
+        "Strict-Transport-Security",
+        "X-Content-Type-Options",
+        "X-DNS-Prefetch-Control",
+        "X-Download-Options",
+        "X-Frame-Options",
+        "X-XSS-Protection"
+      ].forEach((name) => {
+        assert.ok(headers.has(name));
+      });
+    }).
+    then(done);
 });
 
 QUnit.test("Get of / returns ok and compressed HTML", (assert) => {
@@ -51,35 +85,23 @@ QUnit.test("Get of /tests.js returns ok and compressed JS", (assert) => {
     then(done);
 });
 
-QUnit.test("Get of / returns expected HTTP headers", (assert) => {
-  assert.expect(13);
+QUnit.test("Get of /missing returns 404", (assert) => {
+  assert.expect(4);
   const done = assert.async();
-  fetch("/").
+  fetch("/missing").
     then((response) => {
-      const {headers} = response;
-      [
-        // Content headers
-        "Content-Encoding",
-        "Content-Type",
-        // Caching headers
-        "Cache-Control",
-        "ETag",
-        "Last-Modified",
-        // Security headers
-        "Content-Security-Policy",
-        "Referrer-Policy",
-        "Strict-Transport-Security",
-        "X-Content-Type-Options",
-        "X-DNS-Prefetch-Control",
-        "X-Download-Options",
-        "X-Frame-Options",
-        "X-XSS-Protection"
-      ].forEach((name) => {
-        assert.ok(headers.has(name));
-      });
+      assert.ok(!response.ok);
+      assert.equal(response.status, 404);
+      assert.equal(response.statusText, "Not Found");
+      return response.text();
+    }).
+    then((text) => {
+      assert.equal(text, "Not Found");
     }).
     then(done);
 });
+
+QUnit.module("List");
 
 QUnit.test("Get of /blog returns ok, compressed HTML, and 10 posts", (assert) => {
   assert.expect(28);
@@ -176,6 +198,8 @@ QUnit.test("Get of /blog?page=twentyone returns ok and 1 post", (assert) => {
     }).
     then(done);
 });
+
+QUnit.module("Post");
 
 QUnit.test("Get of /blog/post/one (publish date) returns ok and compressed HTML", (assert) => {
   assert.expect(28);
@@ -276,6 +300,106 @@ QUnit.test("Get of /blog/post/zero (unpublished) returns 404", (assert) => {
   assert.expect(4);
   const done = assert.async();
   fetch("/blog/post/zero").
+    then((response) => {
+      assert.ok(!response.ok);
+      assert.equal(response.status, 404);
+      assert.equal(response.statusText, "Not Found");
+      return response.text();
+    }).
+    then((text) => {
+      assert.equal(text, "Not Found");
+    }).
+    then(done);
+});
+
+QUnit.module("Search");
+
+QUnit.test("Get of /blog/search?query=tw* returns ok, compressed HTML, and 4 posts", (assert) => {
+  assert.expect(17);
+  const done = assert.async();
+  fetch("/blog/search?query=tw*").
+    then((response) => {
+      assert.ok(response.ok);
+      assert.equal(response.headers.get("Content-Encoding"), "gzip");
+      assert.equal(response.headers.get("Content-Type"), "text/html; charset=utf-8");
+      return response.text();
+    }).
+    then((text) => {
+      assert.ok((/^<!DOCTYPE html>/u).test(text));
+      const doc = new DOMParser().parseFromString(text, "text/html");
+      assertSingleTagText(assert, doc, "title", "Search: tw* - simple-website-with-blog/test");
+      assertSingleTagText(assert, doc, "h1", "Test blog");
+      assertSingleTagText(assert, doc, "h2", "Search: tw*");
+      assert.equal(doc.getElementsByTagName("h3").length, 4);
+      const postTitles = "two twentyone twenty twelve".split(" ");
+      for (const item of doc.getElementsByTagName("h3")) {
+        assert.equal(item.innerText, postTitles.shift());
+      }
+      assert.equal(doc.getElementsByTagName("a").length, 6);
+      assert.equal(doc.getElementsByTagName("li").length, 6);
+    }).
+    then(done);
+});
+
+QUnit.test("Get of /blog/search?query=missing returns ok and 0 posts", (assert) => {
+  assert.expect(11);
+  const done = assert.async();
+  fetch("/blog/search?query=missing").
+    then((response) => {
+      assert.ok(response.ok);
+      return response.text();
+    }).
+    then((text) => {
+      assert.ok((/^<!DOCTYPE html>/u).test(text));
+      const doc = new DOMParser().parseFromString(text, "text/html");
+      assertSingleTagText(assert, doc, "title", "Search: missing - simple-website-with-blog/test");
+      assertSingleTagText(assert, doc, "h1", "Test blog");
+      assertSingleTagText(assert, doc, "h2", "Search: missing");
+      assert.equal(doc.getElementsByTagName("h3").length, 0);
+      assert.equal(doc.getElementsByTagName("a").length, 6);
+      assert.equal(doc.getElementsByTagName("li").length, 6);
+    }).
+    then(done);
+});
+
+QUnit.module("Archive");
+
+QUnit.test("Get of /blog/archive/201801 returns ok, compressed HTML, and 3 posts", (assert) => {
+  assert.expect(16);
+  const done = assert.async();
+  fetch("/blog/archive/201801").
+    then((response) => {
+      assert.ok(response.ok);
+      assert.equal(response.headers.get("Content-Encoding"), "gzip");
+      assert.equal(response.headers.get("Content-Type"), "text/html; charset=utf-8");
+      return response.text();
+    }).
+    then((text) => {
+      assert.ok((/^<!DOCTYPE html>/u).test(text));
+      const doc = new DOMParser().parseFromString(text, "text/html");
+      assertSingleTagText(
+        assert,
+        doc,
+        "title",
+        "Posts from January 2018 - simple-website-with-blog/test"
+      );
+      assertSingleTagText(assert, doc, "h1", "Test blog");
+      assertSingleTagText(assert, doc, "h2", "Posts from January 2018");
+      assert.equal(doc.getElementsByTagName("h3").length, 3);
+      const postTitles = "four five six".split(" ");
+      for (const item of doc.getElementsByTagName("h3")) {
+        assert.equal(item.innerText, postTitles.shift());
+      }
+      assert.equal(doc.getElementsByTagName("a").length, 6);
+      assert.equal(doc.getElementsByTagName("li").length, 6);
+    }).
+    then(done);
+});
+
+QUnit.test("Get of /blog/archive/300001 (unpublished post) returns 404", (assert) => {
+  assert.expect(4);
+  const done = assert.async();
+  fetch("/blog/archive/300001").
     then((response) => {
       assert.ok(!response.ok);
       assert.equal(response.status, 404);
