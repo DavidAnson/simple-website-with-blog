@@ -233,10 +233,47 @@ QUnit.test("Get of /blog/post/one (publish date) returns ok and compressed HTML"
     then(done);
 });
 
-QUnit.test("Get of /blog/post/eleven (publish/content dates) returns ok and content", (assert) => {
-  assert.expect(24);
+QUnit.test(
+  "Get of /blog/post/eleven (publish/content dates, Markdown) returns ok and content",
+  (assert) => {
+    assert.expect(24);
+    const done = assert.async();
+    fetch("/blog/post/eleven").
+      then((response) => {
+        assert.ok(response.ok);
+        return response.text();
+      }).
+      then((text) => {
+        assert.ok((/^<!DOCTYPE html>/u).test(text));
+        const doc = new DOMParser().parseFromString(text, "text/html");
+        assertSingleTagText(
+          assert,
+          doc,
+          "title",
+          "Test post - eleven - simple-website-with-blog/test"
+        );
+        assertSingleTagText(assert, doc, "h1", "Test blog");
+        assertSingleTagText(assert, doc, "h2", "");
+        assertSingleTagText(assert, doc, "h3", "eleven");
+        assertSingleTagText(assert, doc, "h4", "Test post - eleven");
+        assertSingleTagText(assert, doc, "h5", "2017-11-01T12:00:00.000Z");
+        assertSingleTagText(assert, doc, "h6", "2017-11-20T12:00:00.000Z");
+        assert.equal(doc.getElementsByTagName("div").length, 1);
+        assert.equal(doc.getElementsByTagName("div")[0].childElementCount, 1);
+        const content = doc.getElementsByTagName("div")[0].firstElementChild;
+        assertElementNameText(assert, content, "P", "Content for eleven");
+        assertElementNameText(assert, content.firstElementChild, "STRONG", "eleven");
+        assert.equal(doc.getElementsByTagName("a").length, 6);
+        assert.equal(doc.getElementsByTagName("li").length, 6);
+      }).
+      then(done);
+  }
+);
+
+QUnit.test("Get of /blog/post/twenty (Markdown+code) returns ok and highlighting", (assert) => {
+  assert.expect(3);
   const done = assert.async();
-  fetch("/blog/post/eleven").
+  fetch("/blog/post/twenty").
     then((response) => {
       assert.ok(response.ok);
       return response.text();
@@ -244,30 +281,12 @@ QUnit.test("Get of /blog/post/eleven (publish/content dates) returns ok and cont
     then((text) => {
       assert.ok((/^<!DOCTYPE html>/u).test(text));
       const doc = new DOMParser().parseFromString(text, "text/html");
-      assertSingleTagText(
-        assert,
-        doc,
-        "title",
-        "Test post - eleven - simple-website-with-blog/test"
-      );
-      assertSingleTagText(assert, doc, "h1", "Test blog");
-      assertSingleTagText(assert, doc, "h2", "");
-      assertSingleTagText(assert, doc, "h3", "eleven");
-      assertSingleTagText(assert, doc, "h4", "Test post - eleven");
-      assertSingleTagText(assert, doc, "h5", "2017-11-01T12:00:00.000Z");
-      assertSingleTagText(assert, doc, "h6", "2017-11-20T12:00:00.000Z");
-      assert.equal(doc.getElementsByTagName("div").length, 1);
-      assert.equal(doc.getElementsByTagName("div")[0].childElementCount, 1);
-      const content = doc.getElementsByTagName("div")[0].firstElementChild;
-      assertElementNameText(assert, content, "P", "Content for eleven");
-      assertElementNameText(assert, content.firstElementChild, "STRONG", "eleven");
-      assert.equal(doc.getElementsByTagName("a").length, 6);
-      assert.equal(doc.getElementsByTagName("li").length, 6);
+      assert.equal(doc.getElementsByClassName("language-js").length, 1);
     }).
     then(done);
 });
 
-QUnit.test("Get of /blog/post/nan (no dates) returns ok and content", (assert) => {
+QUnit.test("Get of /blog/post/nan (no dates, HTML) returns ok and content", (assert) => {
   assert.expect(24);
   const done = assert.async();
   fetch("/blog/post/nan").
@@ -341,6 +360,35 @@ QUnit.test("Get of /blog/search?query=tw* returns ok, compressed HTML, and 4 pos
     then(done);
 });
 
+QUnit.test(
+  "Get of /blog/search?query=content&page=thirteen returns ok, compressed HTML, and 10 posts",
+  (assert) => {
+    assert.expect(11);
+    const done = assert.async();
+    fetch("/blog/search?query=content&page=thirteen").
+      then((response) => {
+        assert.ok(response.ok);
+        return response.text();
+      }).
+      then((text) => {
+        assert.ok((/^<!DOCTYPE html>/u).test(text));
+        const doc = new DOMParser().parseFromString(text, "text/html");
+        assertSingleTagText(
+          assert,
+          doc,
+          "title",
+          "Search: content - simple-website-with-blog/test"
+        );
+        assertSingleTagText(assert, doc, "h1", "Test blog");
+        assertSingleTagText(assert, doc, "h2", "Search: content");
+        assert.equal(doc.getElementsByTagName("h3").length, 10);
+        assert.equal(doc.getElementsByTagName("a").length, 7);
+        assert.equal(doc.getElementsByTagName("li").length, 6);
+      }).
+      then(done);
+  }
+);
+
 QUnit.test("Get of /blog/search?query=missing returns ok and 0 posts", (assert) => {
   assert.expect(11);
   const done = assert.async();
@@ -362,7 +410,48 @@ QUnit.test("Get of /blog/search?query=missing returns ok and 0 posts", (assert) 
     then(done);
 });
 
+QUnit.test("Get of /blog/search returns 404", (assert) => {
+  assert.expect(4);
+  const done = assert.async();
+  fetch("/blog/search").
+    then((response) => {
+      assert.ok(!response.ok);
+      assert.equal(response.status, 404);
+      assert.equal(response.statusText, "Not Found");
+      return response.text();
+    }).
+    then((text) => {
+      assert.equal(text, "Not Found");
+    }).
+    then(done);
+});
+
 QUnit.module("Archive");
+
+QUnit.test("Get of /blog returns 6 archive links", (assert) => {
+  assert.expect(21);
+  const done = assert.async();
+  fetch("/blog").
+    then((response) => {
+      assert.ok(response.ok);
+      return response.text();
+    }).
+    then((text) => {
+      assert.ok((/^<!DOCTYPE html>/u).test(text));
+      const doc = new DOMParser().parseFromString(text, "text/html");
+      assert.equal(doc.getElementsByTagName("li").length, 6);
+      const archiveText =
+        "February 2018,January 2018,December 2017,November 2017,October 2017,September 2017".
+          split(",");
+      const archiveLinks = "201802,201801,201712,201711,201710,201709".split(",");
+      for (const li of doc.getElementsByTagName("li")) {
+        assertElementNameText(assert, li.firstElementChild, "A", archiveText.shift());
+        const href = `/blog/archive/${archiveLinks.shift()}`;
+        assert.equal(li.firstElementChild.getAttribute("href"), href);
+      }
+    }).
+    then(done);
+});
 
 QUnit.test("Get of /blog/archive/201801 returns ok, compressed HTML, and 3 posts", (assert) => {
   assert.expect(16);
@@ -400,6 +489,22 @@ QUnit.test("Get of /blog/archive/300001 (unpublished post) returns 404", (assert
   assert.expect(4);
   const done = assert.async();
   fetch("/blog/archive/300001").
+    then((response) => {
+      assert.ok(!response.ok);
+      assert.equal(response.status, 404);
+      assert.equal(response.statusText, "Not Found");
+      return response.text();
+    }).
+    then((text) => {
+      assert.equal(text, "Not Found");
+    }).
+    then(done);
+});
+
+QUnit.test("Get of /blog/archive/1234 (unpublished post) returns 404", (assert) => {
+  assert.expect(4);
+  const done = assert.async();
+  fetch("/blog/archive/1234").
     then((response) => {
       assert.ok(!response.ok);
       assert.equal(response.status, 404);
