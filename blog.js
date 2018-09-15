@@ -129,19 +129,20 @@ router["postsLoaded"] = readdir(postsDir).
     });
   });
 
-const renderPosts = (req, res, posts, title, period, query) => {
+const renderPosts = (req, res, next, posts, title, period, query) => {
   const url = new URL(req.originalUrl, "https://example.org/");
   const pageParam = "page";
   const page = url.searchParams.get(pageParam);
   let currIndex = 0;
-  if (page) {
-    posts.every((post, index) => {
-      if (post.id === page) {
-        currIndex = index;
-        return false;
-      }
-      return true;
-    });
+  const findIndexOfPage = (post, index) => {
+    if (post.id === page) {
+      currIndex = index;
+      return false;
+    }
+    return true;
+  };
+  if (page && posts.every(findIndexOfPage)) {
+    return next();
   }
   const pageSize = 10;
   const prevIndex = currIndex - pageSize;
@@ -171,12 +172,12 @@ const renderPosts = (req, res, posts, title, period, query) => {
   });
   const staticMarkup = ReactDOMServer.renderToStaticMarkup(elements);
   const body = `<!DOCTYPE html>${staticMarkup}`;
-  res.send(body);
+  return res.send(body);
 };
 
-router.get("/", (req, res) => {
+router.get("/", (req, res, next) => {
   const posts = postsSortedByContentDate.filter(getPublishedPostFilter());
-  return renderPosts(req, res, posts);
+  return renderPosts(req, res, next, posts);
 });
 
 router.get("/post/:id", (req, res, next) => {
@@ -186,7 +187,7 @@ router.get("/post/:id", (req, res, next) => {
   if (posts.length === 0) {
     return next();
   }
-  return renderPosts(req, res, posts, render.getPostTitle(posts[0]));
+  return renderPosts(req, res, next, posts, render.getPostTitle(posts[0]));
 });
 
 router.get("/archive/:period(\\d{6})", (req, res, next) => {
@@ -199,7 +200,7 @@ router.get("/archive/:period(\\d{6})", (req, res, next) => {
   if (posts.length === 0) {
     return next();
   }
-  return renderPosts(req, res, posts, null, new Date(year, month));
+  return renderPosts(req, res, next, posts, null, new Date(year, month));
 });
 
 router.get("/search", (req, res, next) => {
@@ -211,7 +212,7 @@ router.get("/search", (req, res, next) => {
     search(query).
     map((result) => postsIndexedById[result.ref]).
     filter(getPublishedPostFilter());
-  return renderPosts(req, res, posts, null, null, query);
+  return renderPosts(req, res, next, posts, null, null, query);
 });
 
 router.get("/rss", (req, res, next) => {

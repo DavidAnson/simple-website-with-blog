@@ -199,6 +199,38 @@ QUnit.test("Get of /blog?page=twentyone returns ok and 1 post", (assert) => {
     then(done);
 });
 
+QUnit.test("Get of /blog?page=missing returns 404", (assert) => {
+  assert.expect(4);
+  const done = assert.async();
+  fetch("/blog?page=missing").
+    then((response) => {
+      assert.ok(!response.ok);
+      assert.equal(response.status, 404);
+      assert.equal(response.statusText, "Not Found");
+      return response.text();
+    }).
+    then((text) => {
+      assert.equal(text, "Not Found");
+    }).
+    then(done);
+});
+
+QUnit.test("Get of /Blog returns 404", (assert) => {
+  assert.expect(4);
+  const done = assert.async();
+  fetch("/Blog").
+    then((response) => {
+      assert.ok(!response.ok);
+      assert.equal(response.status, 404);
+      assert.equal(response.statusText, "Not Found");
+      return response.text();
+    }).
+    then((text) => {
+      assert.equal(text, "Not Found");
+    }).
+    then(done);
+});
+
 QUnit.module("Post");
 
 QUnit.test("Get of /blog/post/one (publish date) returns ok and compressed HTML", (assert) => {
@@ -319,6 +351,22 @@ QUnit.test("Get of /blog/post/zero (unpublished) returns 404", (assert) => {
   assert.expect(4);
   const done = assert.async();
   fetch("/blog/post/zero").
+    then((response) => {
+      assert.ok(!response.ok);
+      assert.equal(response.status, 404);
+      assert.equal(response.statusText, "Not Found");
+      return response.text();
+    }).
+    then((text) => {
+      assert.equal(text, "Not Found");
+    }).
+    then(done);
+});
+
+QUnit.test("Get of /blog/post/missing (missing) returns 404", (assert) => {
+  assert.expect(4);
+  const done = assert.async();
+  fetch("/blog/post/missing").
     then((response) => {
       assert.ok(!response.ok);
       assert.equal(response.status, 404);
@@ -513,6 +561,36 @@ QUnit.test("Get of /blog/archive/1234 (unpublished post) returns 404", (assert) 
     }).
     then((text) => {
       assert.equal(text, "Not Found");
+    }).
+    then(done);
+});
+
+QUnit.module("RSS");
+
+QUnit.test("Get of /blog/rss returns ok, compressed XML, and 20 posts", (assert) => {
+  assert.expect(47);
+  const done = assert.async();
+  fetch("/blog/rss").
+    then((response) => {
+      assert.ok(response.ok);
+      assert.equal(response.headers.get("Content-Encoding"), "gzip");
+      assert.equal(response.headers.get("Content-Type"), "application/rss+xml; charset=utf-8");
+      return response.text();
+    }).
+    then((text) => {
+      assert.ok((/^<\?xml version="1.0" encoding="UTF-8"\?>/u).test(text));
+      const doc = new DOMParser().parseFromString(text, "text/xml");
+      assert.equal(doc.getElementsByTagName("title").length, 21);
+      const titles = ("simple-website-with-blog/test " +
+        "one two three four five six seven eight nine ten " +
+        "twenty nineteen eighteen seventeen sixteen fifteen fourteen thirteen twelve eleven").
+        split(" ");
+      for (const item of doc.getElementsByTagName("title")) {
+        assert.equal(item.textContent.replace(/^Test post - /u, ""), titles.shift());
+      }
+      for (const link of doc.getElementsByTagName("link")) {
+        assert.ok((/^https?:\/\/[^/]+(\/blog\/post\/[a-z]+)?$/u).test(link.textContent));
+      }
     }).
     then(done);
 });
