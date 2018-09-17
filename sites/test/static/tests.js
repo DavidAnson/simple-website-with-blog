@@ -104,7 +104,7 @@ QUnit.test("Get of /missing returns 404", (assert) => {
 QUnit.module("List");
 
 QUnit.test("Get of /blog returns ok, compressed HTML, and 10 posts", (assert) => {
-  assert.expect(28);
+  assert.expect(29);
   const done = assert.async();
   fetch("/blog").
     then((response) => {
@@ -117,6 +117,7 @@ QUnit.test("Get of /blog returns ok, compressed HTML, and 10 posts", (assert) =>
       assert.ok((/^<!DOCTYPE html>/u).test(text));
       const doc = new DOMParser().parseFromString(text, "text/html");
       assertSingleTagText(assert, doc, "title", "simple-website-with-blog/test");
+      assert.equal(doc.getElementsByTagName("meta").length, 1);
       assertSingleTagText(assert, doc, "h1", "Test blog");
       assertSingleTagText(assert, doc, "h2", "");
       assert.equal(doc.getElementsByTagName("h3").length, 10);
@@ -136,7 +137,7 @@ QUnit.test("Get of /blog returns ok, compressed HTML, and 10 posts", (assert) =>
 });
 
 QUnit.test("Get of /blog?page=eleven returns ok and 10 posts", (assert) => {
-  assert.expect(29);
+  assert.expect(30);
   const done = assert.async();
   fetch("/blog?page=eleven").
     then((response) => {
@@ -147,6 +148,7 @@ QUnit.test("Get of /blog?page=eleven returns ok and 10 posts", (assert) => {
       assert.ok((/^<!DOCTYPE html>/u).test(text));
       const doc = new DOMParser().parseFromString(text, "text/html");
       assertSingleTagText(assert, doc, "title", "simple-website-with-blog/test");
+      assert.equal(doc.getElementsByTagName("meta").length, 2);
       assertSingleTagText(assert, doc, "h1", "Test blog");
       assertSingleTagText(assert, doc, "h2", "");
       assert.equal(doc.getElementsByTagName("h3").length, 10);
@@ -170,7 +172,7 @@ QUnit.test("Get of /blog?page=eleven returns ok and 10 posts", (assert) => {
 });
 
 QUnit.test("Get of /blog?page=twentyone returns ok and 1 post", (assert) => {
-  assert.expect(17);
+  assert.expect(18);
   const done = assert.async();
   fetch("/blog?page=twentyone").
     then((response) => {
@@ -181,6 +183,7 @@ QUnit.test("Get of /blog?page=twentyone returns ok and 1 post", (assert) => {
       assert.ok((/^<!DOCTYPE html>/u).test(text));
       const doc = new DOMParser().parseFromString(text, "text/html");
       assertSingleTagText(assert, doc, "title", "simple-website-with-blog/test");
+      assert.equal(doc.getElementsByTagName("meta").length, 2);
       assertSingleTagText(assert, doc, "h1", "Test blog");
       assertSingleTagText(assert, doc, "h2", "");
       assert.equal(doc.getElementsByTagName("h3").length, 1);
@@ -234,7 +237,7 @@ QUnit.test("Get of /Blog returns 404", (assert) => {
 QUnit.module("Post");
 
 QUnit.test("Get of /blog/post/one (publish date) returns ok and compressed HTML", (assert) => {
-  assert.expect(28);
+  assert.expect(29);
   const done = assert.async();
   fetch("/blog/post/one").
     then((response) => {
@@ -247,6 +250,7 @@ QUnit.test("Get of /blog/post/one (publish date) returns ok and compressed HTML"
       assert.ok((/^<!DOCTYPE html>/u).test(text));
       const doc = new DOMParser().parseFromString(text, "text/html");
       assertSingleTagText(assert, doc, "title", "Test post - one - simple-website-with-blog/test");
+      assert.equal(doc.getElementsByTagName("meta").length, 1);
       assertSingleTagText(assert, doc, "h1", "Test blog");
       assertSingleTagText(assert, doc, "h2", "");
       assertSingleTagText(assert, doc, "h3", "one");
@@ -268,7 +272,7 @@ QUnit.test("Get of /blog/post/one (publish date) returns ok and compressed HTML"
 QUnit.test(
   "Get of /blog/post/eleven (publish/content dates, Markdown) returns ok and content",
   (assert) => {
-    assert.expect(24);
+    assert.expect(25);
     const done = assert.async();
     fetch("/blog/post/eleven").
       then((response) => {
@@ -284,6 +288,7 @@ QUnit.test(
           "title",
           "Test post - eleven - simple-website-with-blog/test"
         );
+        assert.equal(doc.getElementsByTagName("meta").length, 1);
         assertSingleTagText(assert, doc, "h1", "Test blog");
         assertSingleTagText(assert, doc, "h2", "");
         assertSingleTagText(assert, doc, "h3", "eleven");
@@ -319,7 +324,7 @@ QUnit.test("Get of /blog/post/twenty (Markdown+code) returns ok and highlighting
 });
 
 QUnit.test("Get of /blog/post/nan (no dates, HTML) returns ok and content", (assert) => {
-  assert.expect(24);
+  assert.expect(25);
   const done = assert.async();
   fetch("/blog/post/nan").
     then((response) => {
@@ -330,6 +335,7 @@ QUnit.test("Get of /blog/post/nan (no dates, HTML) returns ok and content", (ass
       assert.ok((/^<!DOCTYPE html>/u).test(text));
       const doc = new DOMParser().parseFromString(text, "text/html");
       assertSingleTagText(assert, doc, "title", "Test post - nan - simple-website-with-blog/test");
+      assert.equal(doc.getElementsByTagName("meta").length, 1);
       assertSingleTagText(assert, doc, "h1", "Test blog");
       assertSingleTagText(assert, doc, "h2", "");
       assertSingleTagText(assert, doc, "h3", "nan");
@@ -382,7 +388,7 @@ QUnit.test("Get of /blog/post/missing (missing) returns 404", (assert) => {
 QUnit.module("Search");
 
 QUnit.test("Get of /blog/search?query=tw* returns ok, compressed HTML, and 4 posts", (assert) => {
-  assert.expect(17);
+  assert.expect(18);
   const done = assert.async();
   fetch("/blog/search?query=tw*").
     then((response) => {
@@ -395,6 +401,7 @@ QUnit.test("Get of /blog/search?query=tw* returns ok, compressed HTML, and 4 pos
       assert.ok((/^<!DOCTYPE html>/u).test(text));
       const doc = new DOMParser().parseFromString(text, "text/html");
       assertSingleTagText(assert, doc, "title", "Search: tw* - simple-website-with-blog/test");
+      assert.equal(doc.getElementsByTagName("meta").length, 2);
       assertSingleTagText(assert, doc, "h1", "Test blog");
       assertSingleTagText(assert, doc, "h2", "Search: tw*");
       assert.equal(doc.getElementsByTagName("h3").length, 4);
@@ -411,7 +418,7 @@ QUnit.test("Get of /blog/search?query=tw* returns ok, compressed HTML, and 4 pos
 QUnit.test(
   "Get of /blog/search?query=content&page=thirteen returns ok, compressed HTML, and 10 posts",
   (assert) => {
-    assert.expect(11);
+    assert.expect(12);
     const done = assert.async();
     fetch("/blog/search?query=content&page=thirteen").
       then((response) => {
@@ -427,6 +434,7 @@ QUnit.test(
           "title",
           "Search: content - simple-website-with-blog/test"
         );
+        assert.equal(doc.getElementsByTagName("meta").length, 2);
         assertSingleTagText(assert, doc, "h1", "Test blog");
         assertSingleTagText(assert, doc, "h2", "Search: content");
         assert.equal(doc.getElementsByTagName("h3").length, 10);
@@ -438,7 +446,7 @@ QUnit.test(
 );
 
 QUnit.test("Get of /blog/search?query=missing returns ok and 0 posts", (assert) => {
-  assert.expect(11);
+  assert.expect(12);
   const done = assert.async();
   fetch("/blog/search?query=missing").
     then((response) => {
@@ -449,6 +457,7 @@ QUnit.test("Get of /blog/search?query=missing returns ok and 0 posts", (assert) 
       assert.ok((/^<!DOCTYPE html>/u).test(text));
       const doc = new DOMParser().parseFromString(text, "text/html");
       assertSingleTagText(assert, doc, "title", "Search: missing - simple-website-with-blog/test");
+      assert.equal(doc.getElementsByTagName("meta").length, 2);
       assertSingleTagText(assert, doc, "h1", "Test blog");
       assertSingleTagText(assert, doc, "h2", "Search: missing");
       assert.equal(doc.getElementsByTagName("h3").length, 0);
@@ -502,7 +511,7 @@ QUnit.test("Get of /blog returns 6 archive links", (assert) => {
 });
 
 QUnit.test("Get of /blog/archive/201801 returns ok, compressed HTML, and 3 posts", (assert) => {
-  assert.expect(16);
+  assert.expect(17);
   const done = assert.async();
   fetch("/blog/archive/201801").
     then((response) => {
@@ -520,6 +529,7 @@ QUnit.test("Get of /blog/archive/201801 returns ok, compressed HTML, and 3 posts
         "title",
         "Posts from January 2018 - simple-website-with-blog/test"
       );
+      assert.equal(doc.getElementsByTagName("meta").length, 2);
       assertSingleTagText(assert, doc, "h1", "Test blog");
       assertSingleTagText(assert, doc, "h2", "Posts from January 2018");
       assert.equal(doc.getElementsByTagName("h3").length, 3);

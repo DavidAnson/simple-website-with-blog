@@ -44,6 +44,7 @@ module.exports.getHtmlElements = (props) => {
         <title>{title}</title>
         <meta name="viewport" content="width=device-width"/>
         <meta name="description" content={strings.description}/>
+        {shared.getNoIndexTag(props.noindex)}
         <link rel="alternate" type="application/rss+xml" href="/blog/rss" title={strings.title}/>
         <link rel="stylesheet" href="/xcode.css"/>
       </head>
@@ -52,7 +53,7 @@ module.exports.getHtmlElements = (props) => {
         <ul>{archives}</ul>
         <p><a href="/blog/post/about">About this blog</a></p>
         <form action="/blog/search">
-          <input type="text" name="query" placeholder="Search" accessKey="s"/>
+          <input type="text" name="query" placeholder="HTML -CSS Java*" accessKey="s"/>
         </form>
         {heading ? <h2>{heading}</h2> : null}
         {posts}

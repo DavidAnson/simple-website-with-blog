@@ -22,6 +22,9 @@ module.exports.dateTimeFormatWeekday = new Intl.DateTimeFormat("en-US", dateForm
 module.exports.dateTimeFormatDay = new Intl.DateTimeFormat("en-US", dateFormatOptionsDay);
 const dateTimeFormatMonth = new Intl.DateTimeFormat("en-US", dateFormatOptionsMonth);
 
+module.exports.getNoIndexTag =
+  (noindex) => (noindex ? <meta name="robots" content="noindex"/> : null);
+
 module.exports.getArchiveList = (archives) => archives.
   map((period) => {
     const year = period.

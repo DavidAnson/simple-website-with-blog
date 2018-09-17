@@ -129,7 +129,7 @@ router["postsLoaded"] = readdir(postsDir).
     });
   });
 
-const renderPosts = (req, res, next, posts, title, period, query) => {
+const renderPosts = (req, res, next, posts, noindex, title, period, query) => {
   const url = new URL(req.originalUrl, "https://example.org/");
   const pageParam = "page";
   const page = url.searchParams.get(pageParam);
@@ -164,6 +164,7 @@ const renderPosts = (req, res, next, posts, title, period, query) => {
   const elements = render.getHtmlElements({
     "posts": posts.slice(currIndex, nextIndex),
     "archives": getArchivePeriods(),
+    "noindex": noindex || (Object.keys(req.query).length > 0),
     title,
     period,
     query,
@@ -177,7 +178,7 @@ const renderPosts = (req, res, next, posts, title, period, query) => {
 
 router.get("/", (req, res, next) => {
   const posts = postsSortedByContentDate.filter(getPublishedPostFilter());
-  return renderPosts(req, res, next, posts);
+  return renderPosts(req, res, next, posts, false);
 });
 
 router.get("/post/:id", (req, res, next) => {
@@ -187,7 +188,7 @@ router.get("/post/:id", (req, res, next) => {
   if (posts.length === 0) {
     return next();
   }
-  return renderPosts(req, res, next, posts, render.getPostTitle(posts[0]));
+  return renderPosts(req, res, next, posts, false, render.getPostTitle(posts[0]));
 });
 
 router.get("/archive/:period(\\d{6})", (req, res, next) => {
@@ -200,7 +201,7 @@ router.get("/archive/:period(\\d{6})", (req, res, next) => {
   if (posts.length === 0) {
     return next();
   }
-  return renderPosts(req, res, next, posts, null, new Date(year, month));
+  return renderPosts(req, res, next, posts, true, null, new Date(year, month));
 });
 
 router.get("/search", (req, res, next) => {
@@ -212,7 +213,7 @@ router.get("/search", (req, res, next) => {
     search(query).
     map((result) => postsIndexedById[result.ref]).
     filter(getPublishedPostFilter());
-  return renderPosts(req, res, next, posts, null, null, query);
+  return renderPosts(req, res, next, posts, true, null, null, query);
 });
 
 router.get("/rss", (req, res, next) => {

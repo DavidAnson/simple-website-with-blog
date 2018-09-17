@@ -37,6 +37,7 @@ module.exports.getHtmlElements = (props) => {
       <head>
         <title>{title}</title>
         <meta name="viewport" content="width=device-width"/>
+        {shared.getNoIndexTag(props.noindex)}
       </head>
       <body>
         <h1>{strings.description}</h1>

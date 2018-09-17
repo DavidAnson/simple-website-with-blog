@@ -18,6 +18,8 @@ const dateFormatOptionsMonth = {
 module.exports.dateTimeFormatWeekday = new Intl.DateTimeFormat("en-US", dateFormatOptionsWeekday);
 module.exports.dateTimeFormatDay = new Intl.DateTimeFormat("en-US", dateFormatOptionsDay);
 const dateTimeFormatMonth = new Intl.DateTimeFormat("en-US", dateFormatOptionsMonth);
+module.exports.getNoIndexTag =
+    (noindex) => (noindex ? React.createElement("meta", { name: "robots", content: "noindex" }) : null);
 module.exports.getArchiveList = (archives) => archives.
     map((period) => {
     const year = period.

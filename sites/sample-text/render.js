@@ -35,6 +35,7 @@ module.exports.getHtmlElements = (props) => {
             React.createElement("title", null, title),
             React.createElement("meta", { name: "viewport", content: "width=device-width" }),
             React.createElement("meta", { name: "description", content: strings.description }),
+            shared.getNoIndexTag(props.noindex),
             React.createElement("link", { rel: "alternate", type: "application/rss+xml", href: "/blog/rss", title: strings.title }),
             React.createElement("link", { rel: "stylesheet", href: "/xcode.css" })),
         React.createElement("body", null,
@@ -44,7 +45,7 @@ module.exports.getHtmlElements = (props) => {
             React.createElement("p", null,
                 React.createElement("a", { href: "/blog/post/about" }, "About this blog")),
             React.createElement("form", { action: "/blog/search" },
-                React.createElement("input", { type: "text", name: "query", placeholder: "Search", accessKey: "s" })),
+                React.createElement("input", { type: "text", name: "query", placeholder: "HTML -CSS Java*", accessKey: "s" })),
             heading ? React.createElement("h2", null, heading) : null,
             posts,
             shared.getPrevNextLinks(props))));
