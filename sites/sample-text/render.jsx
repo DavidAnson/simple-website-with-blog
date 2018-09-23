@@ -21,6 +21,7 @@ module.exports.getContentJsonElements = (contentJson) => {
 };
 
 module.exports.getHtmlElements = (props) => {
+  const tags = shared.getTagList(props.tags);
   const archives = shared.getArchiveList(props.archives);
   const posts = props.posts.map((post) => {
     const publishDateIso = post.publishDate.toISOString();
@@ -44,12 +45,13 @@ module.exports.getHtmlElements = (props) => {
         <title>{title}</title>
         <meta name="viewport" content="width=device-width"/>
         <meta name="description" content={strings.description}/>
-        {shared.getNoIndexTag(props.noindex)}
+        {shared.getMetaRobots(props.noindex)}
         <link rel="alternate" type="application/rss+xml" href="/blog/rss" title={strings.title}/>
         <link rel="stylesheet" href="/xcode.css"/>
       </head>
       <body>
         <h1><a href="/blog">The blog of simple-website-with-blog</a></h1>
+        <ul>{tags}</ul>
         <ul>{archives}</ul>
         <p><a href="/blog/post/about">About this blog</a></p>
         <form action="/blog/search">

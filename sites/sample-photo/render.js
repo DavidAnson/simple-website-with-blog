@@ -41,7 +41,7 @@ module.exports.getHtmlElements = (props) => {
             React.createElement("title", null, title),
             React.createElement("meta", { name: "viewport", content: "width=device-width" }),
             React.createElement("meta", { name: "description", content: strings.description }),
-            shared.getNoIndexTag(props.noindex),
+            shared.getMetaRobots(props.noindex),
             React.createElement("link", { rel: "alternate", type: "application/rss+xml", href: "/blog/rss", title: strings.title }),
             React.createElement("link", { rel: "stylesheet", href: "/blog.css" })),
         React.createElement("body", null,

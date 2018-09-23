@@ -1,6 +1,10 @@
 {
   "title": "four",
   "publishDate": "2018-01-28T12:00Z",
+  "tags": [
+    "even",
+    "square"
+  ],
   "contentJson": [
     "Content"
   ]

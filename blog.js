@@ -43,6 +43,18 @@ const getPublishedPostFilter = (includeDateless) => {
   };
 };
 
+const getTagNames = () => {
+  const tagSet = new Set();
+  postsSortedByContentDate.
+    filter(getPublishedPostFilter()).
+    forEach((post) => {
+      post.tags.forEach((tag) => tagSet.add(tag));
+    });
+  const tagList = [...tagSet];
+  tagList.sort((left, right) => left.localeCompare(right));
+  return tagList;
+};
+
 const getArchivePeriods = () => {
   const archivePeriods = [];
   let lastPeriodValue = 0;
@@ -77,6 +89,7 @@ router["postsLoaded"] = readdir(postsDir).
           post.id = id;
           post.contentDate = new Date(post.contentDate || post.publishDate || 0);
           post.publishDate = new Date(post.publishDate || 0);
+          post.tags = post.tags || [];
           return post;
         }).
         then((post) => {
@@ -129,7 +142,7 @@ router["postsLoaded"] = readdir(postsDir).
     });
   });
 
-const renderPosts = (req, res, next, posts, noindex, title, period, query) => {
+const renderPosts = (req, res, next, posts, noindex, title, period, tag, query) => {
   const url = new URL(req.originalUrl, "https://example.org/");
   const pageParam = "page";
   const page = url.searchParams.get(pageParam);
@@ -163,10 +176,12 @@ const renderPosts = (req, res, next, posts, noindex, title, period, query) => {
   }
   const elements = render.getHtmlElements({
     "posts": posts.slice(currIndex, nextIndex),
+    "tags": getTagNames(),
     "archives": getArchivePeriods(),
     "noindex": noindex || (Object.keys(req.query).length > 0),
     title,
     period,
+    tag,
     query,
     prevLink,
     nextLink
@@ -191,6 +206,17 @@ router.get("/post/:id", (req, res, next) => {
   return renderPosts(req, res, next, posts, false, render.getPostTitle(posts[0]));
 });
 
+router.get("/tag/:tag", (req, res, next) => {
+  const {tag} = req.params;
+  const posts = postsSortedByContentDate.
+    filter(getPublishedPostFilter()).
+    filter((post) => post.tags.includes(tag));
+  if (posts.length === 0) {
+    return next();
+  }
+  return renderPosts(req, res, next, posts, true, null, null, tag);
+});
+
 router.get("/archive/:period(\\d{6})", (req, res, next) => {
   const year = parseInt(req.params.period.slice(0, 4), 10);
   const month = parseInt(req.params.period.slice(4, 6), 10) - 1;
@@ -213,7 +239,7 @@ router.get("/search", (req, res, next) => {
     search(query).
     map((result) => postsIndexedById[result.ref]).
     filter(getPublishedPostFilter());
-  return renderPosts(req, res, next, posts, true, null, null, query);
+  return renderPosts(req, res, next, posts, true, null, null, null, query);
 });
 
 router.get("/rss", (req, res, next) => {

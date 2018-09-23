@@ -2,6 +2,9 @@
   "title": "twelve",
   "publishDate": "2017-11-02T12:00Z",
   "contentDate": "2017-11-10T12:00Z",
+  "tags": [
+    "even"
+  ],
   "contentJson": [
     "Content"
   ]

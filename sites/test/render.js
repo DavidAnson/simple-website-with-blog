@@ -14,6 +14,7 @@ module.exports.getContentJsonElements = (contentJson) => {
     return React.createElement(React.Fragment, null, content);
 };
 module.exports.getHtmlElements = (props) => {
+    const tags = shared.getTagList(props.tags);
     const archives = shared.getArchiveList(props.archives);
     const posts = props.posts.map((post) => (React.createElement("section", { key: post.id },
         React.createElement("h3", null, post.id),
@@ -26,12 +27,13 @@ module.exports.getHtmlElements = (props) => {
         React.createElement("head", null,
             React.createElement("title", null, title),
             React.createElement("meta", { name: "viewport", content: "width=device-width" }),
-            shared.getNoIndexTag(props.noindex)),
+            shared.getMetaRobots(props.noindex)),
         React.createElement("body", null,
             React.createElement("h1", null, strings.description),
             React.createElement("h2", null, heading),
             posts,
             shared.getPrevNextLinks(props),
-            React.createElement("ul", null, archives))));
+            React.createElement("ul", { id: "tags" }, tags),
+            React.createElement("ul", { id: "archives" }, archives))));
 };
 module.exports.getRssMetadata = () => shared.getRssMetadata(strings);

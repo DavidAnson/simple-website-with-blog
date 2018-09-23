@@ -1,6 +1,10 @@
 {
   "title": "zero",
   "publishDate": "3000-01-01T12:00Z",
+  "tags": [
+    "even",
+    "square"
+  ],
   "contentJson": [
     "Content"
   ]

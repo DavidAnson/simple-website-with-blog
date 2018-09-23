@@ -14,6 +14,7 @@ module.exports.getContentJsonElements = (contentJson) => {
     return React.createElement("div", null, content);
 };
 module.exports.getHtmlElements = (props) => {
+    const tags = shared.getTagList(props.tags);
     const archives = shared.getArchiveList(props.archives);
     const posts = props.posts.map((post) => {
         const publishDateIso = post.publishDate.toISOString();
@@ -35,12 +36,13 @@ module.exports.getHtmlElements = (props) => {
             React.createElement("title", null, title),
             React.createElement("meta", { name: "viewport", content: "width=device-width" }),
             React.createElement("meta", { name: "description", content: strings.description }),
-            shared.getNoIndexTag(props.noindex),
+            shared.getMetaRobots(props.noindex),
             React.createElement("link", { rel: "alternate", type: "application/rss+xml", href: "/blog/rss", title: strings.title }),
             React.createElement("link", { rel: "stylesheet", href: "/xcode.css" })),
         React.createElement("body", null,
             React.createElement("h1", null,
                 React.createElement("a", { href: "/blog" }, "The blog of simple-website-with-blog")),
+            React.createElement("ul", null, tags),
             React.createElement("ul", null, archives),
             React.createElement("p", null,
                 React.createElement("a", { href: "/blog/post/about" }, "About this blog")),

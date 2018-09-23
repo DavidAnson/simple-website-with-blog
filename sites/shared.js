@@ -18,8 +18,11 @@ const dateFormatOptionsMonth = {
 module.exports.dateTimeFormatWeekday = new Intl.DateTimeFormat("en-US", dateFormatOptionsWeekday);
 module.exports.dateTimeFormatDay = new Intl.DateTimeFormat("en-US", dateFormatOptionsDay);
 const dateTimeFormatMonth = new Intl.DateTimeFormat("en-US", dateFormatOptionsMonth);
-module.exports.getNoIndexTag =
+module.exports.getMetaRobots =
     (noindex) => (noindex ? React.createElement("meta", { name: "robots", content: "noindex" }) : null);
+module.exports.getTagList = (tags) => tags.
+    map((tag) => (React.createElement("li", { key: tag },
+    React.createElement("a", { href: `/blog/tag/${tag}` }, tag))));
 module.exports.getArchiveList = (archives) => archives.
     map((period) => {
     const year = period.
@@ -37,6 +40,9 @@ module.exports.getTitleHeading = (props, strings) => {
     let heading = null;
     if (props.period) {
         heading = `Posts from ${dateTimeFormatMonth.format(props.period)}`;
+    }
+    else if (props.tag) {
+        heading = `Tag: ${props.tag}`;
     }
     else if (props.query) {
         heading = `Search: ${props.query}`;

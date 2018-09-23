@@ -21,6 +21,7 @@ module.exports.getContentJsonElements = (contentJson) => {
 };
 
 module.exports.getHtmlElements = (props) => {
+  const tags = shared.getTagList(props.tags);
   const archives = shared.getArchiveList(props.archives);
   const posts = props.posts.map((post) => (
     <section key={post.id}>
@@ -37,14 +38,15 @@ module.exports.getHtmlElements = (props) => {
       <head>
         <title>{title}</title>
         <meta name="viewport" content="width=device-width"/>
-        {shared.getNoIndexTag(props.noindex)}
+        {shared.getMetaRobots(props.noindex)}
       </head>
       <body>
         <h1>{strings.description}</h1>
         <h2>{heading}</h2>
         {posts}
         {shared.getPrevNextLinks(props)}
-        <ul>{archives}</ul>
+        <ul id="tags">{tags}</ul>
+        <ul id="archives">{archives}</ul>
       </body>
     </html>
   );

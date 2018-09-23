@@ -2,6 +2,9 @@
   "title": "thirteen",
   "publishDate": "2017-11-03T12:00Z",
   "contentDate": "2017-11-01T12:00Z",
+  "tags": [
+    "Fibonacci"
+  ],
   "contentJson": [
     "Content"
   ]
