@@ -276,7 +276,7 @@ QUnit.test("Get of /blog/post/one (publish date) returns ok and compressed HTML"
 QUnit.test(
   "Get of /blog/post/eleven (publish/content dates, Markdown) returns ok and content",
   (assert) => {
-    assert.expect(26);
+    assert.expect(33);
     const done = assert.async();
     fetch("/blog/post/eleven").
       then((response) => {
@@ -302,8 +302,14 @@ QUnit.test(
         assert.equal(doc.getElementsByTagName("div").length, 1);
         assert.equal(doc.getElementsByTagName("div")[0].childElementCount, 1);
         const content = doc.getElementsByTagName("div")[0].firstElementChild;
-        assertElementNameText(assert, content, "P", "Content for eleven");
+        assertElementNameText(assert, content, "P", "Content for eleven\n\nText\n");
         assertElementNameText(assert, content.firstElementChild, "STRONG", "eleven");
+        assertElementNameText(assert, content.children[1], "IMG", "");
+        assert.equal(content.children[1].getAttribute("alt"), "Pie chart");
+        assertElementNameText(assert, content.lastElementChild, "IMG", "");
+        assert.equal(content.lastElementChild.getAttribute("alt"), "Another chart");
+        const src = `${location.origin}/images/piechart.png`;
+        assert.equal(content.lastElementChild.getAttribute("src"), src);
         assert.equal(doc.getElementsByTagName("a").length, 10);
         assert.equal(doc.getElementById("tags").children.length, 3);
         assert.equal(doc.getElementById("archives").children.length, 7);
@@ -329,7 +335,7 @@ QUnit.test("Get of /blog/post/twenty (Markdown+code) returns ok and highlighting
 });
 
 QUnit.test("Get of /blog/post/nan (no dates, HTML) returns ok and content", (assert) => {
-  assert.expect(26);
+  assert.expect(29);
   const done = assert.async();
   fetch("/blog/post/nan").
     then((response) => {
@@ -350,9 +356,12 @@ QUnit.test("Get of /blog/post/nan (no dates, HTML) returns ok and content", (ass
       assert.equal(doc.getElementsByTagName("div").length, 1);
       assert.equal(doc.getElementsByTagName("div")[0].childElementCount, 1);
       const content = doc.getElementsByTagName("div")[0].firstElementChild;
-      assertElementNameText(assert, content, "P", "Content for nan");
+      assertElementNameText(assert, content, "P", "Content for nan, link to one");
       assertElementNameText(assert, content.firstElementChild, "I", "nan");
-      assert.equal(doc.getElementsByTagName("a").length, 10);
+      assertElementNameText(assert, content.lastElementChild, "A", "one");
+      const href = `${location.origin}/blog/post/one`;
+      assert.equal(content.lastElementChild.getAttribute("href"), href);
+      assert.equal(doc.getElementsByTagName("a").length, 11);
       assert.equal(doc.getElementById("tags").children.length, 3);
       assert.equal(doc.getElementById("archives").children.length, 7);
     }).
@@ -445,7 +454,7 @@ QUnit.test(
         assertSingleTagText(assert, doc, "h1", "Test blog");
         assertSingleTagText(assert, doc, "h2", "Search: content");
         assert.equal(doc.getElementsByTagName("h3").length, 10);
-        assert.equal(doc.getElementsByTagName("a").length, 12);
+        assert.equal(doc.getElementsByTagName("a").length, 11);
         assert.equal(doc.getElementById("tags").children.length, 3);
         assert.equal(doc.getElementById("archives").children.length, 7);
       }).
@@ -743,30 +752,42 @@ QUnit.test("Get of /blog/archive/1234 (invalid) returns 404", (assert) => {
 
 QUnit.module("RSS");
 
-QUnit.test("Get of /blog/rss returns ok, compressed XML, and 20 posts", (assert) => {
-  assert.expect(47);
-  const done = assert.async();
-  fetch("/blog/rss").
-    then((response) => {
-      assert.ok(response.ok);
-      assert.equal(response.headers.get("Content-Encoding"), "gzip");
-      assert.equal(response.headers.get("Content-Type"), "application/rss+xml; charset=utf-8");
-      return response.text();
-    }).
-    then((text) => {
-      assert.ok((/^<\?xml version="1.0" encoding="UTF-8"\?>/u).test(text));
-      const doc = new DOMParser().parseFromString(text, "text/xml");
-      assert.equal(doc.getElementsByTagName("title").length, 21);
-      const titles = ("simple-website-with-blog/test " +
-        "one two three four five six seven eight nine ten " +
-        "twenty nineteen eighteen seventeen sixteen fifteen fourteen thirteen twelve eleven").
-        split(" ");
-      for (const item of doc.getElementsByTagName("title")) {
-        assert.equal(item.textContent.replace(/^Test post - /u, ""), titles.shift());
-      }
-      for (const link of doc.getElementsByTagName("link")) {
-        assert.ok((/^https?:\/\/[^/]+(\/blog\/post\/[a-z]+)?$/u).test(link.textContent));
-      }
-    }).
-    then(done);
-});
+QUnit.test(
+  "Get of /blog/rss returns ok, compressed XML, and 20 posts with absolute URIs",
+  (assert) => {
+    assert.expect(94);
+    const done = assert.async();
+    fetch("/blog/rss").
+      then((response) => {
+        assert.ok(response.ok);
+        assert.equal(response.headers.get("Content-Encoding"), "gzip");
+        assert.equal(response.headers.get("Content-Type"), "application/rss+xml; charset=utf-8");
+        return response.text();
+      }).
+      then((text) => {
+        assert.ok((/^<\?xml version="1.0" encoding="UTF-8"\?>/u).test(text));
+        const doc = new DOMParser().parseFromString(text, "text/xml");
+        assert.equal(doc.getElementsByTagName("title").length, 21);
+        const titles = ("simple-website-with-blog/test " +
+          "one two three four five six seven eight nine ten " +
+          "twenty nineteen eighteen seventeen sixteen fifteen fourteen thirteen twelve eleven").
+          split(" ");
+        for (const item of doc.getElementsByTagName("title")) {
+          assert.equal(item.textContent.replace(/^Test post - /u, ""), titles.shift());
+        }
+        for (const link of doc.getElementsByTagName("link")) {
+          assert.ok((/^https?:\/\/[^/]+(\/blog\/post\/[a-z]+)?$/u).test(link.textContent));
+        }
+        const uriRe = /[^"<>[\]]+\/[^"<>[\]]+/gu;
+        let match = null;
+        while ((match = uriRe.exec(text)) !== null) {
+          const [url] = match;
+          if ((url !== "simple-website-with-blog/test") &&
+              (url !== "application/rss+xml")) {
+            assert.ok(new URL(url));
+          }
+        }
+      }).
+      then(done);
+  }
+);

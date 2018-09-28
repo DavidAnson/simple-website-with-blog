@@ -1,6 +1,6 @@
 "use strict";
 
-const {showFuturePosts, redirectToHttps, siteRoot} = require("./config");
+const {hostnameToken, showFuturePosts, redirectToHttps, siteRoot} = require("./config");
 const fs = require("fs");
 const path = require("path");
 const {URL} = require("url");
@@ -32,6 +32,18 @@ const postsIndexedById = {};
 let searchIndex = null;
 const commonHtmlStopWords =
   "alt br div h1 h2 h3 h4 h5 h6 href img li ol pre src srcset ul".split(" ");
+const linkRes = [
+  /<(?:a|area|link)\s[^>]*href\s*=\s*"?([^">\s]+)/giu,
+  // eslint-disable-next-line max-len
+  /<(?:audio|embed|iframe|img|input|script|source|track|video)\s[^>]*(?:src|srcset)\s*=\s*"?([^">\s]+)/giu,
+  /<object\s[^>]*data\s*=\s*"?([^">\s]+)/giu,
+  /<video\s[^>]*poster\s*=\s*"?([^">\s]+)/giu
+];
+
+const escapeForRegExp = (str) => str.replace(/[-/\\^$*+?.()|[\]{}]/gu, "\\$&");
+const hostnameTokenRe = new RegExp(escapeForRegExp(hostnameToken), "gu");
+
+const getSiteUrl = (req) => `${redirectToHttps ? "https" : "http"}://${req.headers.host}`;
 
 const getPublishedPostFilter = (includeDateless) => {
   const now = Date.now();
@@ -116,6 +128,19 @@ router["postsLoaded"] = readdir(postsDir).
           }
           return promise.
             then(() => {
+              const contentHtml = post.contentHtml.replace(hostnameTokenRe, "https://example.com");
+              linkRes.forEach((linkRe) => {
+                let match = null;
+                while ((match = linkRe.exec(contentHtml)) !== null) {
+                  const [, url] = match;
+                  try {
+                    // eslint-disable-next-line no-new
+                    new URL(url);
+                  } catch (ex) {
+                    throw new Error(`URL "${url}" in post "${post.id}" must be absolute for RSS.`);
+                  }
+                }
+              });
               postsSortedByContentDate.push(post);
               postsIndexedById[post.id] = post;
             });
@@ -189,7 +214,8 @@ const renderPosts = (req, res, next, posts, noindex, title, period, tag, query) 
     nextLink
   });
   const staticMarkup = ReactDOMServer.renderToStaticMarkup(elements);
-  const body = `<!DOCTYPE html>${staticMarkup}`;
+  const finalMarkup = staticMarkup.replace(hostnameTokenRe, getSiteUrl(req));
+  const body = `<!DOCTYPE html>${finalMarkup}`;
   return res.send(body);
 };
 
@@ -251,7 +277,7 @@ router.get("/rss", (req, res, next) => {
   if (posts.length === 0) {
     return next();
   }
-  const siteUrl = `${redirectToHttps ? "https" : "http"}://${req.headers.host}`;
+  const siteUrl = getSiteUrl(req);
   const {title, description, author, copyright} = render.getRssMetadata();
   const feed = new RSS({
     title,
@@ -266,7 +292,7 @@ router.get("/rss", (req, res, next) => {
     feed.item({
       "title": render.getPostTitle(post),
       "url": `${siteUrl}/blog/post/${post.id}`,
-      "description": post.contentHtml,
+      "description": post.contentHtml.replace(hostnameTokenRe, siteUrl),
       "date": post.publishDate,
       author
     });

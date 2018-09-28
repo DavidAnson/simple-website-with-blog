@@ -14,8 +14,8 @@ const getPostTitle = (post) => {
 module.exports.getPostTitle = getPostTitle;
 module.exports.getContentJsonElements = (contentJson) => {
     const content = contentJson.map((photo, index) => {
-        const src = `/photos/${photo.image}`;
-        const srcSet = photo.image2x ? `/photos/${photo.image2x} 2x` : null;
+        const src = `SWWB_HOST/photos/${photo.image}`;
+        const srcSet = photo.image2x ? `SWWB_HOST/photos/${photo.image2x} 2x` : null;
         return (React.createElement(React.Fragment, { key: index },
             React.createElement("img", { src: src, srcSet: srcSet, alt: photo.caption }),
             React.createElement("p", null, photo.caption)));
