@@ -4,9 +4,26 @@
 // eslint-disable-next-line no-var, no-use-before-define
 var QUnit = QUnit;
 
+const assertResponseAndHeaders = (assert, response, contentType) => {
+  assert.ok(response.ok);
+  assert.equal(response.headers.get("Content-Encoding"), "gzip");
+  assert.equal(response.headers.get("Content-Type"), contentType || "text/html; charset=utf-8");
+};
+
 const assertSingleTagText = (assert, document, tag, text) => {
   assert.equal(document.getElementsByTagName(tag).length, 1);
   assert.equal(document.getElementsByTagName(tag)[0].innerText, text);
+};
+
+const assertPageMetadata = (assert, text, metaCount, titlePrefix, innerTitle) => {
+  const unifiedTitlePrefix = titlePrefix || (innerTitle ? `${innerTitle} - ` : "");
+  assert.ok((/^<!DOCTYPE html>/u).test(text));
+  const doc = new DOMParser().parseFromString(text, "text/html");
+  assertSingleTagText(assert, doc, "title", `${unifiedTitlePrefix}simple-website-with-blog/test`);
+  assert.equal(doc.getElementsByTagName("meta").length, metaCount);
+  assertSingleTagText(assert, doc, "h1", "Test blog");
+  assertSingleTagText(assert, doc, "h2", innerTitle || "");
+  return doc;
 };
 
 const assertElementNameText = (assert, element, name, text) => {
@@ -58,9 +75,7 @@ QUnit.test("Get of / returns ok and compressed HTML", (assert) => {
   const done = assert.async();
   fetch("/").
     then((response) => {
-      assert.ok(response.ok);
-      assert.equal(response.headers.get("Content-Encoding"), "gzip");
-      assert.equal(response.headers.get("Content-Type"), "text/html; charset=UTF-8");
+      assertResponseAndHeaders(assert, response, "text/html; charset=UTF-8");
       return response.text();
     }).
     then((text) => {
@@ -74,9 +89,7 @@ QUnit.test("Get of /tests.js returns ok and compressed JS", (assert) => {
   const done = assert.async();
   fetch("/tests.js").
     then((response) => {
-      assert.ok(response.ok);
-      assert.equal(response.headers.get("Content-Encoding"), "gzip");
-      assert.equal(response.headers.get("Content-Type"), "application/javascript; charset=UTF-8");
+      assertResponseAndHeaders(assert, response, "application/javascript; charset=UTF-8");
       return response.text();
     }).
     then((text) => {
@@ -108,18 +121,11 @@ QUnit.test("Get of /blog returns ok, compressed HTML, and 10 posts", (assert) =>
   const done = assert.async();
   fetch("/blog").
     then((response) => {
-      assert.ok(response.ok);
-      assert.equal(response.headers.get("Content-Encoding"), "gzip");
-      assert.equal(response.headers.get("Content-Type"), "text/html; charset=utf-8");
+      assertResponseAndHeaders(assert, response);
       return response.text();
     }).
     then((text) => {
-      assert.ok((/^<!DOCTYPE html>/u).test(text));
-      const doc = new DOMParser().parseFromString(text, "text/html");
-      assertSingleTagText(assert, doc, "title", "simple-website-with-blog/test");
-      assert.equal(doc.getElementsByTagName("meta").length, 1);
-      assertSingleTagText(assert, doc, "h1", "Test blog");
-      assertSingleTagText(assert, doc, "h2", "");
+      const doc = assertPageMetadata(assert, text, 1);
       assert.equal(doc.getElementsByTagName("h3").length, 10);
       const postTitles = "one two three four five six seven eight nine ten".split(" ");
       for (const item of doc.getElementsByTagName("h3")) {
@@ -146,12 +152,7 @@ QUnit.test("Get of /blog?page=eleven returns ok and 10 posts", (assert) => {
       return response.text();
     }).
     then((text) => {
-      assert.ok((/^<!DOCTYPE html>/u).test(text));
-      const doc = new DOMParser().parseFromString(text, "text/html");
-      assertSingleTagText(assert, doc, "title", "simple-website-with-blog/test");
-      assert.equal(doc.getElementsByTagName("meta").length, 2);
-      assertSingleTagText(assert, doc, "h1", "Test blog");
-      assertSingleTagText(assert, doc, "h2", "");
+      const doc = assertPageMetadata(assert, text, 2);
       assert.equal(doc.getElementsByTagName("h3").length, 10);
       const postTitles =
         "eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty".
@@ -182,12 +183,7 @@ QUnit.test("Get of /blog?page=twentyone returns ok and 2 posts", (assert) => {
       return response.text();
     }).
     then((text) => {
-      assert.ok((/^<!DOCTYPE html>/u).test(text));
-      const doc = new DOMParser().parseFromString(text, "text/html");
-      assertSingleTagText(assert, doc, "title", "simple-website-with-blog/test");
-      assert.equal(doc.getElementsByTagName("meta").length, 2);
-      assertSingleTagText(assert, doc, "h1", "Test blog");
-      assertSingleTagText(assert, doc, "h2", "");
+      const doc = assertPageMetadata(assert, text, 2);
       assert.equal(doc.getElementsByTagName("h3").length, 2);
       const postTitles = "twentyone twentytwo".split(" ");
       for (const item of doc.getElementsByTagName("h3")) {
@@ -244,18 +240,11 @@ QUnit.test("Get of /blog/post/one (publish date) returns ok and compressed HTML"
   const done = assert.async();
   fetch("/blog/post/one").
     then((response) => {
-      assert.ok(response.ok);
-      assert.equal(response.headers.get("Content-Encoding"), "gzip");
-      assert.equal(response.headers.get("Content-Type"), "text/html; charset=utf-8");
+      assertResponseAndHeaders(assert, response);
       return response.text();
     }).
     then((text) => {
-      assert.ok((/^<!DOCTYPE html>/u).test(text));
-      const doc = new DOMParser().parseFromString(text, "text/html");
-      assertSingleTagText(assert, doc, "title", "Test post - one - simple-website-with-blog/test");
-      assert.equal(doc.getElementsByTagName("meta").length, 1);
-      assertSingleTagText(assert, doc, "h1", "Test blog");
-      assertSingleTagText(assert, doc, "h2", "");
+      const doc = assertPageMetadata(assert, text, 1, "Test post - one - ");
       assertSingleTagText(assert, doc, "h3", "one");
       assertSingleTagText(assert, doc, "h4", "Test post - one");
       assertSingleTagText(assert, doc, "h5", "2018-02-28T12:00:00.000Z");
@@ -284,17 +273,7 @@ QUnit.test(
         return response.text();
       }).
       then((text) => {
-        assert.ok((/^<!DOCTYPE html>/u).test(text));
-        const doc = new DOMParser().parseFromString(text, "text/html");
-        assertSingleTagText(
-          assert,
-          doc,
-          "title",
-          "Test post - eleven - simple-website-with-blog/test"
-        );
-        assert.equal(doc.getElementsByTagName("meta").length, 1);
-        assertSingleTagText(assert, doc, "h1", "Test blog");
-        assertSingleTagText(assert, doc, "h2", "");
+        const doc = assertPageMetadata(assert, text, 1, "Test post - eleven - ");
         assertSingleTagText(assert, doc, "h3", "eleven");
         assertSingleTagText(assert, doc, "h4", "Test post - eleven");
         assertSingleTagText(assert, doc, "h5", "2017-11-01T12:00:00.000Z");
@@ -343,12 +322,7 @@ QUnit.test("Get of /blog/post/nan (no dates, HTML) returns ok and content", (ass
       return response.text();
     }).
     then((text) => {
-      assert.ok((/^<!DOCTYPE html>/u).test(text));
-      const doc = new DOMParser().parseFromString(text, "text/html");
-      assertSingleTagText(assert, doc, "title", "Test post - nan - simple-website-with-blog/test");
-      assert.equal(doc.getElementsByTagName("meta").length, 1);
-      assertSingleTagText(assert, doc, "h1", "Test blog");
-      assertSingleTagText(assert, doc, "h2", "");
+      const doc = assertPageMetadata(assert, text, 1, "Test post - nan - ");
       assertSingleTagText(assert, doc, "h3", "nan");
       assertSingleTagText(assert, doc, "h4", "Test post - nan");
       assertSingleTagText(assert, doc, "h5", "1970-01-01T00:00:00.000Z");
@@ -407,18 +381,11 @@ QUnit.test("Get of /blog/search?query=tw* returns ok, compressed HTML, and 4 pos
   const done = assert.async();
   fetch("/blog/search?query=tw*").
     then((response) => {
-      assert.ok(response.ok);
-      assert.equal(response.headers.get("Content-Encoding"), "gzip");
-      assert.equal(response.headers.get("Content-Type"), "text/html; charset=utf-8");
+      assertResponseAndHeaders(assert, response);
       return response.text();
     }).
     then((text) => {
-      assert.ok((/^<!DOCTYPE html>/u).test(text));
-      const doc = new DOMParser().parseFromString(text, "text/html");
-      assertSingleTagText(assert, doc, "title", "Search: tw* - simple-website-with-blog/test");
-      assert.equal(doc.getElementsByTagName("meta").length, 2);
-      assertSingleTagText(assert, doc, "h1", "Test blog");
-      assertSingleTagText(assert, doc, "h2", "Search: tw*");
+      const doc = assertPageMetadata(assert, text, 2, null, "Search: tw*");
       assert.equal(doc.getElementsByTagName("h3").length, 5);
       const postTitles = "two twentytwo twentyone twenty twelve".split(" ");
       for (const item of doc.getElementsByTagName("h3")) {
@@ -442,17 +409,7 @@ QUnit.test(
         return response.text();
       }).
       then((text) => {
-        assert.ok((/^<!DOCTYPE html>/u).test(text));
-        const doc = new DOMParser().parseFromString(text, "text/html");
-        assertSingleTagText(
-          assert,
-          doc,
-          "title",
-          "Search: content - simple-website-with-blog/test"
-        );
-        assert.equal(doc.getElementsByTagName("meta").length, 2);
-        assertSingleTagText(assert, doc, "h1", "Test blog");
-        assertSingleTagText(assert, doc, "h2", "Search: content");
+        const doc = assertPageMetadata(assert, text, 2, null, "Search: content");
         assert.equal(doc.getElementsByTagName("h3").length, 10);
         assert.equal(doc.getElementsByTagName("a").length, 11);
         assert.equal(doc.getElementById("tags").children.length, 3);
@@ -471,12 +428,7 @@ QUnit.test("Get of /blog/search?query=missing returns ok and 0 posts", (assert) 
       return response.text();
     }).
     then((text) => {
-      assert.ok((/^<!DOCTYPE html>/u).test(text));
-      const doc = new DOMParser().parseFromString(text, "text/html");
-      assertSingleTagText(assert, doc, "title", "Search: missing - simple-website-with-blog/test");
-      assert.equal(doc.getElementsByTagName("meta").length, 2);
-      assertSingleTagText(assert, doc, "h1", "Test blog");
-      assertSingleTagText(assert, doc, "h2", "Search: missing");
+      const doc = assertPageMetadata(assert, text, 2, null, "Search: missing");
       assert.equal(doc.getElementsByTagName("h3").length, 0);
       assert.equal(doc.getElementsByTagName("a").length, 10);
       assert.equal(doc.getElementById("tags").children.length, 3);
@@ -492,23 +444,11 @@ QUnit.test(
     const done = assert.async();
     fetch("/blog/search?query=ei*+-title%3Aeighteen").
       then((response) => {
-        assert.ok(response.ok);
-        assert.equal(response.headers.get("Content-Encoding"), "gzip");
-        assert.equal(response.headers.get("Content-Type"), "text/html; charset=utf-8");
+        assertResponseAndHeaders(assert, response);
         return response.text();
       }).
       then((text) => {
-        assert.ok((/^<!DOCTYPE html>/u).test(text));
-        const doc = new DOMParser().parseFromString(text, "text/html");
-        assertSingleTagText(
-          assert,
-          doc,
-          "title",
-          "Search: ei* -title:eighteen - simple-website-with-blog/test"
-        );
-        assert.equal(doc.getElementsByTagName("meta").length, 2);
-        assertSingleTagText(assert, doc, "h1", "Test blog");
-        assertSingleTagText(assert, doc, "h2", "Search: ei* -title:eighteen");
+        const doc = assertPageMetadata(assert, text, 2, null, "Search: ei* -title:eighteen");
         assert.equal(doc.getElementsByTagName("h3").length, 1);
         const postTitles = "eight".split(" ");
         for (const item of doc.getElementsByTagName("h3")) {
@@ -529,23 +469,11 @@ QUnit.test(
     const done = assert.async();
     fetch("/blog/search?query=ni*+-tag%3Asquare").
       then((response) => {
-        assert.ok(response.ok);
-        assert.equal(response.headers.get("Content-Encoding"), "gzip");
-        assert.equal(response.headers.get("Content-Type"), "text/html; charset=utf-8");
+        assertResponseAndHeaders(assert, response);
         return response.text();
       }).
       then((text) => {
-        assert.ok((/^<!DOCTYPE html>/u).test(text));
-        const doc = new DOMParser().parseFromString(text, "text/html");
-        assertSingleTagText(
-          assert,
-          doc,
-          "title",
-          "Search: ni* -tag:square - simple-website-with-blog/test"
-        );
-        assert.equal(doc.getElementsByTagName("meta").length, 2);
-        assertSingleTagText(assert, doc, "h1", "Test blog");
-        assertSingleTagText(assert, doc, "h2", "Search: ni* -tag:square");
+        const doc = assertPageMetadata(assert, text, 2, null, "Search: ni* -tag:square");
         assert.equal(doc.getElementsByTagName("h3").length, 1);
         const postTitles = "nineteen".split(" ");
         for (const item of doc.getElementsByTagName("h3")) {
@@ -605,23 +533,11 @@ QUnit.test("Get of /blog/tag/even returns ok, compressed HTML, and 10 posts", (a
   const done = assert.async();
   fetch("/blog/tag/even").
     then((response) => {
-      assert.ok(response.ok);
-      assert.equal(response.headers.get("Content-Encoding"), "gzip");
-      assert.equal(response.headers.get("Content-Type"), "text/html; charset=utf-8");
+      assertResponseAndHeaders(assert, response);
       return response.text();
     }).
     then((text) => {
-      assert.ok((/^<!DOCTYPE html>/u).test(text));
-      const doc = new DOMParser().parseFromString(text, "text/html");
-      assertSingleTagText(
-        assert,
-        doc,
-        "title",
-        "Tag: even - simple-website-with-blog/test"
-      );
-      assert.equal(doc.getElementsByTagName("meta").length, 2);
-      assertSingleTagText(assert, doc, "h1", "Test blog");
-      assertSingleTagText(assert, doc, "h2", "Tag: even");
+      const doc = assertPageMetadata(assert, text, 2, null, "Tag: even");
       assert.equal(doc.getElementsByTagName("h3").length, 10);
       const postTitles =
         "two four six eight ten twelve fourteen sixteen eighteen twenty".split(" ");
@@ -689,23 +605,11 @@ QUnit.test("Get of /blog/archive/201801 returns ok, compressed HTML, and 3 posts
   const done = assert.async();
   fetch("/blog/archive/201801").
     then((response) => {
-      assert.ok(response.ok);
-      assert.equal(response.headers.get("Content-Encoding"), "gzip");
-      assert.equal(response.headers.get("Content-Type"), "text/html; charset=utf-8");
+      assertResponseAndHeaders(assert, response);
       return response.text();
     }).
     then((text) => {
-      assert.ok((/^<!DOCTYPE html>/u).test(text));
-      const doc = new DOMParser().parseFromString(text, "text/html");
-      assertSingleTagText(
-        assert,
-        doc,
-        "title",
-        "Posts from January 2018 - simple-website-with-blog/test"
-      );
-      assert.equal(doc.getElementsByTagName("meta").length, 2);
-      assertSingleTagText(assert, doc, "h1", "Test blog");
-      assertSingleTagText(assert, doc, "h2", "Posts from January 2018");
+      const doc = assertPageMetadata(assert, text, 2, null, "Posts from January 2018");
       assert.equal(doc.getElementsByTagName("h3").length, 3);
       const postTitles = "four five six".split(" ");
       for (const item of doc.getElementsByTagName("h3")) {
@@ -759,9 +663,7 @@ QUnit.test(
     const done = assert.async();
     fetch("/blog/rss").
       then((response) => {
-        assert.ok(response.ok);
-        assert.equal(response.headers.get("Content-Encoding"), "gzip");
-        assert.equal(response.headers.get("Content-Type"), "application/rss+xml; charset=utf-8");
+        assertResponseAndHeaders(assert, response, "application/rss+xml; charset=utf-8");
         return response.text();
       }).
       then((text) => {
