@@ -47,30 +47,81 @@ QUnit.test("Browser supports fetch API", (assert) => {
 QUnit.module("Static");
 
 QUnit.test("Get of / returns expected HTTP headers", (assert) => {
-  assert.expect(13);
+  assert.expect(25);
   const done = assert.async();
   fetch("/").
     then((response) => {
       const {headers} = response;
       [
         // Content headers
-        "Content-Encoding",
-        "Content-Type",
+        [
+          "Content-Encoding",
+          "gzip"
+        ],
+        [
+          "Content-Type",
+          "text/html; charset=UTF-8"
+        ],
         // Caching headers
-        "Cache-Control",
-        "ETag",
-        "Last-Modified",
+        [
+          "Cache-Control",
+          "public, max-age=0"
+        ],
+        [
+          "ETag",
+          "W/\"1c5-165a80fb6bf\""
+        ],
+        [
+          "Last-Modified",
+          null
+        ],
         // Security headers
-        "Content-Security-Policy",
-        "Referrer-Policy",
-        "Strict-Transport-Security",
-        "X-Content-Type-Options",
-        "X-DNS-Prefetch-Control",
-        "X-Download-Options",
-        "X-Frame-Options",
-        "X-XSS-Protection"
-      ].forEach((name) => {
+        [
+          "Content-Security-Policy",
+          "default-src 'self'; " +
+            "script-src 'self' 'unsafe-inline' code.jquery.com; " +
+            "style-src 'self' 'unsafe-inline' code.jquery.com; " +
+            "base-uri 'none'; " +
+            "frame-ancestors 'none'; " +
+            "form-action 'self'"
+        ],
+        [
+          "Referrer-Policy",
+          "no-referrer-when-downgrade"
+        ],
+        [
+          "Strict-Transport-Security",
+          "max-age=604800; includeSubDomains"
+        ],
+        [
+          "X-Content-Type-Options",
+          "nosniff"
+        ],
+        [
+          "X-DNS-Prefetch-Control",
+          "off"
+        ],
+        [
+          "X-Download-Options",
+          "noopen"
+        ],
+        [
+          "X-Frame-Options",
+          "SAMEORIGIN"
+        ],
+        [
+          "X-XSS-Protection",
+          "1; mode=block"
+        ]
+      ].forEach((nameValue) => {
+        const [
+          name,
+          value
+        ] = nameValue;
         assert.ok(headers.has(name));
+        if (value) {
+          assert.equal(headers.get(name), value);
+        }
       });
     }).
     then(done);
