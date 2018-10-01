@@ -10,6 +10,12 @@ const assertResponseAndHeaders = (assert, response, contentType) => {
   assert.equal(response.headers.get("Content-Type"), contentType || "text/html; charset=utf-8");
 };
 
+const assertNotFound = (assert, response) => {
+  assert.ok(!response.ok);
+  assert.equal(response.status, 404);
+  assert.equal(response.statusText, "Not Found");
+};
+
 const assertSingleTagText = (assert, document, tag, text) => {
   assert.equal(document.getElementsByTagName(tag).length, 1);
   assert.equal(document.getElementsByTagName(tag)[0].innerText, text);
@@ -103,9 +109,7 @@ QUnit.test("Get of /missing returns 404", (assert) => {
   const done = assert.async();
   fetch("/missing").
     then((response) => {
-      assert.ok(!response.ok);
-      assert.equal(response.status, 404);
-      assert.equal(response.statusText, "Not Found");
+      assertNotFound(assert, response);
       return response.text();
     }).
     then((text) => {
@@ -206,9 +210,7 @@ QUnit.test("Get of /blog?page=missing returns 404", (assert) => {
   const done = assert.async();
   fetch("/blog?page=missing").
     then((response) => {
-      assert.ok(!response.ok);
-      assert.equal(response.status, 404);
-      assert.equal(response.statusText, "Not Found");
+      assertNotFound(assert, response);
       return response.text();
     }).
     then((text) => {
@@ -222,9 +224,7 @@ QUnit.test("Get of /Blog returns 404", (assert) => {
   const done = assert.async();
   fetch("/Blog").
     then((response) => {
-      assert.ok(!response.ok);
-      assert.equal(response.status, 404);
-      assert.equal(response.statusText, "Not Found");
+      assertNotFound(assert, response);
       return response.text();
     }).
     then((text) => {
@@ -347,9 +347,7 @@ QUnit.test("Get of /blog/post/zero (unpublished) returns 404", (assert) => {
   const done = assert.async();
   fetch("/blog/post/zero").
     then((response) => {
-      assert.ok(!response.ok);
-      assert.equal(response.status, 404);
-      assert.equal(response.statusText, "Not Found");
+      assertNotFound(assert, response);
       return response.text();
     }).
     then((text) => {
@@ -363,9 +361,7 @@ QUnit.test("Get of /blog/post/missing (missing) returns 404", (assert) => {
   const done = assert.async();
   fetch("/blog/post/missing").
     then((response) => {
-      assert.ok(!response.ok);
-      assert.equal(response.status, 404);
-      assert.equal(response.statusText, "Not Found");
+      assertNotFound(assert, response);
       return response.text();
     }).
     then((text) => {
@@ -492,9 +488,7 @@ QUnit.test("Get of /blog/search returns 404", (assert) => {
   const done = assert.async();
   fetch("/blog/search").
     then((response) => {
-      assert.ok(!response.ok);
-      assert.equal(response.status, 404);
-      assert.equal(response.statusText, "Not Found");
+      assertNotFound(assert, response);
       return response.text();
     }).
     then((text) => {
@@ -561,9 +555,7 @@ QUnit.test("Get of /blog/tag/fibonacci (wrong case) returns 404", (assert) => {
   const done = assert.async();
   fetch("/blog/tag/fibonacci").
     then((response) => {
-      assert.ok(!response.ok);
-      assert.equal(response.status, 404);
-      assert.equal(response.statusText, "Not Found");
+      assertNotFound(assert, response);
       return response.text();
     }).
     then((text) => {
@@ -627,9 +619,7 @@ QUnit.test("Get of /blog/archive/300001 (unpublished post) returns 404", (assert
   const done = assert.async();
   fetch("/blog/archive/300001").
     then((response) => {
-      assert.ok(!response.ok);
-      assert.equal(response.status, 404);
-      assert.equal(response.statusText, "Not Found");
+      assertNotFound(assert, response);
       return response.text();
     }).
     then((text) => {
@@ -643,9 +633,7 @@ QUnit.test("Get of /blog/archive/1234 (invalid) returns 404", (assert) => {
   const done = assert.async();
   fetch("/blog/archive/1234").
     then((response) => {
-      assert.ok(!response.ok);
-      assert.equal(response.status, 404);
-      assert.equal(response.statusText, "Not Found");
+      assertNotFound(assert, response);
       return response.text();
     }).
     then((text) => {
