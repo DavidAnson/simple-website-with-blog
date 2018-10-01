@@ -4,6 +4,8 @@
 const React = require("react");
 // eslint-disable-next-line no-useless-concat
 const shared = require("../" + "shared.js");
+// eslint-disable-next-line no-useless-concat
+const config = require("../../" + "config.js");
 
 const strings = {
   "title": "simple-website-with-blog/sample-photo",
@@ -20,8 +22,8 @@ module.exports.getPostTitle = getPostTitle;
 
 module.exports.getContentJsonElements = (contentJson) => {
   const content = contentJson.map((photo, index) => {
-    const src = `SWWB_HOST/photos/${photo.image}`;
-    const srcSet = photo.image2x ? `SWWB_HOST/photos/${photo.image2x} 2x` : null;
+    const src = `${config.hostnameToken}/photos/${photo.image}`;
+    const srcSet = photo.image2x ? `${config.hostnameToken}/photos/${photo.image2x} 2x` : null;
     return (
       <React.Fragment key={index}>
         <img src={src} srcSet={srcSet} alt={photo.caption}/>
