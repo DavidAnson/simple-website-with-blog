@@ -1,0 +1,12 @@
+{
+  "include": [
+    "sites/**/*.jsx"
+  ],
+  "compilerOptions": {
+    "target": "ES2015",
+    "allowJs": true,
+    "jsx": "react",
+    "removeComments": true,
+    "strict": true
+  }
+}

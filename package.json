@@ -14,7 +14,7 @@
   "bugs": "https://github.com/DavidAnson/simple-website-with-blog/issues",
   "scripts": {
     "lint": "eslint *.js **/*.jsx sites/test/static/tests.js",
-    "compile": "tsc --allowJs --jsx react --target ES2015 --removeComments sites/shared.jsx sites/sample-text/render.jsx sites/sample-photo/render.jsx sites/test/render.jsx",
+    "compile": "tsc",
     "server": "npm run compile && node app.js",
     "start": "node app.js",
     "test": "set SWWB_SITE_ROOT=./sites/test&& node app.js",
