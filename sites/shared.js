@@ -20,6 +20,10 @@ module.exports.dateTimeFormatDay = new Intl.DateTimeFormat("en-US", dateFormatOp
 const dateTimeFormatMonth = new Intl.DateTimeFormat("en-US", dateFormatOptionsMonth);
 module.exports.getMetaRobots =
     (noindex) => (noindex ? React.createElement("meta", { name: "robots", content: "noindex" }) : null);
+module.exports.getReferenceList = (references, publishedPostFilter) => references.
+    filter(publishedPostFilter).
+    map((reference) => (React.createElement("li", { key: reference.id },
+    React.createElement("a", { href: `/blog/post/${reference.id}` }, reference.title))));
 module.exports.getTagList = (tags) => tags.
     map((tag) => (React.createElement("li", { key: tag },
     React.createElement("a", { href: `/blog/tag/${tag}` }, tag))));

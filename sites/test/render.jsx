@@ -12,8 +12,7 @@ const strings = {
   "copyright": "Copyright \u00a9 David Anson"
 };
 
-const getPostTitle = (post) => `Test post - ${post.title}`;
-module.exports.getPostTitle = getPostTitle;
+module.exports.getPostTitle = (post) => `Test post - ${post.title}`;
 
 module.exports.getContentJsonElements = (contentJson) => {
   const content = contentJson.map((line, index) => <p key={index}>{line}</p>);
@@ -23,15 +22,23 @@ module.exports.getContentJsonElements = (contentJson) => {
 module.exports.getHtmlElements = (props) => {
   const tags = shared.getTagList(props.tags);
   const archives = shared.getArchiveList(props.archives);
-  const posts = props.posts.map((post) => (
-    <section key={post.id}>
-      <h3>{post.id}</h3>
-      <h4>{getPostTitle(post)}</h4>
-      <h5>{post.publishDate.toISOString()}</h5>
-      <h6>{post.contentDate.toISOString()}</h6>
-      <div dangerouslySetInnerHTML={{"__html": post.contentHtml}}></div>
-    </section>
-  ));
+  const posts = props.posts.map((post) => {
+    const references = props.title
+      ? <ul id="references">
+        {shared.getReferenceList(post.references, props.publishedPostFilter)}
+      </ul>
+      : null;
+    return (
+      <section key={post.id}>
+        <h3>{post.id}</h3>
+        <h4>{post.title}</h4>
+        <h5>{post.publishDate.toISOString()}</h5>
+        <h6>{post.contentDate.toISOString()}</h6>
+        <div dangerouslySetInnerHTML={{"__html": post.contentHtml}}></div>
+        {references}
+      </section>
+    );
+  });
   const {title, heading} = shared.getTitleHeading(props, strings);
   return (
     <html lang="en">

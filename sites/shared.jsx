@@ -25,6 +25,14 @@ const dateTimeFormatMonth = new Intl.DateTimeFormat("en-US", dateFormatOptionsMo
 module.exports.getMetaRobots =
   (noindex) => (noindex ? <meta name="robots" content="noindex"/> : null);
 
+module.exports.getReferenceList = (references, publishedPostFilter) => references.
+  filter(publishedPostFilter).
+  map((reference) => (
+    <li key={reference.id}>
+      <a href={`/blog/post/${reference.id}`}>{reference.title}</a>
+    </li>
+  ));
+
 module.exports.getTagList = (tags) => tags.
   map((tag) => (
     <li key={tag}>

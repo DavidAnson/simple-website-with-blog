@@ -12,8 +12,7 @@ const strings = {
   "copyright": `Copyright \u00a9 2006-${new Date().getFullYear()} by David Anson`
 };
 
-const getPostTitle = (post) => post.title;
-module.exports.getPostTitle = getPostTitle;
+module.exports.getPostTitle = (post) => post.title;
 
 module.exports.getContentJsonElements = (contentJson) => {
   const content = contentJson.map((line, index) => <p key={index}>{line}</p>);
@@ -32,7 +31,7 @@ module.exports.getHtmlElements = (props) => {
     return (
       <section key={post.id}>
         <hr/>
-        <h2><a href={`/blog/post/${post.id}`}>{getPostTitle(post)}</a></h2>
+        <h2><a href={`/blog/post/${post.id}`}>{post.title}</a></h2>
         {publishDate}
         <div dangerouslySetInnerHTML={{"__html": post.contentHtml}}></div>
       </section>

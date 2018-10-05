@@ -14,11 +14,10 @@ const strings = {
   "copyright": `Copyright \u00a9 2006-${new Date().getFullYear()} by David Anson`
 };
 
-const getPostTitle = (post) => {
+module.exports.getPostTitle = (post) => {
   const contentDate = shared.dateTimeFormatDay.format(post.contentDate);
   return `${contentDate} - ${post.title}`;
 };
-module.exports.getPostTitle = getPostTitle;
 
 module.exports.getContentJsonElements = (contentJson) => {
   const content = contentJson.map((photo, index) => {
@@ -40,7 +39,7 @@ module.exports.getHtmlElements = (props) => {
     const publishDate = shared.dateTimeFormatWeekday.format(post.publishDate);
     return (
       <div key={post.id} className="post">
-        <h2><a href={`/blog/post/${post.id}`}>{getPostTitle(post)}</a></h2>
+        <h2><a href={`/blog/post/${post.id}`}>{post.title}</a></h2>
         <div dangerouslySetInnerHTML={{"__html": post.contentHtml}}></div>
         <p>
           Posted <time dateTime={post.publishDate.toISOString()}>{publishDate}</time>

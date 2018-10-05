@@ -42,6 +42,7 @@ const linkRes = [
 
 const escapeForRegExp = (str) => str.replace(/[-/\\^$*+?.()|[\]{}]/gu, "\\$&");
 const hostnameTokenRe = new RegExp(escapeForRegExp(hostnameToken), "gu");
+const referenceRe = new RegExp(`${escapeForRegExp(hostnameToken)}/blog/post/(\\w+)`, "gu");
 
 const getSiteUrl = (req) => `${redirectToHttps ? "https" : "http"}://${req.headers.host}`;
 
@@ -94,6 +95,9 @@ router["postsLoaded"] = readdir(postsDir).
     filter((file) => postExtension.test(file)).
     map((file) => {
       const id = file.replace(postExtension, "");
+      if (!(/\w+/u).test(id)) {
+        throw new Error(`Post id "${id}" contains unsupported characters.`);
+      }
       const filePath = path.join(postsDir, file);
       return readFile(filePath, "utf8").
         then((content) => {
@@ -103,6 +107,8 @@ router["postsLoaded"] = readdir(postsDir).
           post.publishDate = new Date(post.publishDate || 0);
           post.tags = post.tags || [];
           post.tag = post.tags.join(" ");
+          post.references = [];
+          post.title = render.getPostTitle(post);
           return post;
         }).
         then((post) => {
@@ -152,6 +158,26 @@ router["postsLoaded"] = readdir(postsDir).
     postsSortedByPublishDate.push(...postsSortedByContentDate);
     postsSortedByPublishDate.sort((left, right) => (right.publishDate - left.publishDate) ||
       right.id.localeCompare(left.id));
+  }).
+  then(() => {
+    postsSortedByPublishDate.forEach((post) => {
+      const references = [];
+      let match = null;
+      while ((match = referenceRe.exec(post.contentHtml)) !== null) {
+        const [, id] = match;
+        const matches = postsSortedByPublishDate.filter((pst) => pst.id === id);
+        if (matches.length !== 1) {
+          throw new Error(`Reference "${id}" in post "${post.id}" is not valid.`);
+        }
+        const [target] = matches;
+        references.push(target);
+        target.references.push(post);
+      }
+      post.references = [
+        ...references,
+        ...post.references
+      ];
+    });
   }).
   then(() => {
     searchIndex = lunr(function Config () {
@@ -206,6 +232,7 @@ const renderPosts = (req, res, next, posts, noindex, title, period, tag, query) 
     "tags": getTagNames(),
     "archives": getArchivePeriods(),
     "noindex": noindex || (Object.keys(req.query).length > 0),
+    "publishedPostFilter": getPublishedPostFilter(true),
     title,
     period,
     tag,
@@ -231,7 +258,7 @@ router.get("/post/:id", (req, res, next) => {
   if (posts.length === 0) {
     return next();
   }
-  return renderPosts(req, res, next, posts, false, render.getPostTitle(posts[0]));
+  return renderPosts(req, res, next, posts, false, posts[0].title);
 });
 
 router.get("/tag/:tag", (req, res, next) => {
@@ -290,7 +317,7 @@ router.get("/rss", (req, res, next) => {
   });
   posts.forEach((post) => {
     feed.item({
-      "title": render.getPostTitle(post),
+      "title": post.title,
       "url": `${siteUrl}/blog/post/${post.id}`,
       "description": post.contentHtml.replace(hostnameTokenRe, siteUrl),
       "date": post.publishDate,

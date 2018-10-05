@@ -7,8 +7,7 @@ const strings = {
     "author": "David Anson",
     "copyright": `Copyright \u00a9 2006-${new Date().getFullYear()} by David Anson`
 };
-const getPostTitle = (post) => post.title;
-module.exports.getPostTitle = getPostTitle;
+module.exports.getPostTitle = (post) => post.title;
 module.exports.getContentJsonElements = (contentJson) => {
     const content = contentJson.map((line, index) => React.createElement("p", { key: index }, line));
     return React.createElement("div", null, content);
@@ -26,7 +25,7 @@ module.exports.getHtmlElements = (props) => {
         return (React.createElement("section", { key: post.id },
             React.createElement("hr", null),
             React.createElement("h2", null,
-                React.createElement("a", { href: `/blog/post/${post.id}` }, getPostTitle(post))),
+                React.createElement("a", { href: `/blog/post/${post.id}` }, post.title)),
             publishDate,
             React.createElement("div", { dangerouslySetInnerHTML: { "__html": post.contentHtml } })));
     });

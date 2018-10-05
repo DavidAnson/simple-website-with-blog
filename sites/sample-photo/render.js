@@ -8,11 +8,10 @@ const strings = {
     "author": "David Anson",
     "copyright": `Copyright \u00a9 2006-${new Date().getFullYear()} by David Anson`
 };
-const getPostTitle = (post) => {
+module.exports.getPostTitle = (post) => {
     const contentDate = shared.dateTimeFormatDay.format(post.contentDate);
     return `${contentDate} - ${post.title}`;
 };
-module.exports.getPostTitle = getPostTitle;
 module.exports.getContentJsonElements = (contentJson) => {
     const content = contentJson.map((photo, index) => {
         const src = `${config.hostnameToken}/photos/${photo.image}`;
@@ -29,7 +28,7 @@ module.exports.getHtmlElements = (props) => {
         const publishDate = shared.dateTimeFormatWeekday.format(post.publishDate);
         return (React.createElement("div", { key: post.id, className: "post" },
             React.createElement("h2", null,
-                React.createElement("a", { href: `/blog/post/${post.id}` }, getPostTitle(post))),
+                React.createElement("a", { href: `/blog/post/${post.id}` }, post.title)),
             React.createElement("div", { dangerouslySetInnerHTML: { "__html": post.contentHtml } }),
             React.createElement("p", null,
                 "Posted ",

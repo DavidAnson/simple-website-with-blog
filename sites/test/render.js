@@ -7,8 +7,7 @@ const strings = {
     "author": "David Anson",
     "copyright": "Copyright \u00a9 David Anson"
 };
-const getPostTitle = (post) => `Test post - ${post.title}`;
-module.exports.getPostTitle = getPostTitle;
+module.exports.getPostTitle = (post) => `Test post - ${post.title}`;
 module.exports.getContentJsonElements = (contentJson) => {
     const content = contentJson.map((line, index) => React.createElement("p", { key: index }, line));
     return React.createElement(React.Fragment, null, content);
@@ -16,12 +15,18 @@ module.exports.getContentJsonElements = (contentJson) => {
 module.exports.getHtmlElements = (props) => {
     const tags = shared.getTagList(props.tags);
     const archives = shared.getArchiveList(props.archives);
-    const posts = props.posts.map((post) => (React.createElement("section", { key: post.id },
-        React.createElement("h3", null, post.id),
-        React.createElement("h4", null, getPostTitle(post)),
-        React.createElement("h5", null, post.publishDate.toISOString()),
-        React.createElement("h6", null, post.contentDate.toISOString()),
-        React.createElement("div", { dangerouslySetInnerHTML: { "__html": post.contentHtml } }))));
+    const posts = props.posts.map((post) => {
+        const references = props.title
+            ? React.createElement("ul", { id: "references" }, shared.getReferenceList(post.references, props.publishedPostFilter))
+            : null;
+        return (React.createElement("section", { key: post.id },
+            React.createElement("h3", null, post.id),
+            React.createElement("h4", null, post.title),
+            React.createElement("h5", null, post.publishDate.toISOString()),
+            React.createElement("h6", null, post.contentDate.toISOString()),
+            React.createElement("div", { dangerouslySetInnerHTML: { "__html": post.contentHtml } }),
+            references));
+    });
     const { title, heading } = shared.getTitleHeading(props, strings);
     return (React.createElement("html", { lang: "en" },
         React.createElement("head", null,

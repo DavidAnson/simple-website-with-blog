@@ -18,7 +18,7 @@
     "max-lines": ["error", 800],
     "max-lines-per-function": ["error", 80],
     "max-params": ["error", 10],
-    "max-statements": ["error", 25],
+    "max-statements": ["error", 30],
     "multiline-comment-style": ["error", "separate-lines"],
     "multiline-ternary": ["error", "always-multiline"],
     "new-cap": ["error", {"capIsNew": false}],
