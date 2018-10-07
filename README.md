@@ -78,4 +78,4 @@ The implementation strives to be simple and free of unnecessary dependencies.
 
 ## License
 
-MIT
+[MIT](LICENSE)

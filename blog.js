@@ -42,7 +42,7 @@ const linkRes = [
 
 const escapeForRegExp = (str) => str.replace(/[-/\\^$*+?.()|[\]{}]/gu, "\\$&");
 const hostnameTokenRe = new RegExp(escapeForRegExp(hostnameToken), "gu");
-const referenceRe = new RegExp(`${escapeForRegExp(hostnameToken)}/blog/post/(\\w+)`, "gu");
+const referenceRe = new RegExp(`${escapeForRegExp(hostnameToken)}/blog/post/([\\w-]+)`, "gu");
 
 const getSiteUrl = (req) => `${redirectToHttps ? "https" : "http"}://${req.headers.host}`;
 
@@ -95,7 +95,7 @@ router["postsLoaded"] = readdir(postsDir).
     filter((file) => postExtension.test(file)).
     map((file) => {
       const id = file.replace(postExtension, "");
-      if (!(/\w+/u).test(id)) {
+      if (!(/[\w-]+/u).test(id)) {
         throw new Error(`Post id "${id}" contains unsupported characters.`);
       }
       const filePath = path.join(postsDir, file);

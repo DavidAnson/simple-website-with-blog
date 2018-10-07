@@ -52,7 +52,7 @@ module.exports.getHtmlElements = (props) => {
         <h1><a href="/blog">The blog of simple-website-with-blog</a></h1>
         <ul>{tags}</ul>
         <ul>{archives}</ul>
-        <p><a href="/blog/post/about">About this blog</a></p>
+        <p><a href="/blog/post/mit-license">MIT License</a></p>
         <form action="/blog/search">
           <input type="text" name="query" placeholder="HTML -CSS Java*" accessKey="s"/>
         </form>

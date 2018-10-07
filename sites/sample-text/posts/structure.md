@@ -1,0 +1,9 @@
+- `/app.js` Entry point for the application, configures the server and static content
+- `/blog.js` Implementation of the blog, archives, tags, search, and RSS
+- `/config.js` Environment variables used to control basic behavior
+- `/sites/shared.js(x)` Blog layout code shared by the sample sites
+- `/sites/sample-text/render.js(x)` Blog layout code for the sample text blog
+- `/sites/sample-text/static/...` Static files and directories for the sample text blog
+- `/sites/sample-text/posts/...` Post metadata and content for the sample text blog
+- `/sites/sample-photo/...` Sample photo blog
+- `/sites/test/...` Test site for running unit tests

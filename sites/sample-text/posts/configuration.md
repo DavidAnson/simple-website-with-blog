@@ -1,0 +1,4 @@
+- `SWWB_SITE_ROOT` Set to specify the site to use when serving content (ex: `./sites/sample-text`)
+- `SWWB_REDIRECT_TO_HTTPS` Set to `true` to redirect HTTP traffic to HTTPS and set an HSTS header
+- `SWWB_SHOW_FUTURE_POSTS` Set to `true` to show posts with a publish date in the future (good when authoring locally)
+- `SWWB_HOSTNAME_TOKEN` Set to change the replacement token for inserting host name in posts (RSS uses absolute URLs)

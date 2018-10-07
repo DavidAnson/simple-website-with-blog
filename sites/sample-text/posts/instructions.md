@@ -1,0 +1,11 @@
+- Install Node.js version 8+
+- Fork and clone repository
+- Create directory under `/sites` or use one of the samples
+- Add static content to `/sites/yoursite/static`
+- Add post JSON and content under `/sites/yoursite/posts`
+- `npm install`
+- `npm run compile`
+- `npm start`
+- Open <http://localhost:3000/>
+- Commit changes to repository
+- Deploy repository to hosting service
