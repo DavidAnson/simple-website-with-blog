@@ -1,1 +1,1 @@
-Content, link to [nan](SWWB_HOST/blog/post/nan)
+Content, link to [nan](_SWWB_HOST_/blog/post/nan)

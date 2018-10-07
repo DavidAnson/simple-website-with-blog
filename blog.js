@@ -310,7 +310,7 @@ router.get("/rss", (req, res, next) => {
     title,
     description,
     "feed_url": `${siteUrl}/blog/rss`,
-    "site_url": siteUrl,
+    "site_url": `${siteUrl}/`,
     copyright,
     "pubDate": posts[0].publishDate,
     "ttl": 60

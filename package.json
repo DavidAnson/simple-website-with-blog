@@ -15,9 +15,11 @@
   "scripts": {
     "lint": "eslint *.js **/*.jsx sites/test/static/tests.js",
     "compile": "tsc",
+    "photo": "set SWWB_SITE_ROOT=./sites/sample-photo&& node app.js",
     "server": "npm run compile && node app.js",
     "start": "node app.js",
     "test": "set SWWB_SITE_ROOT=./sites/test&& node app.js",
+    "text": "set SWWB_SITE_ROOT=./sites/sample-text&& node app.js",
     "watch": "nodemon --ext js,jsx,json,html,md --ignore sites/shared.js --ignore **/render.js --exec npm run server"
   },
   "engines": {

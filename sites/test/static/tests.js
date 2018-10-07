@@ -754,7 +754,7 @@ QUnit.test(
           assert.equal(item.textContent.replace(/^Test post - /u, ""), titles.shift());
         }
         for (const link of doc.getElementsByTagName("link")) {
-          assert.ok((/^https?:\/\/[^/]+(\/blog\/post\/[a-z]+)?$/u).test(link.textContent));
+          assert.ok((/^https?:\/\/[^/]+\/(blog\/post\/[a-z]+)?$/u).test(link.textContent));
         }
         const uriRe = /[^"<>[\]]+\/[^"<>[\]]+/gu;
         let match = null;
