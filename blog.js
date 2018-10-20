@@ -41,8 +41,10 @@ const linkRes = [
 ];
 
 const escapeForRegExp = (str) => str.replace(/[-/\\^$*+?.()|[\]{}]/gu, "\\$&");
-const hostnameTokenRe = new RegExp(escapeForRegExp(hostnameToken), "gu");
-const referenceRe = new RegExp(`${escapeForRegExp(hostnameToken)}/blog/post/([\\w-]+)`, "gu");
+const hostnameTokenEscaped =
+  `${escapeForRegExp(hostnameToken)}|${escapeForRegExp(encodeURIComponent(hostnameToken))}`;
+const hostnameTokenRe = new RegExp(hostnameTokenEscaped, "gu");
+const referenceRe = new RegExp(`(${hostnameTokenEscaped})/blog/post/([\\w-]+)`, "gu");
 
 const getSiteUrl = (req) => `${redirectToHttps ? "https" : "http"}://${req.headers.host}`;
 
@@ -117,6 +119,7 @@ router["postsLoaded"] = readdir(postsDir).
             post.contentSearch = JSON.stringify(post.contentJson);
             const contentElements = render.getContentJsonElements(post.contentJson);
             post.contentHtml = ReactDOMServer.renderToStaticMarkup(contentElements);
+            post.contentSource = "json";
             delete post.contentJson;
           } else {
             const htmlFile = `${id}.html`;
@@ -130,6 +133,7 @@ router["postsLoaded"] = readdir(postsDir).
               then((content) => {
                 post.contentSearch = content;
                 post.contentHtml = includesHtmlFile ? content : markdownIt.render(content);
+                post.contentSource = includesHtmlFile ? "html" : "markdown";
               });
           }
           return promise.
@@ -164,7 +168,7 @@ router["postsLoaded"] = readdir(postsDir).
       const references = [];
       let match = null;
       while ((match = referenceRe.exec(post.contentHtml)) !== null) {
-        const [, id] = match;
+        const [, , id] = match;
         const matches = postsSortedByPublishDate.filter((pst) => pst.id === id);
         if (matches.length !== 1) {
           throw new Error(`Reference "${id}" in post "${post.id}" is not valid.`);

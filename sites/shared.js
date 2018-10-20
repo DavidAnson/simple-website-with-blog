@@ -15,18 +15,41 @@ const dateFormatOptionsMonth = {
     "year": "numeric",
     "month": "long"
 };
-module.exports.dateTimeFormatWeekday = new Intl.DateTimeFormat("en-US", dateFormatOptionsWeekday);
 module.exports.dateTimeFormatDay = new Intl.DateTimeFormat("en-US", dateFormatOptionsDay);
+const dateTimeFormatWeekday = new Intl.DateTimeFormat("en-US", dateFormatOptionsWeekday);
 const dateTimeFormatMonth = new Intl.DateTimeFormat("en-US", dateFormatOptionsMonth);
 module.exports.getMetaRobots =
     (noindex) => (noindex ? React.createElement("meta", { name: "robots", content: "noindex" }) : null);
-module.exports.getReferenceList = (references, publishedPostFilter) => references.
-    filter(publishedPostFilter).
-    map((reference) => (React.createElement("li", { key: reference.id },
-    React.createElement("a", { href: `/blog/post/${reference.id}` }, reference.title))));
+module.exports.getPublishDate = (post) => {
+    const publishDateIso = post.publishDate.toISOString();
+    const publishDateFormat = dateTimeFormatWeekday.format(post.publishDate);
+    return (post.publishDate.getTime() > 0)
+        ? React.createElement("time", { dateTime: publishDateIso }, publishDateFormat)
+        : null;
+};
+module.exports.getReferences = (show, references, publishedPostFilter) => {
+    if (!show) {
+        return null;
+    }
+    return (React.createElement("ul", null, references.
+        filter(publishedPostFilter).
+        map((reference) => (React.createElement("li", { key: reference.id },
+        React.createElement("a", { href: `/blog/post/${reference.id}` }, reference.title))))));
+};
 module.exports.getTagList = (tags) => tags.
     map((tag) => (React.createElement("li", { key: tag },
     React.createElement("a", { href: `/blog/tag/${tag}` }, tag))));
+module.exports.getTagLinks = (tags) => {
+    if (tags.length === 0) {
+        return null;
+    }
+    const tagLinks = tags.map((tag) => (React.createElement(React.Fragment, { key: tag },
+        " ",
+        React.createElement("a", { href: `/blog/tag/${tag}` }, tag))));
+    return React.createElement("div", { className: "tags" },
+        "Tags:",
+        tagLinks);
+};
 module.exports.getArchiveList = (archives) => archives.
     map((period) => {
     const year = period.
@@ -46,7 +69,7 @@ module.exports.getTitleHeading = (props, strings) => {
         heading = `Posts from ${dateTimeFormatMonth.format(props.period)}`;
     }
     else if (props.tag) {
-        heading = `Tag: ${props.tag}`;
+        heading = `Posts tagged "${props.tag}"`;
     }
     else if (props.query) {
         heading = `Search: ${props.query}`;

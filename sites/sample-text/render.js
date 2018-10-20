@@ -15,20 +15,12 @@ module.exports.getContentJsonElements = (contentJson) => {
 module.exports.getHtmlElements = (props) => {
     const tags = shared.getTagList(props.tags);
     const archives = shared.getArchiveList(props.archives);
-    const posts = props.posts.map((post) => {
-        const publishDateIso = post.publishDate.toISOString();
-        const publishDateFormat = shared.dateTimeFormatWeekday.format(post.publishDate);
-        const publishDate = (post.publishDate.getTime() > 0)
-            ? React.createElement("p", null,
-                React.createElement("time", { dateTime: publishDateIso }, publishDateFormat))
-            : null;
-        return (React.createElement("section", { key: post.id },
-            React.createElement("hr", null),
-            React.createElement("h2", null,
-                React.createElement("a", { href: `/blog/post/${post.id}` }, post.title)),
-            publishDate,
-            React.createElement("div", { dangerouslySetInnerHTML: { "__html": post.contentHtml } })));
-    });
+    const posts = props.posts.map((post) => (React.createElement("section", { key: post.id },
+        React.createElement("hr", null),
+        React.createElement("h2", null,
+            React.createElement("a", { href: `/blog/post/${post.id}` }, post.title)),
+        shared.getPublishDate(post),
+        React.createElement("div", { dangerouslySetInnerHTML: { "__html": post.contentHtml } }))));
     const { title, heading } = shared.getTitleHeading(props, strings);
     return (React.createElement("html", { lang: "en" },
         React.createElement("head", null,

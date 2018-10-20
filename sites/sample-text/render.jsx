@@ -22,21 +22,14 @@ module.exports.getContentJsonElements = (contentJson) => {
 module.exports.getHtmlElements = (props) => {
   const tags = shared.getTagList(props.tags);
   const archives = shared.getArchiveList(props.archives);
-  const posts = props.posts.map((post) => {
-    const publishDateIso = post.publishDate.toISOString();
-    const publishDateFormat = shared.dateTimeFormatWeekday.format(post.publishDate);
-    const publishDate = (post.publishDate.getTime() > 0)
-      ? <p><time dateTime={publishDateIso}>{publishDateFormat}</time></p>
-      : null;
-    return (
-      <section key={post.id}>
-        <hr/>
-        <h2><a href={`/blog/post/${post.id}`}>{post.title}</a></h2>
-        {publishDate}
-        <div dangerouslySetInnerHTML={{"__html": post.contentHtml}}></div>
-      </section>
-    );
-  });
+  const posts = props.posts.map((post) => (
+    <section key={post.id}>
+      <hr/>
+      <h2><a href={`/blog/post/${post.id}`}>{post.title}</a></h2>
+      {shared.getPublishDate(post)}
+      <div dangerouslySetInnerHTML={{"__html": post.contentHtml}}></div>
+    </section>
+  ));
   const {title, heading} = shared.getTitleHeading(props, strings);
   return (
     <html lang="en">

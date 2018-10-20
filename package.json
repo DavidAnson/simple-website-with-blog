@@ -15,6 +15,7 @@
   "scripts": {
     "lint": "eslint *.js **/*.jsx sites/test/static/tests.js",
     "compile": "tsc",
+    "future": "set SWWB_SHOW_FUTURE_POSTS=true&& node app.js",
     "photo": "set SWWB_SITE_ROOT=./sites/sample-photo&& node app.js",
     "server": "npm run compile && node app.js",
     "start": "node app.js",

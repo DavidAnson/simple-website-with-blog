@@ -16,16 +16,17 @@ module.exports.getHtmlElements = (props) => {
     const tags = shared.getTagList(props.tags);
     const archives = shared.getArchiveList(props.archives);
     const posts = props.posts.map((post) => {
-        const references = props.title
-            ? React.createElement("ul", { id: "references" }, shared.getReferenceList(post.references, props.publishedPostFilter))
-            : null;
+        const tagLinks = shared.getTagLinks(post.tags);
+        const references = shared.getReferences(Boolean(props.title), post.references, props.publishedPostFilter);
         return (React.createElement("section", { key: post.id },
             React.createElement("h3", null, post.id),
             React.createElement("h4", null, post.title),
             React.createElement("h5", null, post.publishDate.toISOString()),
             React.createElement("h6", null, post.contentDate.toISOString()),
+            React.createElement("blockquote", null, post.contentSource),
             React.createElement("div", { dangerouslySetInnerHTML: { "__html": post.contentHtml } }),
-            references));
+            tagLinks,
+            React.createElement("article", { className: "references" }, references)));
     });
     const { title, heading } = shared.getTitleHeading(props, strings);
     return (React.createElement("html", { lang: "en" },

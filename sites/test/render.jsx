@@ -23,19 +23,21 @@ module.exports.getHtmlElements = (props) => {
   const tags = shared.getTagList(props.tags);
   const archives = shared.getArchiveList(props.archives);
   const posts = props.posts.map((post) => {
-    const references = props.title
-      ? <ul id="references">
-        {shared.getReferenceList(post.references, props.publishedPostFilter)}
-      </ul>
-      : null;
+    const tagLinks = shared.getTagLinks(post.tags);
+    const references =
+      shared.getReferences(Boolean(props.title), post.references, props.publishedPostFilter);
     return (
       <section key={post.id}>
         <h3>{post.id}</h3>
         <h4>{post.title}</h4>
         <h5>{post.publishDate.toISOString()}</h5>
         <h6>{post.contentDate.toISOString()}</h6>
+        <blockquote>{post.contentSource}</blockquote>
         <div dangerouslySetInnerHTML={{"__html": post.contentHtml}}></div>
-        {references}
+        {tagLinks}
+        <article className="references">
+          {references}
+        </article>
       </section>
     );
   });
