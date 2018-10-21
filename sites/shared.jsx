@@ -34,19 +34,16 @@ module.exports.getPublishDate = (post) => {
 };
 
 module.exports.getReferences = (show, references, publishedPostFilter) => {
-  if (!show) {
-    return null;
-  }
-  return (
-    <ul>
-      {references.
-        filter(publishedPostFilter).
-        map((reference) => (
-          <li key={reference.id}>
-            <a href={`/blog/post/${reference.id}`}>{reference.title}</a>
-          </li>
-        ))}
-    </ul>);
+  const filteredReferences = references.filter(publishedPostFilter);
+  return (show && (filteredReferences.length > 0))
+    ? (<ul>
+      {filteredReferences.map((reference) => (
+        <li key={reference.id}>
+          <a href={`/blog/post/${reference.id}`}>{reference.title}</a>
+        </li>
+      ))}
+    </ul>)
+    : null;
 };
 
 module.exports.getTagList = (tags) => tags.

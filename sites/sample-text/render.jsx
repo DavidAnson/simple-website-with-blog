@@ -22,14 +22,27 @@ module.exports.getContentJsonElements = (contentJson) => {
 module.exports.getHtmlElements = (props) => {
   const tags = shared.getTagList(props.tags);
   const archives = shared.getArchiveList(props.archives);
-  const posts = props.posts.map((post) => (
-    <section key={post.id}>
-      <hr/>
-      <h2><a href={`/blog/post/${post.id}`}>{post.title}</a></h2>
-      {shared.getPublishDate(post)}
-      <div dangerouslySetInnerHTML={{"__html": post.contentHtml}}></div>
-    </section>
-  ));
+  const posts = props.posts.map((post) => {
+    const tagLinks = shared.getTagLinks(post.tags);
+    const references =
+      shared.getReferences(Boolean(props.title), post.references, props.publishedPostFilter);
+    return (
+      <div key={post.id} className="post">
+        <h2><a href={`/blog/post/${post.id}`}>{post.title}</a></h2>
+        {shared.getPublishDate(post)}
+        <div className={post.contentSource} dangerouslySetInnerHTML={{"__html": post.contentHtml}}>
+        </div>
+        {tagLinks}
+        {references
+          ? (<div className="references">
+            <p>Related Posts:</p>
+            {references}
+          </div>)
+          : null
+        }
+      </div>
+    );
+  });
   const {title, heading} = shared.getTitleHeading(props, strings);
   return (
     <html lang="en">
@@ -39,19 +52,39 @@ module.exports.getHtmlElements = (props) => {
         <meta name="description" content={strings.description}/>
         {shared.getMetaRobots(props.noindex)}
         <link rel="alternate" type="application/rss+xml" href="/blog/rss" title={strings.title}/>
+        <link rel="stylesheet" href="/blog.css"/>
         <link rel="stylesheet" href="/xcode.css"/>
       </head>
       <body>
-        <h1><a href="/blog">The blog of simple-website-with-blog</a></h1>
-        <ul>{tags}</ul>
-        <ul>{archives}</ul>
-        <p><a href="/blog/post/mit-license">MIT License</a></p>
-        <form action="/blog/search">
-          <input type="text" name="query" placeholder="HTML -CSS Java*" accessKey="s"/>
-        </form>
-        {heading ? <h2>{heading}</h2> : null}
-        {posts}
-        {shared.getPrevNextLinks(props)}
+        <div className="column">
+          <h1 className="banner">
+            <a href="/blog">{strings.description}</a>
+          </h1>
+          <div className="content">
+            <div className="posts">
+              {heading ? <h2>{heading}</h2> : null}
+              {posts}
+              {shared.getPrevNextLinks(props)}
+            </div>
+            <div className="sidebar">
+              <img src="/avatar.png" alt={strings.author}/>
+              <h2>About</h2>
+              <p>{strings.description}</p>
+              <p>By {strings.author}</p>
+              <h2>License</h2>
+              <p><a href="/blog/post/mit-license">MIT</a></p>
+              <h2>Search</h2>
+              <form action="/blog/search">
+                <input type="text" name="query" placeholder="HTML -CSS Java*" accessKey="s"/>
+              </form>
+              <h2>Tags</h2>
+              <ul>{tags}</ul>
+              <h2>Archive</h2>
+              <ul>{archives}</ul>
+            </div>
+          </div>
+          <div className="copyright">{strings.copyright}</div>
+        </div>
       </body>
     </html>
   );

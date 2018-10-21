@@ -1,0 +1,163 @@
+body {
+  background-color: #f0f0f0;
+  color: #000000;
+  font-family: "Segoe UI", GillSans, Helvetica, sans-serif;
+  font-size: 12pt;
+  font-weight: lighter;
+  margin: 0;
+}
+.column {
+  background-color: #ffffff;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 5px;
+}
+.banner {
+  border-bottom: 1px dotted black;
+  margin-bottom: 0.3em;
+  padding-top: 0.3em;
+}
+.banner a {
+  color: inherit;
+  text-decoration: inherit;
+}
+.content {
+  margin-top: 1.5em;
+}
+@media (min-width: 500px) {
+  .content {
+    display: flex;
+    align-items: flex-start;
+  }
+}
+.posts {
+  flex: 1 1 auto;
+  overflow-x: hidden;
+}
+.posts > h2 {
+  margin-bottom: 1em;
+  font-style: italic;
+}
+.post {
+  margin-bottom: 2em;
+}
+.post > time, .post > .tags {
+  font-size: 80%;
+}
+.post > .tags {
+  margin-top: 2em;
+}
+.post > .references > p {
+  font-weight: bolder;
+  margin-top: 2em;
+  margin-bottom: 0;
+}
+.post > .references > ul {
+  margin-top: 0;
+}
+.post blockquote, .post code, .post pre {
+  background-color: #0000000d;
+}
+.post code, .post pre {
+  font-size: 10pt;
+}
+.post pre {
+  overflow-x: auto;
+}
+.post ul {
+  list-style: disc;
+}
+.post img, .post canvas, .post iframe, .post svg, .post video {
+  max-width: 100%;
+}
+.navigation {
+  margin-bottom: 2em;
+}
+.copyright {
+  font-size: 80%;
+  padding-bottom: 1em;
+}
+.sidebar {
+  flex: 0 0 159px;
+  font-size: 90%;
+  margin-bottom: 2em;
+}
+@media (min-width: 500px) {
+  .sidebar {
+    margin-left: 5px;
+    border-left: 1px solid #0000000d;
+    padding-left: 5px;
+  }
+}
+.sidebar > img {
+  width: 150px;
+  height: 150px;
+  padding: 3px;
+  border: 1px solid #00000020;
+  border-radius: 4px;
+}
+.sidebar > h2 {
+  margin: 0.5em 0 0 0;
+}
+.sidebar > p {
+  margin-top: 0;
+  margin-bottom: 0.5em;
+}
+.sidebar > form > input {
+  box-sizing: border-box;
+  width: 100%;
+}
+.sidebar > form > ::placeholder {
+  font-style: italic;
+}
+.sidebar > ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.sidebar > ul > li {
+  display: inline-block;
+  width: 159px;
+}
+.markdown tr {
+  background-color: #0000000d;
+}
+.markdown thead > tr, .markdown tbody > tr:nth-child(2n) {
+  background-color: #0000001a;
+}
+.markdown pre > code {
+  background-color: transparent;
+}
+.delay img {
+  padding: 0;
+}
+.delay .TipHeader {
+  font-weight: bolder;
+}
+.delay .TipTip {
+  color: #e63e00;
+}
+h1 {
+  font-size: 170%;
+}
+h2 {
+  font-size: 120%;
+}
+h3 {
+  font-size: 115%;
+}
+h4 {
+  font-size: 110%;
+}
+h5 {
+  font-size: 105%;
+}
+h6 {
+  font-size: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+b, strong, h1, h2, h3, h4, h5, h6 {
+  font-weight: bolder;
+}

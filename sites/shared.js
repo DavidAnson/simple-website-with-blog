@@ -28,13 +28,11 @@ module.exports.getPublishDate = (post) => {
         : null;
 };
 module.exports.getReferences = (show, references, publishedPostFilter) => {
-    if (!show) {
-        return null;
-    }
-    return (React.createElement("ul", null, references.
-        filter(publishedPostFilter).
-        map((reference) => (React.createElement("li", { key: reference.id },
-        React.createElement("a", { href: `/blog/post/${reference.id}` }, reference.title))))));
+    const filteredReferences = references.filter(publishedPostFilter);
+    return (show && (filteredReferences.length > 0))
+        ? (React.createElement("ul", null, filteredReferences.map((reference) => (React.createElement("li", { key: reference.id },
+            React.createElement("a", { href: `/blog/post/${reference.id}` }, reference.title))))))
+        : null;
 };
 module.exports.getTagList = (tags) => tags.
     map((tag) => (React.createElement("li", { key: tag },
