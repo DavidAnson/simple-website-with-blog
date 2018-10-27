@@ -61,7 +61,7 @@ module.exports.getHtmlElements = (props) => {
                             React.createElement("a", { href: "/blog/post/mit-license" }, "MIT")),
                         React.createElement("h2", null, "Search"),
                         React.createElement("form", { action: "/blog/search" },
-                            React.createElement("input", { type: "text", name: "query", placeholder: "HTML -CSS Java*", accessKey: "s" })),
+                            React.createElement("input", { type: "text", name: "query", accessKey: "s", placeholder: "HTML -CSS Java*", "aria-label": "Search" })),
                         React.createElement("h2", null, "Tags"),
                         React.createElement("ul", null, tags),
                         React.createElement("h2", null, "Archive"),
