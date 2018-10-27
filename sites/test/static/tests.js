@@ -425,7 +425,7 @@ QUnit.test("Get of /blog/post/twenty (Markdown+code) returns ok and highlighting
 });
 
 QUnit.test("Get of /blog/post/nan (no dates, HTML) returns ok and content", (assert) => {
-  assert.expect(38);
+  assert.expect(41);
   const done = assert.async();
   fetch("/blog/post/nan").
     then((response) => {
@@ -442,12 +442,14 @@ QUnit.test("Get of /blog/post/nan (no dates, HTML) returns ok and content", (ass
       assert.equal(doc.getElementsByTagName("div").length, 1);
       assert.equal(doc.getElementsByTagName("div")[0].childElementCount, 1);
       const content = doc.getElementsByTagName("div")[0].firstElementChild;
-      assertElementNameText(assert, content, "P", "Content for nan, link to one");
+      assertElementNameText(assert, content, "P", "Content for nan, links to one and one");
       assertElementNameText(assert, content.firstElementChild, "I", "nan");
-      assertElementNameText(assert, content.lastElementChild, "A", "one");
+      assertElementNameText(assert, content.children[1], "A", "one");
       const href = `${location.origin}/blog/post/one`;
+      assert.equal(content.children[1].getAttribute("href"), href);
+      assertElementNameText(assert, content.children[1], "A", "one");
       assert.equal(content.lastElementChild.getAttribute("href"), href);
-      assert.equal(doc.getElementsByTagName("a").length, 13);
+      assert.equal(doc.getElementsByTagName("a").length, 14);
       assertListTextAndLinks(
         assert,
         doc,

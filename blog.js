@@ -184,6 +184,11 @@ router["postsLoaded"] = readdir(postsDir).
     });
   }).
   then(() => {
+    postsSortedByPublishDate.forEach((post) => {
+      post.references = [...new Set(post.references)];
+    });
+  }).
+  then(() => {
     searchIndex = lunr(function Config () {
       const commonHtmlStopWordFilter = lunr.generateStopWordFilter(commonHtmlStopWords);
       lunr.Pipeline.registerFunction(commonHtmlStopWordFilter, "commonHtmlStopWords");
