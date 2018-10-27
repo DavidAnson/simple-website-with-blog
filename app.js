@@ -48,12 +48,12 @@ app.use(helmet({
       "defaultSrc": ["'self'"],
       "scriptSrc": [
         "'self'",
-        "'unsafe-inline'",
+        // "'unsafe-inline'",
         "code.jquery.com"
       ],
       "styleSrc": [
         "'self'",
-        "'unsafe-inline'",
+        // "'unsafe-inline'",
         "code.jquery.com"
       ],
       "baseUri": ["'none'"],
