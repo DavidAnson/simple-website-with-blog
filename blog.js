@@ -9,6 +9,7 @@ const highlightJs = require("highlight.js");
 const lunr = require("lunr");
 const MarkdownIt = require("markdown-it");
 const pify = require("pify");
+const React = require("react");
 const ReactDOMServer = require("react-dom/server");
 const RSS = require("rss");
 const render = require(`${siteRoot}/render.js`);
@@ -335,6 +336,29 @@ router.get("/rss", (req, res, next) => {
   });
   res.setHeader("Content-Type", "application/rss+xml");
   return res.send(feed.xml());
+});
+
+// eslint-disable-next-line no-unused-vars
+router.use((req, res, next) => {
+  const statusCode = 404;
+  const statusText = "Not Found";
+  res.status(statusCode);
+  const contentHtml = ReactDOMServer.renderToStaticMarkup(React.createElement(
+    React.Fragment,
+    null,
+    React.createElement("strong", null, `HTTP ${statusCode}`),
+    React.createElement("p", null, statusText)
+  ));
+  const noDate = new Date(0);
+  const post = {
+    "id": statusText,
+    contentHtml,
+    "contentDate": noDate,
+    "publishDate": noDate,
+    "tags": [],
+    "references": []
+  };
+  return renderPosts(req, res, next, [post], true, statusText);
 });
 
 module.exports = router;

@@ -277,20 +277,6 @@ QUnit.test("Get of /blog?page=twentyone returns ok and 2 posts", (assert) => {
     then(done);
 });
 
-QUnit.test("Get of /blog?page=missing returns 404", (assert) => {
-  assert.expect(4);
-  const done = assert.async();
-  fetch("/blog?page=missing").
-    then((response) => {
-      assertNotFound(assert, response);
-      return response.text();
-    }).
-    then((text) => {
-      assert.equal(text, "Not Found");
-    }).
-    then(done);
-});
-
 QUnit.test("Get of /Blog returns 404", (assert) => {
   assert.expect(4);
   const done = assert.async();
@@ -479,13 +465,13 @@ QUnit.test("Get of /blog/post/zero (unpublished) returns 404", (assert) => {
       return response.text();
     }).
     then((text) => {
-      assert.equal(text, "Not Found");
+      assert.ok(text.includes("Not Found"));
     }).
     then(done);
 });
 
-QUnit.test("Get of /blog/post/missing (missing) returns 404", (assert) => {
-  assert.expect(4);
+QUnit.test("Get of /blog/post/missing (missing) returns 404 (inline)", (assert) => {
+  assert.expect(28);
   const done = assert.async();
   fetch("/blog/post/missing").
     then((response) => {
@@ -493,7 +479,19 @@ QUnit.test("Get of /blog/post/missing (missing) returns 404", (assert) => {
       return response.text();
     }).
     then((text) => {
-      assert.equal(text, "Not Found");
+      const doc = assertPageMetadata(assert, text, 2, "Not Found - ");
+      assertSingleTagText(assert, doc, "h3", "Not Found");
+      assertSingleTagText(assert, doc, "h4", "");
+      assertSingleTagText(assert, doc, "h5", "1970-01-01T00:00:00.000Z");
+      assertSingleTagText(assert, doc, "h5", "1970-01-01T00:00:00.000Z");
+      assert.equal(doc.getElementsByTagName("div").length, 1);
+      assert.equal(doc.getElementsByTagName("div")[0].childElementCount, 2);
+      const [parent] = doc.getElementsByTagName("div");
+      assertElementNameText(assert, parent.firstChild, "STRONG", "HTTP 404");
+      assertElementNameText(assert, parent.lastChild, "P", "Not Found");
+      assert.equal(doc.getElementsByTagName("a").length, 10);
+      assert.equal(doc.getElementById("tags").children.length, 3);
+      assert.equal(doc.getElementById("archives").children.length, 7);
     }).
     then(done);
 });
@@ -620,7 +618,7 @@ QUnit.test("Get of /blog/search returns 404", (assert) => {
       return response.text();
     }).
     then((text) => {
-      assert.equal(text, "Not Found");
+      assert.ok(text.includes("Not Found"));
     }).
     then(done);
 });
@@ -680,7 +678,7 @@ QUnit.test("Get of /blog/tag/fibonacci (wrong case) returns 404", (assert) => {
       return response.text();
     }).
     then((text) => {
-      assert.equal(text, "Not Found");
+      assert.ok(text.includes("Not Found"));
     }).
     then(done);
 });
@@ -737,7 +735,7 @@ QUnit.test("Get of /blog/archive/300001 (unpublished post) returns 404", (assert
       return response.text();
     }).
     then((text) => {
-      assert.equal(text, "Not Found");
+      assert.ok(text.includes("Not Found"));
     }).
     then(done);
 });
@@ -751,7 +749,7 @@ QUnit.test("Get of /blog/archive/1234 (invalid) returns 404", (assert) => {
       return response.text();
     }).
     then((text) => {
-      assert.equal(text, "Not Found");
+      assert.ok(text.includes("Not Found"));
     }).
     then(done);
 });
