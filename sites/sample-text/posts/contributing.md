@@ -3,5 +3,5 @@
 - Change code and update tests
 - `npm test`
 - `npm run lint`
-- Review code
+- Review changes
 - Send pull request

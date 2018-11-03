@@ -10,14 +10,14 @@ The implementation strives to be simple and free of unnecessary dependencies.
 
 - An easy way to create a simple, secure web site with a blog
 - Support for text-based and photo-based blog formats
-- Easy post authoring in HTML, Markdown (with code formatting), or JSON
+- Easy authoring in HTML, Markdown (with code formatting), or JSON
 - Ordering of posts by publish date or content date
 - Easy customization of site layout and formatting
 - High resolution (2x) support for photo blog images
 - Support for Windows and Linux hosting with Node.js
-- Simple post format that separates content and post metadata
-- Ability to author posts ahead of time and schedule a publish date
-- Ability to create posts that don't show up in the timeline
+- Simple post format that separates content and metadata
+- Ability to author hidden posts and schedule a publish date
+- Ability to create posts that never show up in the timeline
 - Support for archive links and tagging of posts by category
 - Quick search of post content, including simple search queries
 - Automatic cross-linking of related posts
@@ -45,7 +45,7 @@ The implementation strives to be simple and free of unnecessary dependencies.
 - `npm install`
 - `npm run compile`
 - `npm start`
-- Open <http://localhost:3000/>
+- Open <http://localhost:3000/> and verify
 - Commit changes to repository
 - Deploy repository to hosting service
 
@@ -73,7 +73,7 @@ The implementation strives to be simple and free of unnecessary dependencies.
 - Change code and update tests
 - `npm test`
 - `npm run lint`
-- Review code
+- Review changes
 - Send pull request
 
 ## License

@@ -6,6 +6,6 @@
 - `npm install`
 - `npm run compile`
 - `npm start`
-- Open <http://localhost:3000/>
+- Open <http://localhost:3000/> and verify
 - Commit changes to repository
 - Deploy repository to hosting service
