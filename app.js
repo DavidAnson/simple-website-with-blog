@@ -74,9 +74,6 @@ app.use(compression({
   "threshold": 0
 }));
 
-// Handle blog content
-app.use("/blog", blog);
-
 // Handle static content
 app.use(express.static(`${siteRoot}/static`, {
   "index": [
@@ -86,6 +83,9 @@ app.use(express.static(`${siteRoot}/static`, {
     "default.htm"
   ]
 }));
+
+// Handle blog content
+app.use("/blog", blog);
 
 // Handle HTTP 404/500
 // eslint-disable-next-line no-unused-vars
