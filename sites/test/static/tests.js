@@ -176,6 +176,20 @@ QUnit.test("Get of /tests.js returns ok and compressed JS", (assert) => {
     then(done);
 });
 
+QUnit.test("Get of /blog/file.txt returns ok and compressed text", (assert) => {
+  assert.expect(4);
+  const done = assert.async();
+  fetch("/blog/file.txt").
+    then((response) => {
+      assertResponseAndHeaders(assert, response, "text/plain; charset=UTF-8");
+      return response.text();
+    }).
+    then((text) => {
+      assert.equal(text, "Hello world.");
+    }).
+    then(done);
+});
+
 QUnit.test("Get of /missing returns 404", (assert) => {
   assert.expect(4);
   const done = assert.async();
