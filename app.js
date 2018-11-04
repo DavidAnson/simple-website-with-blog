@@ -81,7 +81,8 @@ app.use(express.static(`${siteRoot}/static`, {
     "index.htm",
     "default.html",
     "default.htm"
-  ]
+  ],
+  "redirect": false
 }));
 
 // Handle blog content
