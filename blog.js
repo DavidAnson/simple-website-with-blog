@@ -22,7 +22,8 @@ const markdownIt = new MarkdownIt({
       return highlightJs.highlight(lang, str).value;
     }
     return "";
-  }
+  },
+  "xhtmlOut": true
 });
 
 const postsDir = `${siteRoot}/posts`;
