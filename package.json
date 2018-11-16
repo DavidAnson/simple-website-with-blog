@@ -21,7 +21,7 @@
     "start": "node app.js",
     "test": "set SWWB_SITE_ROOT=./sites/test&& node app.js",
     "text": "set SWWB_SITE_ROOT=./sites/sample-text&& node app.js",
-    "watch": "nodemon --ext js,jsx,json,html,md --ignore sites/shared.js --ignore **/render.js --exec npm run server"
+    "watch": "nodemon --ext js,jsx,json,html,md --ignore sites/**/*.js --exec npm run server"
   },
   "engines": {
     "node": "8.x"
