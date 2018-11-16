@@ -13,7 +13,10 @@ const React = require("react");
 const ReactDOMServer = require("react-dom/server");
 const RSS = require("rss");
 const render = require(`${siteRoot}/render.js`);
-const router = express.Router();
+const router = express.Router({
+  "caseSensitive": true,
+  "strict": true
+});
 const readdir = pify(fs.readdir);
 const readFile = pify(fs.readFile);
 const markdownIt = new MarkdownIt({

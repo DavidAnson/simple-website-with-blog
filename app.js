@@ -8,11 +8,11 @@ const blog = require("./blog");
 const app = express();
 
 // Configure app
-app.set("case sensitive routing", true);
-app.set("strict routing", true);
+app.enable("case sensitive routing");
+app.enable("strict routing");
 
 // Fix protocol for HTTPS requests under iisnode
-app.set("trust proxy", true);
+app.enable("trust proxy");
 app.use((req, res, next) => {
   if (!req.secure && req.headers["x-arr-ssl"] && !req.headers["x-forwarded-proto"]) {
     req.headers["x-forwarded-proto"] = "https";
@@ -86,6 +86,7 @@ app.use(express.static(`${siteRoot}/static`, {
 }));
 
 // Handle blog content
+app.all("/blog/", (req, res) => res.sendStatus(404));
 app.use("/blog", blog);
 
 // Handle HTTP 404/500

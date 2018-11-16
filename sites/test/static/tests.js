@@ -204,6 +204,64 @@ QUnit.test("Get of /missing returns 404", (assert) => {
     then(done);
 });
 
+QUnit.module("Configuration");
+
+QUnit.test("Get of /Blog returns 404", (assert) => {
+  assert.expect(4);
+  const done = assert.async();
+  fetch("/Blog").
+    then((response) => {
+      assertNotFound(assert, response);
+      return response.text();
+    }).
+    then((text) => {
+      assert.equal(text, "Not Found");
+    }).
+    then(done);
+});
+
+QUnit.test("Get of /blog/ returns 404", (assert) => {
+  assert.expect(4);
+  const done = assert.async();
+  fetch("/blog/").
+    then((response) => {
+      assertNotFound(assert, response);
+      return response.text();
+    }).
+    then((text) => {
+      assert.equal(text, "Not Found");
+    }).
+    then(done);
+});
+
+QUnit.test("Get of /blog/Post/one returns 404", (assert) => {
+  assert.expect(4);
+  const done = assert.async();
+  fetch("/blog/Post/one").
+    then((response) => {
+      assertNotFound(assert, response);
+      return response.text();
+    }).
+    then((text) => {
+      assert.ok(text.includes("Not Found"));
+    }).
+    then(done);
+});
+
+QUnit.test("Get of /blog/post/one/ returns 404", (assert) => {
+  assert.expect(4);
+  const done = assert.async();
+  fetch("/blog/post/one/").
+    then((response) => {
+      assertNotFound(assert, response);
+      return response.text();
+    }).
+    then((text) => {
+      assert.ok(text.includes("Not Found"));
+    }).
+    then(done);
+});
+
 QUnit.module("List");
 
 QUnit.test("Get of /blog returns ok, compressed HTML, and 10 posts", (assert) => {
