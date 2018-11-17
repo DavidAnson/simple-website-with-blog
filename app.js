@@ -82,7 +82,12 @@ app.use(express.static(`${siteRoot}/static`, {
     "default.html",
     "default.htm"
   ],
-  "redirect": false
+  "redirect": false,
+  "setHeaders": (res, path, stat) => {
+    if (stat.isFile() && (/\.appcache$/iu).test(path)) {
+      res.setHeader("Cache-Control", "no-cache");
+    }
+  }
 }));
 
 // Handle blog content

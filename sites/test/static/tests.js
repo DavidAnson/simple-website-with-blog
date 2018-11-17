@@ -204,6 +204,20 @@ QUnit.test("Get of /missing returns 404", (assert) => {
     then(done);
 });
 
+QUnit.test("Get of .appcache file has correct MIME type and no caching", (assert) => {
+  assert.expect(4);
+  const done = assert.async();
+  fetch("/offline.appcache").
+    then((response) => {
+      const {headers} = response;
+      assert.ok(headers.has("Content-Type"));
+      assert.equal(headers.get("Content-Type"), "text/cache-manifest; charset=UTF-8");
+      assert.ok(headers.has("Cache-Control"));
+      assert.equal(headers.get("Cache-Control"), "no-cache");
+    }).
+    then(done);
+});
+
 QUnit.module("Configuration");
 
 QUnit.test("Get of /Blog returns 404", (assert) => {
