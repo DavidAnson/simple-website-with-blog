@@ -82,7 +82,7 @@ module.exports.getArchiveList = (archives) => archives.
     );
   });
 
-module.exports.getTitleHeading = (props, strings) => {
+const getHeading = (props) => {
   let heading = null;
   if (props.period) {
     heading = `Posts from ${dateTimeFormatMonth.format(props.period)}`;
@@ -91,6 +91,11 @@ module.exports.getTitleHeading = (props, strings) => {
   } else if (props.query) {
     heading = `Search: ${props.query}`;
   }
+  return heading;
+};
+
+module.exports.getTitleHeading = (props, strings) => {
+  const heading = getHeading(props);
   const title = [
     props.title || heading,
     strings.title
@@ -102,6 +107,9 @@ module.exports.getTitleHeading = (props, strings) => {
     heading
   };
 };
+
+module.exports.getDescription =
+  (props, strings) => props.title || getHeading(props) || strings.description;
 
 module.exports.getPrevNextLinks = (props) => {
   const prevLink = props.prevLink ? <a href={props.prevLink}>{"\u00ab"} Previous Posts</a> : null;

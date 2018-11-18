@@ -49,7 +49,8 @@ module.exports.getHtmlElements = (props) => {
       <head>
         <title>{title}</title>
         <meta name="viewport" content="width=device-width"/>
-        <meta name="description" content={strings.description}/>
+        <meta name="description" content={shared.getDescription(props, strings)}/>
+        <meta name="author" content={strings.author}/>
         {shared.getMetaRobots(props.noindex)}
         <link rel="alternate" type="application/rss+xml" href="/blog/rss" title={strings.title}/>
         <link rel="stylesheet" href="/blog.css"/>
