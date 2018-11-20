@@ -1,4 +1,5 @@
 "use strict";
+const { URL } = require("url");
 const React = require("react");
 const dateFormatOptionsWeekday = {
     "weekday": "long",
@@ -74,21 +75,30 @@ const getHeading = (props) => {
     }
     return heading;
 };
-module.exports.getTitleHeading = (props, strings) => {
-    const heading = getHeading(props);
-    const title = [
-        props.title || heading,
-        strings.title
-    ].
-        filter((part) => Boolean(part)).
-        join(" - ");
-    return {
-        title,
-        heading
-    };
+module.exports.getHeading = getHeading;
+const getTitle = (props, strings) => [
+    props.title || getHeading(props),
+    strings.title
+].
+    filter((part) => Boolean(part)).
+    join(" - ");
+module.exports.getTitle = getTitle;
+const getDescription = (props, strings) => props.title || getHeading(props) || strings.description;
+module.exports.getDescription = getDescription;
+module.exports.getTwitterOpenGraph = (props, strings) => {
+    const avatarHref = new URL(strings.avatar, props.urlHref).href;
+    const description = getDescription(props, strings);
+    return (React.createElement(React.Fragment, null,
+        React.createElement("meta", { name: "twitter:card", content: "summary" }),
+        strings.twitter ? React.createElement("meta", { name: "twitter:site", content: strings.twitter }) : null,
+        strings.twitter ? React.createElement("meta", { name: "twitter:creator", content: strings.twitter }) : null,
+        React.createElement("meta", { property: "og:type", content: "article" }),
+        React.createElement("meta", { property: "og:title", content: description }),
+        React.createElement("meta", { property: "og:url", content: props.urlHref }),
+        strings.avatar ? React.createElement("meta", { property: "og:image", content: avatarHref }) : null,
+        React.createElement("meta", { property: "og:site_name", content: strings.title }),
+        React.createElement("meta", { property: "og:description", content: description })));
 };
-module.exports.getDescription =
-    (props, strings) => props.title || getHeading(props) || strings.description;
 module.exports.getPrevNextLinks = (props) => {
     const prevLink = props.prevLink ? React.createElement("a", { href: props.prevLink },
         "\u00ab",

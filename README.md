@@ -20,6 +20,7 @@ The implementation strives to be simple and free of unnecessary dependencies.
 - Ability to create posts that never show up in the timeline
 - Support for archive links and tagging of posts by category
 - Quick search of post content, including simple search queries
+- Automatic Twitter and Open Graph metadata for social media
 - Automatic cross-linking of related posts
 - No JavaScript requirement for client browsers
 

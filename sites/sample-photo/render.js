@@ -32,13 +32,15 @@ module.exports.getHtmlElements = (props) => {
             "Posted ",
             shared.getPublishDate(post)),
         React.createElement("hr", null))));
-    const { title, heading } = shared.getTitleHeading(props, strings);
+    const title = shared.getTitle(props, strings);
+    const heading = shared.getHeading(props);
     return (React.createElement("html", { lang: "en" },
         React.createElement("head", null,
             React.createElement("title", null, title),
             React.createElement("meta", { name: "viewport", content: "width=device-width" }),
             React.createElement("meta", { name: "description", content: shared.getDescription(props, strings) }),
             React.createElement("meta", { name: "author", content: strings.author }),
+            shared.getTwitterOpenGraph(props, strings),
             shared.getMetaRobots(props.noindex),
             React.createElement("link", { rel: "alternate", type: "application/rss+xml", href: "/blog/rss", title: strings.title }),
             React.createElement("link", { rel: "stylesheet", href: "/blog.css" })),

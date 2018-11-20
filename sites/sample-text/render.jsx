@@ -9,6 +9,8 @@ const strings = {
   "title": "simple-website-with-blog/sample-text",
   "description": "The blog of a simple web site",
   "author": "David Anson",
+  "twitter": "@DavidAns",
+  "avatar": "/avatar.png",
   "copyright": `Copyright \u00a9 2006-${new Date().getFullYear()} by David Anson`
 };
 
@@ -43,7 +45,8 @@ module.exports.getHtmlElements = (props) => {
       </div>
     );
   });
-  const {title, heading} = shared.getTitleHeading(props, strings);
+  const title = shared.getTitle(props, strings);
+  const heading = shared.getHeading(props);
   return (
     <html lang="en">
       <head>
@@ -51,6 +54,7 @@ module.exports.getHtmlElements = (props) => {
         <meta name="viewport" content="width=device-width"/>
         <meta name="description" content={shared.getDescription(props, strings)}/>
         <meta name="author" content={strings.author}/>
+        {shared.getTwitterOpenGraph(props, strings)}
         {shared.getMetaRobots(props.noindex)}
         <link rel="alternate" type="application/rss+xml" href="/blog/rss" title={strings.title}/>
         <link rel="stylesheet" href="/blog.css"/>

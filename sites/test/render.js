@@ -5,6 +5,8 @@ const strings = {
     "title": "simple-website-with-blog/test",
     "description": "Test blog",
     "author": "David Anson",
+    "twitter": "@DavidAns",
+    "avatar": "/images/piechart.png",
     "copyright": "Copyright \u00a9 David Anson"
 };
 module.exports.getPostTitle = (post) => `Test post - ${post.title}`;
@@ -28,13 +30,15 @@ module.exports.getHtmlElements = (props) => {
             tagLinks,
             React.createElement("article", { className: "references" }, references)));
     });
-    const { title, heading } = shared.getTitleHeading(props, strings);
+    const title = shared.getTitle(props, strings);
+    const heading = shared.getHeading(props);
     return (React.createElement("html", { lang: "en" },
         React.createElement("head", null,
             React.createElement("title", null, title),
             React.createElement("meta", { name: "viewport", content: "width=device-width" }),
             React.createElement("meta", { name: "description", content: shared.getDescription(props, strings) }),
             React.createElement("meta", { name: "author", content: strings.author }),
+            shared.getTwitterOpenGraph(props, strings),
             shared.getMetaRobots(props.noindex)),
         React.createElement("body", null,
             React.createElement("h1", null, strings.description),

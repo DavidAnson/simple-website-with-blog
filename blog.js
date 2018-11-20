@@ -210,7 +210,9 @@ router["postsLoaded"] = readdir(postsDir).
   });
 
 const renderPosts = (req, res, next, posts, noindex, title, period, tag, query) => {
-  const url = new URL(req.originalUrl, "https://example.org/");
+  const siteUrl = getSiteUrl(req);
+  const url = new URL(req.originalUrl, siteUrl);
+  const urlHref = url.href;
   const pageParam = "page";
   const page = url.searchParams.get(pageParam);
   let currIndex = 0;
@@ -247,6 +249,7 @@ const renderPosts = (req, res, next, posts, noindex, title, period, tag, query) 
     "archives": getArchivePeriods(),
     "noindex": noindex || (Object.keys(req.query).length > 0),
     "publishedPostFilter": getPublishedPostFilter(true),
+    urlHref,
     title,
     period,
     tag,
@@ -255,7 +258,7 @@ const renderPosts = (req, res, next, posts, noindex, title, period, tag, query) 
     nextLink
   });
   const staticMarkup = ReactDOMServer.renderToStaticMarkup(elements);
-  const finalMarkup = staticMarkup.replace(hostnameTokenRe, getSiteUrl(req));
+  const finalMarkup = staticMarkup.replace(hostnameTokenRe, siteUrl);
   const body = `<!DOCTYPE html>${finalMarkup}`;
   return res.send(body);
 };

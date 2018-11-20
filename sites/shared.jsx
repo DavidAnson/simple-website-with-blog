@@ -1,5 +1,6 @@
 "use strict";
 
+const {URL} = require("url");
 // eslint-disable-next-line no-unused-vars
 const React = require("react");
 
@@ -93,23 +94,38 @@ const getHeading = (props) => {
   }
   return heading;
 };
+module.exports.getHeading = getHeading;
 
-module.exports.getTitleHeading = (props, strings) => {
-  const heading = getHeading(props);
-  const title = [
-    props.title || heading,
+const getTitle =
+  (props, strings) => [
+    props.title || getHeading(props),
     strings.title
   ].
     filter((part) => Boolean(part)).
     join(" - ");
-  return {
-    title,
-    heading
-  };
-};
+module.exports.getTitle = getTitle;
 
-module.exports.getDescription =
+const getDescription =
   (props, strings) => props.title || getHeading(props) || strings.description;
+module.exports.getDescription = getDescription;
+
+module.exports.getTwitterOpenGraph = (props, strings) => {
+  const avatarHref = new URL(strings.avatar, props.urlHref).href;
+  const description = getDescription(props, strings);
+  return (
+    <React.Fragment>
+      <meta name="twitter:card" content="summary"/>
+      {strings.twitter ? <meta name="twitter:site" content={strings.twitter}/> : null}
+      {strings.twitter ? <meta name="twitter:creator" content={strings.twitter}/> : null}
+      <meta property="og:type" content="article"/>
+      <meta property="og:title" content={description}/>
+      <meta property="og:url" content={props.urlHref}/>
+      {strings.avatar ? <meta property="og:image" content={avatarHref}/> : null}
+      <meta property="og:site_name" content={strings.title}/>
+      <meta property="og:description" content={description}/>
+    </React.Fragment>
+  );
+};
 
 module.exports.getPrevNextLinks = (props) => {
   const prevLink = props.prevLink ? <a href={props.prevLink}>{"\u00ab"} Previous Posts</a> : null;
