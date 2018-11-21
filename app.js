@@ -1,6 +1,6 @@
 "use strict";
 
-const {port, redirectToHttps, siteRoot} = require("./config");
+const {port, acmeChallenge, redirectToHttps, siteRoot} = require("./config");
 const compression = require("compression");
 const express = require("express");
 const helmet = require("helmet");
@@ -73,6 +73,14 @@ app.use(compression({
   "level": 9,
   "threshold": 0
 }));
+
+// Handle ACME requests (as made by Let's Encrypt, https://letsencrypt.org/)
+if (acmeChallenge) {
+  const [path] = acmeChallenge.split(".");
+  app.get(`/.well-known/acme-challenge/${path}`, (req, res) => {
+    res.send(acmeChallenge);
+  });
+}
 
 // Handle static content
 app.use(express.static(`${siteRoot}/static`, {

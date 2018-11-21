@@ -965,3 +965,24 @@ QUnit.test(
       then(done);
   }
 );
+
+QUnit.module("ACME");
+
+QUnit.test(
+  "Get of /.well-known/acme-challenge/... returns ok and correct content",
+  (assert) => {
+    assert.expect(2);
+    const done = assert.async();
+    const prefix = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFG";
+    const suffix = "HIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmn";
+    fetch(`/.well-known/acme-challenge/${prefix}`).
+      then((response) => {
+        assert.ok(response.ok);
+        return response.text();
+      }).
+      then((text) => {
+        assert.equal(`${prefix}.${suffix}`, text);
+      }).
+      then(done);
+  }
+);
