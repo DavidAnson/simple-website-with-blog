@@ -2,4 +2,4 @@
 - `SWWB_REDIRECT_TO_HTTPS` Set to `true` to redirect HTTP traffic to HTTPS and set an HSTS header
 - `SWWB_SHOW_FUTURE_POSTS` Set to `true` to show posts with a publish date in the future (good when authoring locally)
 - `SWWB_HOSTNAME_TOKEN` Set to change the replacement token for inserting host name in posts (RSS uses absolute URLs)
-- `SWWB_ACME_CHALLENGE` Set to specify the ACME challenge/response for [Let's Encrypt](https://letsencrypt.org/) (ex: `abc.def`)
+- `SWWB_ACME_CHALLENGE` Set to specify the ACME challenge for [Let's Encrypt](https://letsencrypt.org/) (ex: `abc.123,def.456`)

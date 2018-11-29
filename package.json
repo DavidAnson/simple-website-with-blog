@@ -19,7 +19,7 @@
     "photo": "set SWWB_SITE_ROOT=./sites/sample-photo&& node app.js",
     "server": "npm run compile && node app.js",
     "start": "node app.js",
-    "test": "set SWWB_SITE_ROOT=./sites/test&& set SWWB_ACME_CHALLENGE=abcdefghijklmnopqrstuvwxyz0123456789ABCDEFG.HIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmn&& node app.js",
+    "test": "set SWWB_SITE_ROOT=./sites/test&& set SWWB_ACME_CHALLENGE=abc.123,abcdefghijklmnopqrstuvwxyz0123456789ABCDEFG.HIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmn&& node app.js",
     "text": "set SWWB_SITE_ROOT=./sites/sample-text&& node app.js",
     "watch": "nodemon --ext js,jsx,json,html,md --ignore sites/**/*.js --exec npm run server"
   },

@@ -969,7 +969,26 @@ QUnit.test(
 QUnit.module("ACME");
 
 QUnit.test(
-  "Get of /.well-known/acme-challenge/... returns ok and correct content",
+  "Get of /.well-known/acme-challenge/[short] returns ok and correct content",
+  (assert) => {
+    assert.expect(2);
+    const done = assert.async();
+    const prefix = "abc";
+    const suffix = "123";
+    fetch(`/.well-known/acme-challenge/${prefix}`).
+      then((response) => {
+        assert.ok(response.ok);
+        return response.text();
+      }).
+      then((text) => {
+        assert.equal(`${prefix}.${suffix}`, text);
+      }).
+      then(done);
+  }
+);
+
+QUnit.test(
+  "Get of /.well-known/acme-challenge/[long] returns ok and correct content",
   (assert) => {
     assert.expect(2);
     const done = assert.async();

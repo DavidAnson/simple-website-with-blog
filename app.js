@@ -76,9 +76,11 @@ app.use(compression({
 
 // Handle ACME requests (as made by Let's Encrypt, https://letsencrypt.org/)
 if (acmeChallenge) {
-  const [path] = acmeChallenge.split(".");
-  app.get(`/.well-known/acme-challenge/${path}`, (req, res) => {
-    res.send(acmeChallenge);
+  acmeChallenge.split(",").forEach((challenge) => {
+    const [path] = challenge.split(".");
+    app.get(`/.well-known/acme-challenge/${path}`, (req, res) => {
+      res.send(challenge);
+    });
   });
 }
 
