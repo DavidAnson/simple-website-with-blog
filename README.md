@@ -1,14 +1,14 @@
 # simple-website-with-blog
 
-> A simple web site with a blog
+> A simple website with a blog
 
 `simple-website-with-blog` is a simple [Node.js](https://nodejs.org/) web application for static content that includes a blog.
-It was created as the basis for [my own web site](https://dlaa.me/), but everyone is welcome to use it.
+It was created as the basis for [my own website](https://dlaa.me/), but everyone is welcome to use it.
 The implementation strives to be simple and free of unnecessary dependencies.
 
 ## Goals
 
-- An easy way to create a simple, secure web site with a blog
+- An easy way to create a simple, secure website with a blog
 - Support for text-based and photo-based blog formats
 - Easy authoring in HTML, Markdown (with code formatting), or JSON
 - Ordering of posts by publish date or content date

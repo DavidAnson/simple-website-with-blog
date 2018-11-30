@@ -1,7 +1,7 @@
 {
   "name": "simple-website-with-blog",
   "version": "0.1.0",
-  "description": "A simple web site that includes a blog",
+  "description": "A simple website that includes a blog",
   "private": true,
   "main": "app.js",
   "author": "David Anson (https://dlaa.me/)",

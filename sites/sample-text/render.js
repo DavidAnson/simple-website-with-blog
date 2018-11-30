@@ -3,7 +3,7 @@ const React = require("react");
 const shared = require("../" + "shared.js");
 const strings = {
     "title": "simple-website-with-blog/sample-text",
-    "description": "The blog of a simple web site",
+    "description": "The blog of a simple website",
     "author": "David Anson",
     "twitter": "@DavidAns",
     "avatar": "/avatar.png",

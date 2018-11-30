@@ -4,7 +4,7 @@ const shared = require("../" + "shared.js");
 const config = require("../../" + "config.js");
 const strings = {
     "title": "simple-website-with-blog/sample-photo",
-    "description": "The photo blog of a simple web site",
+    "description": "The photo blog of a simple website",
     "author": "David Anson",
     "copyright": `Copyright \u00a9 2006-${new Date().getFullYear()} by David Anson`
 };
