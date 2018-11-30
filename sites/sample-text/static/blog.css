@@ -1,3 +1,9 @@
+html {
+  -ms-text-size-adjust: none;
+  -moz-text-size-adjust: none;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+}
 body {
   background-color: #f0f0f0;
   color: #000000;
