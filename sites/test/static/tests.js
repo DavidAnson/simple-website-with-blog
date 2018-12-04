@@ -125,10 +125,6 @@ QUnit.test("Get of / returns expected HTTP headers", (assert) => {
           "public, max-age=0"
         ],
         [
-          "ETag",
-          "W/\"1c5-165a80fb6bf\""
-        ],
-        [
           "Last-Modified",
           null
         ],
@@ -180,6 +176,8 @@ QUnit.test("Get of / returns expected HTTP headers", (assert) => {
           assert.equal(headers.get(name), value);
         }
       });
+      assert.ok(headers.has("ETag"));
+      assert.ok(headers.get("ETag").startsWith("W/\""));
     }).
     then(done);
 });
