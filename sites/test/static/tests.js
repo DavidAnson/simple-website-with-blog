@@ -88,11 +88,17 @@ const assertPostTags = (assert, doc, tags) => {
   }
 };
 
-QUnit.module("Requirements");
+QUnit.module("Prerequisites");
 
 QUnit.test("Browser supports fetch API", (assert) => {
   assert.expect(1);
   assert.ok(fetch);
+});
+
+QUnit.test("Browser supports the iterable protocol", (assert) => {
+  assert.expect(2);
+  assert.ok(Symbol.iterator);
+  assert.ok(document.getElementsByTagName("body")[Symbol.iterator]);
 });
 
 QUnit.module("Static");
