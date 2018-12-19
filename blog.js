@@ -122,7 +122,7 @@ router["postsLoaded"] = readdir(postsDir).
           let promise = Promise.resolve();
           if (post.contentJson) {
             post.contentSearch = JSON.stringify(post.contentJson);
-            const contentElements = render.getContentJsonElements(post.contentJson);
+            const contentElements = render.getContentJsonElements(post);
             post.contentHtml = ReactDOMServer.renderToStaticMarkup(contentElements);
             post.contentSource = "json";
             delete post.contentJson;

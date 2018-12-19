@@ -12,8 +12,8 @@ module.exports.getPostTitle = (post) => {
     const contentDate = shared.dateTimeFormatDay.format(post.contentDate);
     return `${contentDate} - ${post.title}`;
 };
-module.exports.getContentJsonElements = (contentJson) => {
-    const content = contentJson.map((photo, index) => {
+module.exports.getContentJsonElements = (post) => {
+    const content = post.contentJson.map((photo, index) => {
         const src = `${config.hostnameToken}/photos/${photo.image}`;
         const srcSet = photo.image2x ? `${config.hostnameToken}/photos/${photo.image2x} 2x` : null;
         return (React.createElement(React.Fragment, { key: index },

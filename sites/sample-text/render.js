@@ -10,8 +10,8 @@ const strings = {
     "copyright": `Copyright \u00a9 2006-${new Date().getFullYear()} by David Anson`
 };
 module.exports.getPostTitle = (post) => post.title;
-module.exports.getContentJsonElements = (contentJson) => {
-    const content = contentJson.map((line, index) => React.createElement("p", { key: index }, line));
+module.exports.getContentJsonElements = (post) => {
+    const content = post.contentJson.map((line, index) => React.createElement("p", { key: index }, line));
     return React.createElement("div", null, content);
 };
 module.exports.getHtmlElements = (props) => {

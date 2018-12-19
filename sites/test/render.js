@@ -10,8 +10,8 @@ const strings = {
     "copyright": "Copyright \u00a9 David Anson"
 };
 module.exports.getPostTitle = (post) => `Test post - ${post.title}`;
-module.exports.getContentJsonElements = (contentJson) => {
-    const content = contentJson.map((line, index) => React.createElement("p", { key: index }, line));
+module.exports.getContentJsonElements = (post) => {
+    const content = post.contentJson.map((line, index) => React.createElement("p", { key: index }, line));
     return React.createElement(React.Fragment, null, content);
 };
 module.exports.getHtmlElements = (props) => {
