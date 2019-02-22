@@ -36,12 +36,12 @@ module.exports.getContentJsonElements = (post) => {
 module.exports.getHtmlElements = (props) => {
   const archives = shared.getArchiveList(props.archives);
   const posts = props.posts.map((post) => (
-    <div key={post.id} className="post">
+    <article key={post.id} className="post">
       <h2><a href={`/blog/post/${post.id}`}>{post.title}</a></h2>
       <div dangerouslySetInnerHTML={{"__html": post.contentHtml}}></div>
       <p>Posted {shared.getPublishDate(post)}</p>
       <hr/>
-    </div>
+    </article>
   ));
   const title = shared.getTitle(props, strings);
   const heading = shared.getHeading(props);
@@ -58,17 +58,19 @@ module.exports.getHtmlElements = (props) => {
         <link rel="stylesheet" href="/blog.css"/>
       </head>
       <body>
-        <div className="banner">
+        <header className="banner">
           <h1><a href="/blog">{strings.description}</a></h1>
-        </div>
+        </header>
         <div className="content">
-          <div className="posts">
+          <main className="posts">
             {heading ? <React.Fragment><h2>{heading}</h2><hr/></React.Fragment> : null}
             {posts}
             {shared.getPrevNextLinks(props)}
-            <p className="copyright">{strings.copyright}</p>
-          </div>
-          <div className="sidebar">
+            <footer>
+              <p className="copyright">{strings.copyright}</p>
+            </footer>
+          </main>
+          <nav className="sidebar">
             <h2>Search</h2>
             <form action="/blog/search">
               <input type="text" name="query" accessKey="s"
@@ -76,7 +78,7 @@ module.exports.getHtmlElements = (props) => {
             </form>
             <h2>Archive</h2>
             <ul>{archives}</ul>
-          </div>
+          </nav>
         </div>
       </body>
     </html>

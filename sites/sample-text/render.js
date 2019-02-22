@@ -20,7 +20,7 @@ module.exports.getHtmlElements = (props) => {
     const posts = props.posts.map((post) => {
         const tagLinks = shared.getTagLinks(post.tags);
         const references = shared.getReferences(Boolean(props.title), post.references, props.publishedPostFilter);
-        return (React.createElement("div", { key: post.id, className: "post" },
+        return (React.createElement("article", { key: post.id, className: "post" },
             React.createElement("h2", null,
                 React.createElement("a", { href: `/blog/post/${post.id}` }, post.title)),
             shared.getPublishDate(post),
@@ -47,14 +47,15 @@ module.exports.getHtmlElements = (props) => {
             React.createElement("link", { rel: "stylesheet", href: "/xcode.css" })),
         React.createElement("body", null,
             React.createElement("div", { className: "column" },
-                React.createElement("h1", { className: "banner" },
-                    React.createElement("a", { href: "/blog" }, strings.description)),
+                React.createElement("header", null,
+                    React.createElement("h1", { className: "banner" },
+                        React.createElement("a", { href: "/blog" }, strings.description))),
                 React.createElement("div", { className: "content" },
-                    React.createElement("div", { className: "posts" },
+                    React.createElement("main", { className: "posts" },
                         heading ? React.createElement("h2", null, heading) : null,
                         posts,
                         shared.getPrevNextLinks(props)),
-                    React.createElement("div", { className: "sidebar" },
+                    React.createElement("nav", { className: "sidebar" },
                         React.createElement("img", { src: "/avatar.png", alt: strings.author }),
                         React.createElement("h2", null, "About"),
                         React.createElement("p", null, strings.description),
@@ -71,6 +72,7 @@ module.exports.getHtmlElements = (props) => {
                         React.createElement("ul", null, tags),
                         React.createElement("h2", null, "Archive"),
                         React.createElement("ul", null, archives))),
-                React.createElement("div", { className: "copyright" }, strings.copyright)))));
+                React.createElement("footer", null,
+                    React.createElement("div", { className: "copyright" }, strings.copyright))))));
 };
 module.exports.getRssMetadata = () => shared.getRssMetadata(strings);

@@ -29,7 +29,7 @@ module.exports.getHtmlElements = (props) => {
     const references =
       shared.getReferences(Boolean(props.title), post.references, props.publishedPostFilter);
     return (
-      <div key={post.id} className="post">
+      <article key={post.id} className="post">
         <h2><a href={`/blog/post/${post.id}`}>{post.title}</a></h2>
         {shared.getPublishDate(post)}
         <div className={post.contentSource} dangerouslySetInnerHTML={{"__html": post.contentHtml}}>
@@ -42,7 +42,7 @@ module.exports.getHtmlElements = (props) => {
           </div>)
           : null
         }
-      </div>
+      </article>
     );
   });
   const title = shared.getTitle(props, strings);
@@ -62,16 +62,18 @@ module.exports.getHtmlElements = (props) => {
       </head>
       <body>
         <div className="column">
-          <h1 className="banner">
-            <a href="/blog">{strings.description}</a>
-          </h1>
+          <header>
+            <h1 className="banner">
+              <a href="/blog">{strings.description}</a>
+            </h1>
+          </header>
           <div className="content">
-            <div className="posts">
+            <main className="posts">
               {heading ? <h2>{heading}</h2> : null}
               {posts}
               {shared.getPrevNextLinks(props)}
-            </div>
-            <div className="sidebar">
+            </main>
+            <nav className="sidebar">
               <img src="/avatar.png" alt={strings.author}/>
               <h2>About</h2>
               <p>{strings.description}</p>
@@ -87,9 +89,11 @@ module.exports.getHtmlElements = (props) => {
               <ul>{tags}</ul>
               <h2>Archive</h2>
               <ul>{archives}</ul>
-            </div>
+            </nav>
           </div>
-          <div className="copyright">{strings.copyright}</div>
+          <footer>
+            <div className="copyright">{strings.copyright}</div>
+          </footer>
         </div>
       </body>
     </html>
