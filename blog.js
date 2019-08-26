@@ -264,7 +264,7 @@ const renderPosts = (req, res, next, posts, noindex, title, period, tag, query) 
 };
 
 router.get("/", (req, res, next) => {
-  const posts = postsSortedByContentDate.filter(getPublishedPostFilter());
+  const posts = postsSortedByPublishDate.filter(getPublishedPostFilter());
   return renderPosts(req, res, next, posts, false);
 });
 

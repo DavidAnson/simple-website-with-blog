@@ -334,18 +334,18 @@ QUnit.test("Get of /blog returns ok, compressed HTML, and 10 posts", (assert) =>
       assert.equal(nav.length, 1);
       assert.equal(nav[0].childElementCount, 1);
       assertElementNameText(assert, nav[0].firstElementChild, "a", "Next Posts \u00bb");
-      assert.equal(nav[0].firstElementChild.getAttribute("href"), "/blog?page=eleven");
+      assert.equal(nav[0].firstElementChild.getAttribute("href"), "/blog?page=twenty");
       assert.equal(doc.getElementById("tags").children.length, 3);
       assert.equal(doc.getElementById("archives").children.length, 7);
     }).
     then(done);
 });
 
-QUnit.test("Get of /blog?page=eleven returns ok and 10 posts", (assert) => {
+QUnit.test("Get of /blog?page=twenty returns ok and 10 posts", (assert) => {
   assert.expect(56);
   const done = assert.async();
   let responseUrl = null;
-  fetch("/blog?page=eleven").
+  fetch("/blog?page=twenty").
     then((response) => {
       responseUrl = response.url;
       assert.ok(response.ok);
@@ -355,7 +355,7 @@ QUnit.test("Get of /blog?page=eleven returns ok and 10 posts", (assert) => {
       const doc = assertPageMetadata(assert, responseUrl, text, true);
       assert.equal(doc.getElementsByTagName("h3").length, 10);
       const postTitles =
-        "eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty".
+        "twenty nineteen eighteen seventeen sixteen fifteen fourteen thirteen twelve eleven".
           split(" ");
       for (const item of doc.getElementsByTagName("h3")) {
         assert.equal(item.innerHTML, postTitles.shift());
@@ -396,7 +396,7 @@ QUnit.test("Get of /blog?page=twentyone returns ok and 2 posts", (assert) => {
       assert.equal(nav.length, 1);
       assert.equal(nav[0].childElementCount, 1);
       assertElementNameText(assert, nav[0].firstElementChild, "a", "\u00ab Previous Posts");
-      assert.equal(nav[0].firstElementChild.getAttribute("href"), "/blog?page=eleven");
+      assert.equal(nav[0].firstElementChild.getAttribute("href"), "/blog?page=twenty");
       assert.equal(doc.getElementById("tags").children.length, 3);
       assert.equal(doc.getElementById("archives").children.length, 7);
     }).
