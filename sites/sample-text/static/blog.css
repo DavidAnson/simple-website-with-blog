@@ -167,3 +167,44 @@ h1, h2, h3, h4, h5, h6 {
 b, strong, h1, h2, h3, h4, h5, h6 {
   font-weight: bolder;
 }
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #333;
+    color: #eee;
+  }
+  .column {
+    background-color: #111;
+  }
+  a:link {
+    color: #35f;
+  }
+  a:visited {
+    color: #929;
+  }
+  a:active {
+    color: #dd0;
+  }
+  .banner {
+    border-bottom-color: #eee;
+  }
+  .banner a {
+    color: inherit;
+  }
+  .post blockquote, .post code, .post pre {
+    background-color: #ffffff18;
+  }
+  @media (min-width: 500px) {
+    .sidebar {
+      border-left-color: #ffffff20;
+    }
+  }
+  .sidebar > img {
+    border-color: #ffffff40;
+  }
+  .markdown tr {
+    background-color: #ffffff18;
+  }
+  .markdown thead > tr, .markdown tbody > tr:nth-child(2n) {
+    background-color: #ffffff10;
+  }
+}
