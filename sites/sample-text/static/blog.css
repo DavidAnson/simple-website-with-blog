@@ -76,6 +76,10 @@ body {
 .post img, .post canvas, .post iframe, .post svg, .post video {
   max-width: 100%;
 }
+.post table {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
 .navigation {
   margin-bottom: 2em;
 }
