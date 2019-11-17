@@ -24,7 +24,7 @@
     "watch": "nodemon --ext js,jsx,json,html,md --ignore sites/**/*.js --exec npm run server"
   },
   "engines": {
-    "node": "8.x"
+    "node": "10.x"
   },
   "dependencies": {
     "compression": "~1.7.3",
@@ -33,7 +33,6 @@
     "highlight.js": "~9.14.2",
     "lunr": "~2.3.5",
     "markdown-it": "~8.4.2",
-    "pify": "~4.0.1",
     "react": "~16.8.3",
     "react-dom": "~16.8.3",
     "rss": "~1.2.2"

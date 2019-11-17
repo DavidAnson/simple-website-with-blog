@@ -1,14 +1,12 @@
 "use strict";
 
 const {hostnameToken, showFuturePosts, redirectToHttps, siteRoot} = require("./config");
-const fs = require("fs");
+const fs = require("fs").promises;
 const path = require("path");
-const {URL} = require("url");
 const express = require("express");
 const highlightJs = require("highlight.js");
 const lunr = require("lunr");
 const MarkdownIt = require("markdown-it");
-const pify = require("pify");
 const React = require("react");
 const ReactDOMServer = require("react-dom/server");
 const RSS = require("rss");
@@ -17,8 +15,6 @@ const router = express.Router({
   "caseSensitive": true,
   "strict": true
 });
-const readdir = pify(fs.readdir);
-const readFile = pify(fs.readFile);
 const markdownIt = new MarkdownIt({
   "highlight": (str, lang) => {
     if (lang && highlightJs.getLanguage(lang)) {
@@ -92,7 +88,7 @@ const getArchivePeriods = () => {
 };
 
 // eslint-disable-next-line dot-notation
-router["postsLoaded"] = readdir(postsDir).
+router["postsLoaded"] = fs.readdir(postsDir).
   catch((reason) => {
     if (reason.code !== "ENOENT") {
       throw reason;
@@ -107,7 +103,7 @@ router["postsLoaded"] = readdir(postsDir).
         throw new Error(`Post id "${id}" contains unsupported characters.`);
       }
       const filePath = path.join(postsDir, file);
-      return readFile(filePath, "utf8").
+      return fs.readFile(filePath, "utf8").
         then((content) => {
           const post = JSON.parse(content);
           post.id = id;
@@ -135,12 +131,13 @@ router["postsLoaded"] = readdir(postsDir).
             if (!includesHtmlFile && !includesMdFile) {
               throw new Error(`Post id "${id}" missing 'contentJson'/${htmlFile}/${mdFile}.`);
             }
-            promise = readFile(path.join(postsDir, includesHtmlFile ? htmlFile : mdFile), "utf8").
-              then((content) => {
-                post.contentSearch = content;
-                post.contentHtml = includesHtmlFile ? content : markdownIt.render(content);
-                post.contentSource = includesHtmlFile ? "html" : "markdown";
-              });
+            promise =
+              fs.readFile(path.join(postsDir, includesHtmlFile ? htmlFile : mdFile), "utf8").
+                then((content) => {
+                  post.contentSearch = content;
+                  post.contentHtml = includesHtmlFile ? content : markdownIt.render(content);
+                  post.contentSource = includesHtmlFile ? "html" : "markdown";
+                });
           }
           return promise.
             then(() => {

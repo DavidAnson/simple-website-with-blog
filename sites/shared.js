@@ -1,5 +1,4 @@
 "use strict";
-const { URL } = require("url");
 const React = require("react");
 const dateFormatOptionsWeekday = {
     "weekday": "long",

@@ -1,6 +1,5 @@
 "use strict";
 
-const {URL} = require("url");
 // eslint-disable-next-line no-unused-vars
 const React = require("react");
 
