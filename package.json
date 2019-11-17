@@ -14,13 +14,13 @@
   "bugs": "https://github.com/DavidAnson/simple-website-with-blog/issues",
   "scripts": {
     "compile": "tsc",
-    "future": "set SWWB_SHOW_FUTURE_POSTS=true&& node app.js",
+    "future": "cross-env SWWB_SHOW_FUTURE_POSTS=true node app.js",
     "lint": "eslint *.js **/*.jsx sites/test/static/tests.js",
-    "photo": "set SWWB_SITE_ROOT=./sites/sample-photo&& node app.js",
+    "photo": "cross-env SWWB_SITE_ROOT=./sites/sample-photo node app.js",
     "server": "npm run compile && node app.js",
     "start": "node app.js",
-    "test": "set SWWB_SITE_ROOT=./sites/test&& set SWWB_ACME_CHALLENGE=abc.123,abcdefghijklmnopqrstuvwxyz0123456789ABCDEFG.HIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmn&& node app.js",
-    "text": "set SWWB_SITE_ROOT=./sites/sample-text&& node app.js",
+    "test": "cross-env SWWB_SITE_ROOT=./sites/test SWWB_ACME_CHALLENGE=abc.123,abcdefghijklmnopqrstuvwxyz0123456789ABCDEFG.HIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmn node app.js",
+    "text": "cross-env SWWB_SITE_ROOT=./sites/sample-text node app.js",
     "watch": "nodemon --ext js,jsx,json,html,md --ignore sites/**/*.js --exec npm run server"
   },
   "engines": {
@@ -38,6 +38,7 @@
     "rss": "~1.2.2"
   },
   "devDependencies": {
+    "cross-env": "~6.0.3",
     "eslint": "~5.14.1",
     "nodemon": "~1.18.10",
     "typescript": "~3.3.3333"
