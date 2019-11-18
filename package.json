@@ -21,7 +21,7 @@
     "start": "node app.js",
     "test": "cross-env SWWB_SITE_ROOT=./sites/test SWWB_ACME_CHALLENGE=abc.123,abcdefghijklmnopqrstuvwxyz0123456789ABCDEFG.HIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmn node app.js",
     "text": "cross-env SWWB_SITE_ROOT=./sites/sample-text node app.js",
-    "watch": "nodemon --ext js,jsx,json,html,md --ignore sites/**/*.js --exec npm run server"
+    "watch": "nodemon --ext js,jsx,json,html,md --ignore 'sites/**/*.js' --exec npm run server"
   },
   "engines": {
     "node": "10.x"
@@ -39,8 +39,8 @@
   },
   "devDependencies": {
     "cross-env": "~6.0.3",
-    "eslint": "~5.14.1",
-    "nodemon": "~1.18.10",
-    "typescript": "~3.3.3333"
+    "eslint": "~6.6.0",
+    "nodemon": "~1.19.4",
+    "typescript": "~3.7.2"
   }
 }
