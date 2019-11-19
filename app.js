@@ -45,25 +45,37 @@ app.use((req, res, next) => {
 app.use(helmet({
   "contentSecurityPolicy": {
     "directives": {
-      "defaultSrc": ["'self'"],
-      "scriptSrc": [
+      "default-src": ["'self'"],
+      "script-src": [
         "'self'",
         // "'unsafe-inline'",
         "code.jquery.com"
       ],
-      "styleSrc": [
+      "style-src": [
         "'self'",
         // "'unsafe-inline'",
         "code.jquery.com"
       ],
-      "baseUri": ["'none'"],
-      "frameAncestors": ["'none'"],
-      "formAction": ["'self'"]
+      "base-uri": ["'none'"],
+      "frame-ancestors": ["'none'"],
+      "form-action": ["'self'"],
+      "object-src": ["'none'"]
+    }
+  },
+  "featurePolicy": {
+    "features": {
+      // Disable features with security/privacy implications
+      "geolocation": ["'none'"],
+      "payment": ["'none'"],
+      "usb": ["'none'"]
     }
   },
   "hsts": {
     // Set maxAge to 1 week to mitigate impact of certificate expiration
     "maxAge": 60 * 60 * 24 * 7
+  },
+  "permittedCrossDomainPolicies": {
+    "permittedPolicies": "none"
   },
   "referrerPolicy": {
     "policy": "no-referrer-when-downgrade"
