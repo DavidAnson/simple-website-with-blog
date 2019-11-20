@@ -24,14 +24,17 @@ module.exports.getContentJsonElements = (post) => {
 };
 module.exports.getHtmlElements = (props) => {
     const archives = shared.getArchiveList(props.archives);
-    const posts = props.posts.map((post) => (React.createElement("article", { key: post.id, className: "post" },
-        React.createElement("h2", null,
-            React.createElement("a", { href: `/blog/post/${post.id}` }, post.title)),
-        React.createElement("div", { dangerouslySetInnerHTML: { "__html": post.contentHtml } }),
-        React.createElement("p", null,
-            "Posted ",
-            shared.getPublishDate(post)),
-        React.createElement("hr", null))));
+    const posts = props.posts.map((post) => {
+        const publishDate = shared.getPublishDate(post);
+        return (React.createElement("article", { key: post.id, className: "post" },
+            React.createElement("h2", null,
+                React.createElement("a", { href: `/blog/post/${post.id}` }, post.title)),
+            React.createElement("div", { dangerouslySetInnerHTML: { "__html": post.contentHtml } }),
+            publishDate ? React.createElement("p", null,
+                "Posted ",
+                publishDate) : null,
+            React.createElement("hr", null)));
+    });
     const title = shared.getTitle(props, strings);
     const heading = shared.getHeading(props);
     return (React.createElement("html", { lang: "en" },

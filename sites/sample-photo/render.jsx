@@ -35,14 +35,17 @@ module.exports.getContentJsonElements = (post) => {
 
 module.exports.getHtmlElements = (props) => {
   const archives = shared.getArchiveList(props.archives);
-  const posts = props.posts.map((post) => (
-    <article key={post.id} className="post">
-      <h2><a href={`/blog/post/${post.id}`}>{post.title}</a></h2>
-      <div dangerouslySetInnerHTML={{"__html": post.contentHtml}}></div>
-      <p>Posted {shared.getPublishDate(post)}</p>
-      <hr/>
-    </article>
-  ));
+  const posts = props.posts.map((post) => {
+    const publishDate = shared.getPublishDate(post);
+    return (
+      <article key={post.id} className="post">
+        <h2><a href={`/blog/post/${post.id}`}>{post.title}</a></h2>
+        <div dangerouslySetInnerHTML={{"__html": post.contentHtml}}></div>
+        {publishDate ? <p>Posted {publishDate}</p> : null}
+        <hr/>
+      </article>
+    );
+  });
   const title = shared.getTitle(props, strings);
   const heading = shared.getHeading(props);
   return (

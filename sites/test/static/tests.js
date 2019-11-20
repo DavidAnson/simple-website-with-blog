@@ -690,8 +690,8 @@ QUnit.test(
   }
 );
 
-QUnit.test("Get of /blog/search?query=missing returns ok and 0 posts", (assert) => {
-  assert.expect(38);
+QUnit.test("Get of /blog/search?query=missing returns ok and \"no results\" message", (assert) => {
+  assert.expect(39);
   const done = assert.async();
   let responseUrl = null;
   fetch("/blog/search?query=missing").
@@ -702,7 +702,8 @@ QUnit.test("Get of /blog/search?query=missing returns ok and 0 posts", (assert) 
     }).
     then((text) => {
       const doc = assertPageMetadata(assert, responseUrl, text, true, null, "Search: missing");
-      assert.equal(doc.getElementsByTagName("h3").length, 0);
+      assert.equal(doc.getElementsByTagName("h3").length, 1);
+      assert.ok(text.includes("<p>No results</p>"));
       assert.equal(doc.getElementsByTagName("a").length, 10);
       assert.equal(doc.getElementById("tags").children.length, 3);
       assert.equal(doc.getElementById("archives").children.length, 7);

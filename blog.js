@@ -261,6 +261,18 @@ const renderPosts = (req, res, next, posts, noindex, title, period, tag, query) 
   return res.send(body);
 };
 
+const createPost = (id, contentHtml) => {
+  const noDate = new Date(0);
+  return {
+    id,
+    contentHtml,
+    "contentDate": noDate,
+    "publishDate": noDate,
+    "tags": [],
+    "references": []
+  };
+};
+
 router.get("/", (req, res, next) => {
   const posts = postsSortedByPublishDate.filter(getPublishedPostFilter());
   return renderPosts(req, res, next, posts, false);
@@ -309,6 +321,15 @@ router.get("/search", (req, res, next) => {
     search(query).
     map((result) => postsIndexedById[result.ref]).
     filter(getPublishedPostFilter());
+  if (posts.length === 0) {
+    const noResults = "No results";
+    const contentHtml = ReactDOMServer.renderToStaticMarkup(React.createElement(
+      React.Fragment,
+      null,
+      React.createElement("p", null, noResults)
+    ));
+    posts.push(createPost(noResults, contentHtml));
+  }
   return renderPosts(req, res, next, posts, true, null, null, null, query);
 });
 
@@ -354,15 +375,7 @@ router.use((req, res, next) => {
     React.createElement("strong", null, `HTTP ${statusCode}`),
     React.createElement("p", null, statusText)
   ));
-  const noDate = new Date(0);
-  const post = {
-    "id": statusText,
-    contentHtml,
-    "contentDate": noDate,
-    "publishDate": noDate,
-    "tags": [],
-    "references": []
-  };
+  const post = createPost(statusText, contentHtml);
   return renderPosts(req, res, next, [post], true, statusText);
 });
 
