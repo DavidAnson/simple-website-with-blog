@@ -15,7 +15,7 @@
   "scripts": {
     "compile": "tsc",
     "future": "cross-env SWWB_SHOW_FUTURE_POSTS=true node app.js",
-    "lint": "eslint *.js **/*.jsx sites/test/static/tests.js",
+    "lint": "eslint *.js **/*.jsx sites/test/static/tests.js && stylelint sites/**/*.css",
     "photo": "cross-env SWWB_SITE_ROOT=./sites/sample-photo node app.js",
     "server": "npm run compile && node app.js",
     "start": "node app.js",
@@ -41,6 +41,9 @@
     "cross-env": "~6.0.3",
     "eslint": "~6.6.0",
     "nodemon": "~1.19.4",
-    "typescript": "~3.7.2"
+    "stylelint": "~12.0.0",
+    "stylelint-config-standard": "~19.0.0",
+    "typescript": "~3.7.2",
+    "@types/vfile-message": "1.0.1"
   }
 }

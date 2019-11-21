@@ -7,10 +7,12 @@ html {
 body {
   background-color: #eeeeee;
   color: #000000;
-  font-family: Calibri,GillSans,Helvetica,sans-serif;
+  font-family: Calibri, GillSans, Helvetica, sans-serif;
   margin: 0;
 }
-a:link, a:visited, a:hover {
+a:link,
+a:visited,
+a:hover {
   color: #008800;
   text-decoration: none;
 }
@@ -38,7 +40,8 @@ a:link, a:visited, a:hover {
 .posts hr {
   width: 95%;
 }
-.posts > h2, .post > h2 {
+.posts > h2,
+.post > h2 {
   font-size: 1.25em;
   font-weight: normal;
   margin-left: 5px;
@@ -54,13 +57,13 @@ a:link, a:visited, a:hover {
   box-sizing: border-box;
   max-width: calc(100% - 4px);
 }
-.post > div > p {
-  margin-top: 0.5em;
-  margin-bottom: 2em;
-}
 .post > p {
   font-size: 70%;
   margin-left: 5px;
+  margin-bottom: 2em;
+}
+.post > div > p {
+  margin-top: 0.5em;
   margin-bottom: 2em;
 }
 .navigation {

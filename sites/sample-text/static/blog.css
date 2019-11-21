@@ -47,7 +47,8 @@ body {
 .post {
   margin-bottom: 2em;
 }
-.post > time, .post > .tags {
+.post > time,
+.post > .tags {
   font-size: 80%;
 }
 .post > .tags {
@@ -61,10 +62,13 @@ body {
 .post > .references > ul {
   margin-top: 0;
 }
-.post blockquote, .post code, .post pre {
+.post blockquote,
+.post code,
+.post pre {
   background-color: #0000000d;
 }
-.post code, .post pre {
+.post code,
+.post pre {
   font-size: 10pt;
 }
 .post pre {
@@ -73,7 +77,11 @@ body {
 .post ul {
   list-style: disc;
 }
-.post img, .post canvas, .post iframe, .post svg, .post video {
+.post img,
+.post canvas,
+.post iframe,
+.post svg,
+.post video {
   max-width: 100%;
 }
 .post table {
@@ -132,7 +140,8 @@ body {
 .markdown tr {
   background-color: #0000000d;
 }
-.markdown thead > tr, .markdown tbody > tr:nth-child(2n) {
+.markdown thead > tr,
+.markdown tbody > tr:nth-child(2n) {
   background-color: #0000001a;
 }
 .markdown pre > code {
@@ -165,10 +174,22 @@ h5 {
 h6 {
   font-size: 100%;
 }
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin: 0;
 }
-b, strong, h1, h2, h3, h4, h5, h6 {
+b,
+strong,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: bolder;
 }
 @media (prefers-color-scheme: dark) {
@@ -194,7 +215,9 @@ b, strong, h1, h2, h3, h4, h5, h6 {
   .banner a {
     color: inherit;
   }
-  .post blockquote, .post code, .post pre {
+  .post blockquote,
+  .post code,
+  .post pre {
     background-color: #ffffff18;
   }
   @media (min-width: 500px) {
@@ -208,7 +231,8 @@ b, strong, h1, h2, h3, h4, h5, h6 {
   .markdown tr {
     background-color: #ffffff18;
   }
-  .markdown thead > tr, .markdown tbody > tr:nth-child(2n) {
+  .markdown thead > tr,
+  .markdown tbody > tr:nth-child(2n) {
     background-color: #ffffff10;
   }
 }
