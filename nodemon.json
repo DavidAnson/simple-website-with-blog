@@ -1,0 +1,7 @@
+{
+  "verbose": true,
+  "ext": "js,jsx,json,html,md",
+  "ignore": [
+    "sites/**/*.js"
+  ]
+}
