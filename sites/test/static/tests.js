@@ -37,7 +37,6 @@ const assertPageMetadata = (assert, responseUrl, text, noindex, titlePrefix, inn
   const siteName = "simple-website-with-blog/test";
   const title = `${unifiedTitlePrefix}${siteName}`;
   const description = titlePrefix || innerTitle || "Test blog";
-  const image = `${location.origin}/images/piechart.png`;
   assert.ok((/^<!DOCTYPE html>/u).test(text));
   const doc = new DOMParser().parseFromString(text, "application/xml");
   assertSingleTagText(assert, doc, "title", title);
@@ -51,7 +50,7 @@ const assertPageMetadata = (assert, responseUrl, text, noindex, titlePrefix, inn
   assertMetaAttributes(assert, metas[6], null, "og:type", "article");
   assertMetaAttributes(assert, metas[7], null, "og:title", description);
   assertMetaAttributes(assert, metas[8], null, "og:url", responseUrl);
-  assertMetaAttributes(assert, metas[9], null, "og:image", image);
+  assertMetaAttributes(assert, metas[9], null, "og:image", "og/Image.jpg");
   assertMetaAttributes(assert, metas[10], null, "og:site_name", siteName);
   assertMetaAttributes(assert, metas[11], null, "og:description", description);
   if (noindex) {
@@ -682,7 +681,7 @@ QUnit.test(
       then((text) => {
         const doc = assertPageMetadata(assert, responseUrl, text, true, null, "Search: content");
         assert.equal(doc.getElementsByTagName("h3").length, 10);
-        assert.equal(doc.getElementsByTagName("a").length, 20);
+        assert.equal(doc.getElementsByTagName("a").length, 21);
         assert.equal(doc.getElementById("tags").children.length, 3);
         assert.equal(doc.getElementById("archives").children.length, 7);
       }).

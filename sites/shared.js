@@ -84,8 +84,7 @@ const getTitle = (props, strings) => [
 module.exports.getTitle = getTitle;
 const getDescription = (props, strings) => props.title || getHeading(props) || strings.description;
 module.exports.getDescription = getDescription;
-module.exports.getTwitterOpenGraph = (props, strings) => {
-    const avatarHref = new URL(strings.avatar, props.urlHref).href;
+module.exports.getTwitterOpenGraph = (props, context, strings) => {
     const description = getDescription(props, strings);
     return (React.createElement(React.Fragment, null,
         React.createElement("meta", { name: "twitter:card", content: "summary" }),
@@ -94,7 +93,7 @@ module.exports.getTwitterOpenGraph = (props, strings) => {
         React.createElement("meta", { property: "og:type", content: "article" }),
         React.createElement("meta", { property: "og:title", content: description }),
         React.createElement("meta", { property: "og:url", content: props.urlHref }),
-        strings.avatar ? React.createElement("meta", { property: "og:image", content: avatarHref }) : null,
+        context.ogImage ? React.createElement("meta", { property: "og:image", content: context.ogImage }) : null,
         React.createElement("meta", { property: "og:site_name", content: strings.title }),
         React.createElement("meta", { property: "og:description", content: description })));
 };

@@ -108,8 +108,7 @@ const getDescription =
   (props, strings) => props.title || getHeading(props) || strings.description;
 module.exports.getDescription = getDescription;
 
-module.exports.getTwitterOpenGraph = (props, strings) => {
-  const avatarHref = new URL(strings.avatar, props.urlHref).href;
+module.exports.getTwitterOpenGraph = (props, context, strings) => {
   const description = getDescription(props, strings);
   return (
     <React.Fragment>
@@ -119,7 +118,7 @@ module.exports.getTwitterOpenGraph = (props, strings) => {
       <meta property="og:type" content="article"/>
       <meta property="og:title" content={description}/>
       <meta property="og:url" content={props.urlHref}/>
-      {strings.avatar ? <meta property="og:image" content={avatarHref}/> : null}
+      {context.ogImage ? <meta property="og:image" content={context.ogImage}/> : null}
       <meta property="og:site_name" content={strings.title}/>
       <meta property="og:description" content={description}/>
     </React.Fragment>

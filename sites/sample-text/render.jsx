@@ -47,6 +47,9 @@ module.exports.getHtmlElements = (props) => {
   });
   const title = shared.getTitle(props, strings);
   const heading = shared.getHeading(props);
+  const context = {
+    "ogImage": new URL(strings.avatar, props.urlHref).href
+  };
   return (
     <html lang="en">
       <head>
@@ -54,7 +57,7 @@ module.exports.getHtmlElements = (props) => {
         <meta name="viewport" content="width=device-width"/>
         <meta name="description" content={shared.getDescription(props, strings)}/>
         <meta name="author" content={strings.author}/>
-        {shared.getTwitterOpenGraph(props, strings)}
+        {shared.getTwitterOpenGraph(props, context, strings)}
         {shared.getMetaRobots(props.noindex)}
         <link rel="alternate" type="application/rss+xml" href="/blog/rss" title={strings.title}/>
         <link rel="stylesheet" href="/blog.css"/>

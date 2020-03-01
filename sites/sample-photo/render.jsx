@@ -23,6 +23,7 @@ module.exports.getContentJsonElements = (post) => {
   const content = post.contentJson.map((photo, index) => {
     const src = `${config.hostnameToken}/photos/${photo.image}`;
     const srcSet = photo.image2x ? `${config.hostnameToken}/photos/${photo.image2x} 2x` : null;
+    post.ogImage = post.ogImage || src;
     return (
       <React.Fragment key={index}>
         <img src={src} srcSet={srcSet} alt={photo.caption}/>
@@ -48,6 +49,9 @@ module.exports.getHtmlElements = (props) => {
   });
   const title = shared.getTitle(props, strings);
   const heading = shared.getHeading(props);
+  const context = {};
+  const ogImages = props.posts.filter((post) => post.ogImage).map((post) => post.ogImage);
+  [context.ogImage] = ogImages;
   return (
     <html lang="en">
       <head>
@@ -55,7 +59,7 @@ module.exports.getHtmlElements = (props) => {
         <meta name="viewport" content="width=device-width"/>
         <meta name="description" content={shared.getDescription(props, strings)}/>
         <meta name="author" content={strings.author}/>
-        {shared.getTwitterOpenGraph(props, strings)}
+        {shared.getTwitterOpenGraph(props, context, strings)}
         {shared.getMetaRobots(props.noindex)}
         <link rel="alternate" type="application/rss+xml" href="/blog/rss" title={strings.title}/>
         <link rel="stylesheet" href="/blog.css"/>

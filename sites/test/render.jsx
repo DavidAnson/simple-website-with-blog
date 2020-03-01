@@ -45,6 +45,9 @@ module.exports.getHtmlElements = (props) => {
   });
   const title = shared.getTitle(props, strings);
   const heading = shared.getHeading(props);
+  const context = {
+    "ogImage": "og/Image.jpg"
+  };
   return (
     <html lang="en">
       <head>
@@ -52,7 +55,7 @@ module.exports.getHtmlElements = (props) => {
         <meta name="viewport" content="width=device-width"/>
         <meta name="description" content={shared.getDescription(props, strings)}/>
         <meta name="author" content={strings.author}/>
-        {shared.getTwitterOpenGraph(props, strings)}
+        {shared.getTwitterOpenGraph(props, context, strings)}
         {shared.getMetaRobots(props.noindex)}
       </head>
       <body>
