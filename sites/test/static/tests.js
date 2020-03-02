@@ -598,6 +598,41 @@ QUnit.test("Get of /blog/post/nan (no dates, HTML) returns ok and content", (ass
     then(done);
 });
 
+QUnit.test("Get of /blog/post/code (highlighting) returns ok and content", (assert) => {
+  assert.expect(56);
+  const done = assert.async();
+  let responseUrl = null;
+  fetch("/blog/post/code").
+    then((response) => {
+      responseUrl = response.url;
+      assert.ok(response.ok);
+      return response.text();
+    }).
+    then((text) => {
+      const doc = assertPageMetadata(assert, responseUrl, text, false, "Test post - Code");
+      assertSingleTagText(assert, doc, "h3", "code");
+      assertSingleTagText(assert, doc, "h4", "Test post - Code");
+      assertSingleTagText(assert, doc, "h5", "1970-01-01T00:00:00.000Z");
+      assertSingleTagText(assert, doc, "h6", "1970-01-01T00:00:00.000Z");
+      assertSingleTagText(assert, doc, "blockquote", "markdown");
+      assert.equal(doc.getElementsByTagName("div").length, 1);
+      assert.equal(doc.getElementsByTagName("div")[0].childElementCount, 1);
+      const preElement = doc.getElementsByTagName("div")[0].firstElementChild;
+      assertElementNameText(assert, preElement, "pre", "console.log()\n");
+      const codeElement = preElement.firstElementChild;
+      assertElementNameText(assert, codeElement, "code", "console.log()\n");
+      assert.equal(codeElement.attributes.getNamedItem("class").value, "language-js");
+      const spanElement = codeElement.firstElementChild;
+      assert.ok(spanElement);
+      spanElement && assertElementNameText(assert, spanElement, "span", "console");
+      spanElement && assert.equal(spanElement.attributes.getNamedItem("class").value, "hljs-built_in");
+      assert.equal(doc.getElementsByTagName("a").length, 10);
+      assert.equal(doc.getElementById("tags").children.length, 3);
+      assert.equal(doc.getElementById("archives").children.length, 7);
+    }).
+    then(done);
+});
+
 QUnit.test("Get of /blog/post/zero (unpublished) returns 404", (assert) => {
   assert.expect(4);
   const done = assert.async();
