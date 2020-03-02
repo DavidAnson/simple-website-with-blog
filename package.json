@@ -13,7 +13,7 @@
   },
   "bugs": "https://github.com/DavidAnson/simple-website-with-blog/issues",
   "scripts": {
-    "compile": "tsc",
+    "compile": "tsc --incremental",
     "future": "cross-env SWWB_SHOW_FUTURE_POSTS=true node app.js",
     "lint": "eslint *.js **/*.jsx sites/test/static/tests.js && stylelint sites/**/*.css",
     "photo": "cross-env SWWB_SITE_ROOT=./sites/sample-photo node app.js",
