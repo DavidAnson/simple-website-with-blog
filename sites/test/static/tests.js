@@ -624,8 +624,10 @@ QUnit.test("Get of /blog/post/code (highlighting) returns ok and content", (asse
       assert.equal(codeElement.attributes.getNamedItem("class").value, "language-js");
       const spanElement = codeElement.firstElementChild;
       assert.ok(spanElement);
-      spanElement && assertElementNameText(assert, spanElement, "span", "console");
-      spanElement && assert.equal(spanElement.attributes.getNamedItem("class").value, "hljs-built_in");
+      if (spanElement) {
+        assertElementNameText(assert, spanElement, "span", "console");
+        assert.equal(spanElement.attributes.getNamedItem("class").value, "hljs-built_in");
+      }
       assert.equal(doc.getElementsByTagName("a").length, 10);
       assert.equal(doc.getElementById("tags").children.length, 3);
       assert.equal(doc.getElementById("archives").children.length, 7);
