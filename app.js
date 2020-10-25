@@ -4,6 +4,7 @@ const {port, acmeChallenge, redirectToHttps, siteRoot} = require("./config");
 const compression = require("compression");
 const express = require("express");
 const helmet = require("helmet");
+const featurePolicy = require("feature-policy");
 const blog = require("./blog");
 const app = express();
 
@@ -62,14 +63,6 @@ app.use(helmet({
       "object-src": ["'none'"]
     }
   },
-  "featurePolicy": {
-    "features": {
-      // Disable features with security/privacy implications
-      "geolocation": ["'none'"],
-      "payment": ["'none'"],
-      "usb": ["'none'"]
-    }
-  },
   "hsts": {
     // Set maxAge to 1 week to mitigate impact of certificate expiration
     "maxAge": 60 * 60 * 24 * 7
@@ -79,6 +72,14 @@ app.use(helmet({
   },
   "referrerPolicy": {
     "policy": "no-referrer-when-downgrade"
+  }
+}));
+app.use(featurePolicy({
+  "features": {
+    // Disable features with security/privacy implications
+    "geolocation": ["'none'"],
+    "payment": ["'none'"],
+    "usb": ["'none'"]
   }
 }));
 app.use(compression({

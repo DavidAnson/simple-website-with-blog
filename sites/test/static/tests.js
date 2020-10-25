@@ -103,7 +103,7 @@ QUnit.test("Browser supports the iterable protocol", (assert) => {
 QUnit.module("Static");
 
 QUnit.test("Get of / returns expected HTTP headers", (assert) => {
-  assert.expect(29);
+  assert.expect(31);
   const done = assert.async();
   fetch("/").
     then((response) => {
@@ -130,13 +130,17 @@ QUnit.test("Get of / returns expected HTTP headers", (assert) => {
         // Security headers
         [
           "Content-Security-Policy",
-          "default-src 'self'; " +
-            "script-src 'self' code.jquery.com; " +
-            "style-src 'self' code.jquery.com; " +
-            "base-uri 'none'; " +
-            "frame-ancestors 'none'; " +
-            "form-action 'self'; " +
+          "default-src 'self';" +
+            "script-src 'self' code.jquery.com;" +
+            "style-src 'self' code.jquery.com;" +
+            "base-uri 'none';" +
+            "frame-ancestors 'none';" +
+            "form-action 'self';" +
             "object-src 'none'"
+        ],
+        [
+          "Expect-CT",
+          "max-age=0"
         ],
         [
           "Feature-Policy",
@@ -174,7 +178,7 @@ QUnit.test("Get of / returns expected HTTP headers", (assert) => {
         ],
         [
           "X-XSS-Protection",
-          "1; mode=block"
+          "0"
         ]
       ].forEach((nameValue) => {
         const [
