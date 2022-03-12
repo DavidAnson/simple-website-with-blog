@@ -13,7 +13,7 @@ const assertResponseAndHeaders = (assert, response, contentType) => {
 const assertNotFound = (assert, response) => {
   assert.ok(!response.ok);
   assert.equal(response.status, 404);
-  assert.equal(response.statusText, "Not Found");
+  assert.equal(response.statusText, response.statusText ? "Not Found" : "");
 };
 
 const assertSingleTagText = (assert, document, tag, text) => {
@@ -103,7 +103,7 @@ QUnit.test("Browser supports the iterable protocol", (assert) => {
 QUnit.module("Static");
 
 QUnit.test("Get of / returns expected HTTP headers", (assert) => {
-  assert.expect(31);
+  assert.expect(32);
   const done = assert.async();
   fetch("/").
     then((response) => {
@@ -153,10 +153,6 @@ QUnit.test("Get of / returns expected HTTP headers", (assert) => {
           "no-referrer-when-downgrade"
         ],
         [
-          "Strict-Transport-Security",
-          "max-age=604800; includeSubDomains"
-        ],
-        [
           "X-Content-Type-Options",
           "nosniff"
         ],
@@ -192,6 +188,9 @@ QUnit.test("Get of / returns expected HTTP headers", (assert) => {
       });
       assert.ok(headers.has("ETag"));
       assert.ok(headers.get("ETag").startsWith("W/\""));
+      assert.ok(headers.has("Strict-Transport-Security"));
+      assert.ok(headers.get("Strict-Transport-Security").startsWith("max-age="));
+      assert.ok(headers.get("Strict-Transport-Security").endsWith("; includeSubDomains"));
     }).
     then(done);
 });

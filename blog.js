@@ -48,7 +48,11 @@ const hostnameTokenRe = new RegExp(hostnameTokenEscaped, "gu");
 const referenceRe = new RegExp(`(${hostnameTokenEscaped})/blog/post/([\\w-]+)`, "gu");
 
 const getSiteUrl =
-  (req) => `${(redirectToHttps || req.secure) ? "https" : "http"}://${req.headers.host}`;
+  (req) => {
+    const protocol = (redirectToHttps || req.secure) ? "https" : "http";
+    const host = req.headers["x-forwarded-host"] || req.headers.host;
+    return `${protocol}://${host}`;
+  };
 
 const getPublishedPostFilter = (includeDateless) => {
   const now = Date.now();
