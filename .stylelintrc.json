@@ -4,6 +4,9 @@
     "at-rule-empty-line-before": null,
     "color-hex-length": null,
     "no-descending-specificity": null,
-    "rule-empty-line-before": null
+    "property-no-vendor-prefix": null,
+    "rule-empty-line-before": null,
+    "selector-class-pattern": null,
+    "shorthand-property-no-redundant-values": null
   }
 }
