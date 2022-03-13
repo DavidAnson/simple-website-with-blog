@@ -46,21 +46,14 @@ app.use((req, res, next) => {
 app.use(helmet({
   "contentSecurityPolicy": {
     "directives": {
-      "default-src": ["'self'"],
       "script-src": [
         "'self'",
-        // "'unsafe-inline'",
         "code.jquery.com"
       ],
       "style-src": [
         "'self'",
-        // "'unsafe-inline'",
         "code.jquery.com"
-      ],
-      "base-uri": ["'none'"],
-      "frame-ancestors": ["'none'"],
-      "form-action": ["'self'"],
-      "object-src": ["'none'"]
+      ]
     }
   },
   "hsts": {

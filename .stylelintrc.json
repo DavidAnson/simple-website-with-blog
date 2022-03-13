@@ -1,5 +1,8 @@
 {
   "extends": "stylelint-config-standard",
+  "ignoreFiles": [
+    "sites/sample-text/static/xcode.css"
+  ],
   "rules": {
     "at-rule-empty-line-before": null,
     "color-hex-length": null,

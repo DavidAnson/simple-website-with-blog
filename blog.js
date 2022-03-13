@@ -16,9 +16,13 @@ const router = express.Router({
   "strict": true
 });
 const markdownIt = new MarkdownIt({
-  "highlight": (str, lang) => {
-    if (lang && highlightJs.getLanguage(lang)) {
-      return highlightJs.highlight(lang, str).value;
+  "highlight": (str, language) => {
+    if (language && highlightJs.getLanguage(language)) {
+      const ignoreIllegals = true;
+      return highlightJs.highlight(str, {
+        language,
+        ignoreIllegals
+      }).value;
     }
     return "";
   },

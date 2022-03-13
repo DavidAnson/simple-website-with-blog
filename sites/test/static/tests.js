@@ -130,13 +130,18 @@ QUnit.test("Get of / returns expected HTTP headers", (assert) => {
         // Security headers
         [
           "Content-Security-Policy",
-          "default-src 'self';" +
-            "script-src 'self' code.jquery.com;" +
+          "script-src 'self' code.jquery.com;" +
             "style-src 'self' code.jquery.com;" +
-            "base-uri 'none';" +
-            "frame-ancestors 'none';" +
+            "default-src 'self';" +
+            "base-uri 'self';" +
+            "block-all-mixed-content;" +
+            "font-src 'self' https: data:;" +
             "form-action 'self';" +
-            "object-src 'none'"
+            "frame-ancestors 'self';" +
+            "img-src 'self' data:;" +
+            "object-src 'none';" +
+            "script-src-attr 'none';" +
+            "upgrade-insecure-requests"
         ],
         [
           "Expect-CT",
@@ -629,7 +634,7 @@ QUnit.test("Get of /blog/post/code (highlighting) returns ok and content", (asse
       assert.ok(spanElement);
       if (spanElement) {
         assertElementNameText(assert, spanElement, "span", "console");
-        assert.equal(spanElement.attributes.getNamedItem("class").value, "hljs-built_in");
+        assert.equal(spanElement.attributes.getNamedItem("class").value, "hljs-variable language_");
       }
       assert.equal(doc.getElementsByTagName("a").length, 10);
       assert.equal(doc.getElementById("tags").children.length, 3);
