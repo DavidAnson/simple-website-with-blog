@@ -120,7 +120,6 @@ router["postsLoaded"] = fs.readdir(postsDir).
           post.contentDate = new Date(post.contentDate || post.publishDate || 0);
           post.publishDate = new Date(post.publishDate || 0);
           post.tags = post.tags || [];
-          post.tag = post.tags.join(" ");
           post.references = [];
           post.title = render.getPostTitle(post);
           return post;
@@ -206,14 +205,19 @@ router["postsLoaded"] = fs.readdir(postsDir).
       const commonHtmlStopWordFilter = lunr.generateStopWordFilter(commonHtmlStopWords);
       lunr.Pipeline.registerFunction(commonHtmlStopWordFilter, "commonHtmlStopWords");
       this.pipeline.after(lunr.stopWordFilter, commonHtmlStopWordFilter);
+      this.ref("id");
       this.field("title");
-      this.field("contentSearch");
+      this.field("content");
       this.field("tag");
-      postsSortedByContentDate.forEach((post) => {
-        post.contentSearch = post.contentSearch.replace(/[\W_]+/gu, " ");
-        this.add(post);
+      for (const post of postsSortedByContentDate) {
+        this.add({
+          "id": post.id,
+          "title": post.title,
+          "content": post.contentSearch.replace(/[\W_]+/gu, " "),
+          "tag": post.tags
+        });
         delete post.contentSearch;
-      });
+      }
     });
   });
 
