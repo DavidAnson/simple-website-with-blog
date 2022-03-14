@@ -82,12 +82,12 @@ app.use(compression({
 
 // Handle ACME requests (as made by Let's Encrypt, https://letsencrypt.org/)
 if (acmeChallenge) {
-  acmeChallenge.split(",").forEach((challenge) => {
+  for (const challenge of acmeChallenge.split(",")) {
     const [path] = challenge.split(".");
     app.get(`/.well-known/acme-challenge/${path}`, (req, res) => {
       res.send(challenge);
     });
-  });
+  }
 }
 
 // Handle static content

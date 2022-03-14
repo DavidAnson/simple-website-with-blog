@@ -1,16 +1,23 @@
 {
   "parserOptions": {
-    "ecmaVersion": 6,
     "ecmaFeatures": {
       "jsx": true
-    }
+    },
+    "ecmaVersion": 2020,
+    "sourceType": "script"
   },
   "env":{
     "browser": true,
     "node": true,
     "es6": true
   },
-  "extends": "eslint:all",
+  "plugins": [
+    "unicorn"
+  ],
+  "extends": [
+    "eslint:all",
+    "plugin:unicorn/all"
+  ],
   "rules": {
     "function-call-argument-newline": "off",
     "indent": ["error", 2],
@@ -37,6 +44,14 @@
     "one-var": ["error", "never"],
     "padded-blocks": ["error", "never"],
     "prefer-named-capture-group": "off",
-    "sort-keys": "off"
+    "sort-keys": "off",
+
+    "unicorn/no-array-callback-reference": "off",
+    "unicorn/no-null": "off",
+    "unicorn/no-unreadable-array-destructuring": "off",
+    "unicorn/prefer-module": "off",
+    "unicorn/prefer-query-selector": "off",
+    "unicorn/prefer-top-level-await": "off",
+    "unicorn/prevent-abbreviations": "off"
   }
 }

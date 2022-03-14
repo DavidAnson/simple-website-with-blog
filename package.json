@@ -41,6 +41,7 @@
   "devDependencies": {
     "cross-env": "7.0.3",
     "eslint": "8.11.0",
+    "eslint-plugin-unicorn": "41.0.0",
     "nodemon": "2.0.15",
     "stylelint": "14.5.3",
     "stylelint-config-standard": "25.0.0",

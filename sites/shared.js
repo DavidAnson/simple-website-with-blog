@@ -99,11 +99,11 @@ module.exports.getTwitterOpenGraph = (props, context, strings) => {
 };
 module.exports.getPrevNextLinks = (props) => {
     const prevLink = props.prevLink ? React.createElement("a", { href: props.prevLink },
-        "\u00ab",
+        "\u00AB",
         " Previous Posts") : null;
     const nextLink = props.nextLink ? React.createElement("a", { href: props.nextLink },
         "Next Posts ",
-        "\u00bb") : null;
+        "\u00BB") : null;
     return (prevLink || nextLink)
         ? React.createElement("div", { className: "navigation" },
             prevLink,

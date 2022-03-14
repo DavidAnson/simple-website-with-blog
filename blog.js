@@ -1,5 +1,7 @@
 "use strict";
 
+/* eslint-disable unicorn/no-array-for-each */
+
 const {hostnameToken, showFuturePosts, redirectToHttps, siteRoot} = require("./config");
 const fs = require("fs").promises;
 const path = require("path");
@@ -97,9 +99,9 @@ const getArchivePeriods = () => {
 
 // eslint-disable-next-line dot-notation
 router["postsLoaded"] = fs.readdir(postsDir).
-  catch((reason) => {
-    if (reason.code !== "ENOENT") {
-      throw reason;
+  catch((error) => {
+    if (error.code !== "ENOENT") {
+      throw error;
     }
     return [];
   }).
@@ -157,7 +159,7 @@ router["postsLoaded"] = fs.readdir(postsDir).
                   try {
                     // eslint-disable-next-line no-new
                     new URL(url);
-                  } catch (ex) {
+                  } catch {
                     throw new Error(`URL "${url}" in post "${post.id}" must be absolute for RSS.`);
                   }
                 }
@@ -308,8 +310,8 @@ router.get("/tag/:tag", (req, res, next) => {
 });
 
 router.get("/archive/:period(\\d{6})", (req, res, next) => {
-  const year = parseInt(req.params.period.slice(0, 4), 10);
-  const month = parseInt(req.params.period.slice(4, 6), 10) - 1;
+  const year = Number.parseInt(req.params.period.slice(0, 4), 10);
+  const month = Number.parseInt(req.params.period.slice(4, 6), 10) - 1;
   const posts = postsSortedByContentDate.
     filter(getPublishedPostFilter()).
     filter((post) => (post.contentDate.getFullYear() === year) &&
