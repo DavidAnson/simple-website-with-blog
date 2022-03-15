@@ -53,6 +53,8 @@ const hostnameTokenEscaped =
 const hostnameTokenRe = new RegExp(hostnameTokenEscaped, "gu");
 const referenceRe = new RegExp(`(${hostnameTokenEscaped})/blog/post/([\\w-]+)`, "gu");
 
+const formatStringForSearch = (str) => str.replace(/[\W_]+/gu, " ");
+
 const getSiteUrl =
   (req) => {
     const protocol = (redirectToHttps || req.secure) ? "https" : "http";
@@ -201,6 +203,11 @@ router["postsLoaded"] = fs.readdir(postsDir).
     });
   }).
   then(() => {
+    const dateFormatOptionsYearMonth = {
+      "year": "numeric",
+      "month": "long"
+    };
+    const dateFormatYearMonth = new Intl.DateTimeFormat("en-US", dateFormatOptionsYearMonth);
     searchIndex = lunr(function Config () {
       const commonHtmlStopWordFilter = lunr.generateStopWordFilter(commonHtmlStopWords);
       lunr.Pipeline.registerFunction(commonHtmlStopWordFilter, "commonHtmlStopWords");
@@ -209,12 +216,14 @@ router["postsLoaded"] = fs.readdir(postsDir).
       this.field("title");
       this.field("content");
       this.field("tag");
+      this.field("date");
       for (const post of postsSortedByContentDate) {
         this.add({
           "id": post.id,
-          "title": post.title,
-          "content": post.contentSearch.replace(/[\W_]+/gu, " "),
-          "tag": post.tags
+          "title": formatStringForSearch(post.title),
+          "content": formatStringForSearch(post.contentSearch),
+          "tag": post.tags,
+          "date": dateFormatYearMonth.format(post.contentDate).split(" ")
         });
         delete post.contentSearch;
       }

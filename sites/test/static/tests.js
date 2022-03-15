@@ -824,6 +824,74 @@ QUnit.test(
   }
 );
 
+QUnit.test(
+  "Get of /blog/search?query=february returns ok, compressed HTML, and 3 posts",
+  (assert) => {
+    assert.expect(43);
+    const done = assert.async();
+    let responseUrl = null;
+    fetch("/blog/search?query=february").
+      then((response) => {
+        responseUrl = response.url;
+        assertResponseAndHeaders(assert, response);
+        return response.text();
+      }).
+      then((text) => {
+        const doc = assertPageMetadata(
+          assert,
+          responseUrl,
+          text,
+          true,
+          null,
+          "Search: february"
+        );
+        assert.equal(doc.getElementsByTagName("h3").length, 3);
+        const postTitles = "one two three".split(" ");
+        for (const item of doc.getElementsByTagName("h3")) {
+          assert.equal(item.innerHTML, postTitles.shift());
+        }
+        assert.equal(doc.getElementsByTagName("a").length, 15);
+        assert.equal(doc.getElementById("tags").children.length, 3);
+        assert.equal(doc.getElementById("archives").children.length, 7);
+      }).
+      then(done);
+  }
+);
+
+QUnit.test(
+  "Get of /blog/search?query=2018 returns ok, compressed HTML, and 6 posts",
+  (assert) => {
+    assert.expect(46);
+    const done = assert.async();
+    let responseUrl = null;
+    fetch("/blog/search?query=2018").
+      then((response) => {
+        responseUrl = response.url;
+        assertResponseAndHeaders(assert, response);
+        return response.text();
+      }).
+      then((text) => {
+        const doc = assertPageMetadata(
+          assert,
+          responseUrl,
+          text,
+          true,
+          null,
+          "Search: 2018"
+        );
+        assert.equal(doc.getElementsByTagName("h3").length, 6);
+        const postTitles = "one two three four five six".split(" ");
+        for (const item of doc.getElementsByTagName("h3")) {
+          assert.equal(item.innerHTML, postTitles.shift());
+        }
+        assert.equal(doc.getElementsByTagName("a").length, 19);
+        assert.equal(doc.getElementById("tags").children.length, 3);
+        assert.equal(doc.getElementById("archives").children.length, 7);
+      }).
+      then(done);
+  }
+);
+
 QUnit.test("Get of /blog/search returns 404", (assert) => {
   assert.expect(4);
   const done = assert.async();
