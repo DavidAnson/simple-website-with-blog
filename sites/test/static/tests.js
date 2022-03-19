@@ -42,19 +42,20 @@ const assertPageMetadata = (assert, responseUrl, text, noindex, titlePrefix, inn
   assertSingleTagText(assert, doc, "title", title);
   const metas = doc.getElementsByTagName("meta");
   assertMetaAttributes(assert, metas[0], "viewport", null, "width=device-width");
-  assertMetaAttributes(assert, metas[1], "description", null, description);
-  assertMetaAttributes(assert, metas[2], "author", null, "David Anson");
-  assertMetaAttributes(assert, metas[3], "twitter:card", null, "summary");
-  assertMetaAttributes(assert, metas[4], "twitter:site", null, "@DavidAns");
-  assertMetaAttributes(assert, metas[5], "twitter:creator", null, "@DavidAns");
-  assertMetaAttributes(assert, metas[6], null, "og:type", "article");
-  assertMetaAttributes(assert, metas[7], null, "og:title", description);
-  assertMetaAttributes(assert, metas[8], null, "og:url", responseUrl);
-  assertMetaAttributes(assert, metas[9], null, "og:image", "og/Image.jpg");
-  assertMetaAttributes(assert, metas[10], null, "og:site_name", siteName);
-  assertMetaAttributes(assert, metas[11], null, "og:description", description);
+  assertMetaAttributes(assert, metas[1], "color-scheme", null, "light dark");
+  assertMetaAttributes(assert, metas[2], "description", null, description);
+  assertMetaAttributes(assert, metas[3], "author", null, "David Anson");
+  assertMetaAttributes(assert, metas[4], "twitter:card", null, "summary");
+  assertMetaAttributes(assert, metas[5], "twitter:site", null, "@DavidAns");
+  assertMetaAttributes(assert, metas[6], "twitter:creator", null, "@DavidAns");
+  assertMetaAttributes(assert, metas[7], null, "og:type", "article");
+  assertMetaAttributes(assert, metas[8], null, "og:title", description);
+  assertMetaAttributes(assert, metas[9], null, "og:url", responseUrl);
+  assertMetaAttributes(assert, metas[10], null, "og:image", "og/Image.jpg");
+  assertMetaAttributes(assert, metas[11], null, "og:site_name", siteName);
+  assertMetaAttributes(assert, metas[12], null, "og:description", description);
   if (noindex) {
-    assertMetaAttributes(assert, metas[12], "robots", null, "noindex");
+    assertMetaAttributes(assert, metas[13], "robots", null, "noindex");
   }
   assertSingleTagText(assert, doc, "h1", "Test blog");
   assertSingleTagText(assert, doc, "h2", innerTitle || "");
@@ -332,7 +333,7 @@ QUnit.test("Get of /blog/post/one/ returns 404", (assert) => {
 QUnit.module("List");
 
 QUnit.test("Get of /blog returns ok, compressed HTML, and 10 posts", (assert) => {
-  assert.expect(53);
+  assert.expect(55);
   const done = assert.async();
   let responseUrl = null;
   fetch("/blog").
@@ -361,7 +362,7 @@ QUnit.test("Get of /blog returns ok, compressed HTML, and 10 posts", (assert) =>
 });
 
 QUnit.test("Get of /blog?page=twenty returns ok and 10 posts", (assert) => {
-  assert.expect(56);
+  assert.expect(58);
   const done = assert.async();
   let responseUrl = null;
   fetch("/blog?page=twenty").
@@ -394,7 +395,7 @@ QUnit.test("Get of /blog?page=twenty returns ok and 10 posts", (assert) => {
 });
 
 QUnit.test("Get of /blog?page=twentyone returns ok and 2 posts", (assert) => {
-  assert.expect(45);
+  assert.expect(47);
   const done = assert.async();
   let responseUrl = null;
   fetch("/blog?page=twentyone").
@@ -439,7 +440,7 @@ QUnit.test("Get of /Blog returns 404", (assert) => {
 QUnit.module("Post");
 
 QUnit.test("Get of /blog/post/one (publish date) returns ok and compressed HTML", (assert) => {
-  assert.expect(66);
+  assert.expect(68);
   const done = assert.async();
   let responseUrl = null;
   fetch("/blog/post/one").
@@ -487,7 +488,7 @@ QUnit.test("Get of /blog/post/one (publish date) returns ok and compressed HTML"
 QUnit.test(
   "Get of /blog/post/eleven (publish/content dates, Markdown) returns ok and content",
   (assert) => {
-    assert.expect(67);
+    assert.expect(69);
     const done = assert.async();
     let responseUrl = null;
     fetch("/blog/post/eleven").
@@ -560,7 +561,7 @@ QUnit.test("Get of /blog/post/twenty (Markdown+code) returns ok and highlighting
 });
 
 QUnit.test("Get of /blog/post/nan (no dates, HTML) returns ok and content", (assert) => {
-  assert.expect(64);
+  assert.expect(66);
   const done = assert.async();
   let responseUrl = null;
   fetch("/blog/post/nan").
@@ -608,7 +609,7 @@ QUnit.test("Get of /blog/post/nan (no dates, HTML) returns ok and content", (ass
 });
 
 QUnit.test("Get of /blog/post/code (highlighting) returns ok and content", (assert) => {
-  assert.expect(56);
+  assert.expect(58);
   const done = assert.async();
   let responseUrl = null;
   fetch("/blog/post/code").
@@ -659,7 +660,7 @@ QUnit.test("Get of /blog/post/zero (unpublished) returns 404", (assert) => {
 });
 
 QUnit.test("Get of /blog/post/missing (missing) returns 404 (inline)", (assert) => {
-  assert.expect(53);
+  assert.expect(55);
   const done = assert.async();
   let responseUrl = null;
   fetch("/blog/post/missing").
@@ -689,7 +690,7 @@ QUnit.test("Get of /blog/post/missing (missing) returns 404 (inline)", (assert) 
 QUnit.module("Search");
 
 QUnit.test("Get of /blog/search?query=tw* returns ok, compressed HTML, and 4 posts", (assert) => {
-  assert.expect(45);
+  assert.expect(47);
   const done = assert.async();
   let responseUrl = null;
   fetch("/blog/search?query=tw*").
@@ -715,7 +716,7 @@ QUnit.test("Get of /blog/search?query=tw* returns ok, compressed HTML, and 4 pos
 QUnit.test(
   "Get of /blog/search?query=content&page=thirteen returns ok, compressed HTML, and 10 posts",
   (assert) => {
-    assert.expect(38);
+    assert.expect(40);
     const done = assert.async();
     let responseUrl = null;
     fetch("/blog/search?query=content&page=thirteen").
@@ -736,7 +737,7 @@ QUnit.test(
 );
 
 QUnit.test("Get of /blog/search?query=missing returns ok and \"no results\" message", (assert) => {
-  assert.expect(39);
+  assert.expect(41);
   const done = assert.async();
   let responseUrl = null;
   fetch("/blog/search?query=missing").
@@ -759,7 +760,7 @@ QUnit.test("Get of /blog/search?query=missing returns ok and \"no results\" mess
 QUnit.test(
   "Get of /blog/search?query=ei*+-title%3Aeighteen returns ok, compressed HTML, and 1 post",
   (assert) => {
-    assert.expect(41);
+    assert.expect(43);
     const done = assert.async();
     let responseUrl = null;
     fetch("/blog/search?query=ei*+-title%3Aeighteen").
@@ -793,7 +794,7 @@ QUnit.test(
 QUnit.test(
   "Get of /blog/search?query=ni*+-tag%3Asquare returns ok, compressed HTML, and 1 post",
   (assert) => {
-    assert.expect(41);
+    assert.expect(43);
     const done = assert.async();
     let responseUrl = null;
     fetch("/blog/search?query=ni*+-tag%3Asquare").
@@ -827,7 +828,7 @@ QUnit.test(
 QUnit.test(
   "Get of /blog/search?query=february returns ok, compressed HTML, and 3 posts",
   (assert) => {
-    assert.expect(43);
+    assert.expect(45);
     const done = assert.async();
     let responseUrl = null;
     fetch("/blog/search?query=february").
@@ -861,7 +862,7 @@ QUnit.test(
 QUnit.test(
   "Get of /blog/search?query=2018 returns ok, compressed HTML, and 6 posts",
   (assert) => {
-    assert.expect(46);
+    assert.expect(48);
     const done = assert.async();
     let responseUrl = null;
     fetch("/blog/search?query=2018").
@@ -925,7 +926,7 @@ QUnit.test("Get of /blog returns 3 tag links", (assert) => {
 });
 
 QUnit.test("Get of /blog/tag/even returns ok, compressed HTML, and 10 posts", (assert) => {
-  assert.expect(55);
+  assert.expect(57);
   const done = assert.async();
   let responseUrl = null;
   fetch("/blog/tag/even").
@@ -997,7 +998,7 @@ QUnit.test("Get of /blog returns 6 archive links", (assert) => {
 });
 
 QUnit.test("Get of /blog/archive/201801 returns ok, compressed HTML, and 3 posts", (assert) => {
-  assert.expect(43);
+  assert.expect(45);
   const done = assert.async();
   let responseUrl = null;
   fetch("/blog/archive/201801").

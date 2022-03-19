@@ -53,6 +53,7 @@ module.exports.getHtmlElements = (props) => {
       <head>
         <title>{title}</title>
         <meta name="viewport" content="width=device-width"/>
+        <meta name="color-scheme" content="light dark"/>
         <meta name="description" content={shared.getDescription(props, strings)}/>
         <meta name="author" content={strings.author}/>
         {shared.getTwitterOpenGraph(props, context, strings)}

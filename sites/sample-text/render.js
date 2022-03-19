@@ -41,6 +41,7 @@ module.exports.getHtmlElements = (props) => {
         React.createElement("head", null,
             React.createElement("title", null, title),
             React.createElement("meta", { name: "viewport", content: "width=device-width" }),
+            React.createElement("meta", { name: "color-scheme", content: "light dark" }),
             React.createElement("meta", { name: "description", content: shared.getDescription(props, strings) }),
             React.createElement("meta", { name: "author", content: strings.author }),
             shared.getTwitterOpenGraph(props, context, strings),
