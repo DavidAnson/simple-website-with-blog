@@ -32,6 +32,15 @@ const assertMetaAttributes = (assert, meta, name, property, content) => {
   assert.equal(meta.attributes.getNamedItem("content").value, content);
 };
 
+const assertFavIcon = (assert, document) => {
+  const links = [...document.getElementsByTagName("link")];
+  assert.ok(links.some((link) => (
+    (link.attributes.getNamedItem("rel").value === "icon") &&
+    (link.attributes.getNamedItem("href").value === "/favicon.svg") &&
+    (link.attributes.getNamedItem("type").value === "image/svg+xml")
+  )));
+};
+
 const assertPageMetadata = (assert, responseUrl, text, noindex, titlePrefix, innerTitle) => {
   const unifiedTitlePrefix = (titlePrefix || innerTitle) ? `${titlePrefix || innerTitle} - ` : "";
   const siteName = "simple-website-with-blog/test";
@@ -57,6 +66,7 @@ const assertPageMetadata = (assert, responseUrl, text, noindex, titlePrefix, inn
   if (noindex) {
     assertMetaAttributes(assert, metas[13], "robots", null, "noindex");
   }
+  assertFavIcon(assert, doc);
   assertSingleTagText(assert, doc, "h1", "Test blog");
   assertSingleTagText(assert, doc, "h2", innerTitle || "");
   return doc;
@@ -203,7 +213,7 @@ QUnit.test("Get of / returns expected HTTP headers", (assert) => {
 });
 
 QUnit.test("Get of / returns ok and compressed HTML", (assert) => {
-  assert.expect(4);
+  assert.expect(5);
   const done = assert.async();
   fetch("/").
     then((response) => {
@@ -212,6 +222,7 @@ QUnit.test("Get of / returns ok and compressed HTML", (assert) => {
     }).
     then((text) => {
       assert.ok(text.startsWith("<!DOCTYPE html>"));
+      assertFavIcon(assert, new DOMParser().parseFromString(text, "application/xml"));
     }).
     then(done);
 });
@@ -333,7 +344,7 @@ QUnit.test("Get of /blog/post/one/ returns 404", (assert) => {
 QUnit.module("List");
 
 QUnit.test("Get of /blog returns ok, compressed HTML, and 10 posts", (assert) => {
-  assert.expect(55);
+  assert.expect(56);
   const done = assert.async();
   let responseUrl = null;
   fetch("/blog").
@@ -362,7 +373,7 @@ QUnit.test("Get of /blog returns ok, compressed HTML, and 10 posts", (assert) =>
 });
 
 QUnit.test("Get of /blog?page=twenty returns ok and 10 posts", (assert) => {
-  assert.expect(58);
+  assert.expect(59);
   const done = assert.async();
   let responseUrl = null;
   fetch("/blog?page=twenty").
@@ -395,7 +406,7 @@ QUnit.test("Get of /blog?page=twenty returns ok and 10 posts", (assert) => {
 });
 
 QUnit.test("Get of /blog?page=twentyone returns ok and 2 posts", (assert) => {
-  assert.expect(47);
+  assert.expect(48);
   const done = assert.async();
   let responseUrl = null;
   fetch("/blog?page=twentyone").
@@ -440,7 +451,7 @@ QUnit.test("Get of /Blog returns 404", (assert) => {
 QUnit.module("Post");
 
 QUnit.test("Get of /blog/post/one (publish date) returns ok and compressed HTML", (assert) => {
-  assert.expect(68);
+  assert.expect(69);
   const done = assert.async();
   let responseUrl = null;
   fetch("/blog/post/one").
@@ -488,7 +499,7 @@ QUnit.test("Get of /blog/post/one (publish date) returns ok and compressed HTML"
 QUnit.test(
   "Get of /blog/post/eleven (publish/content dates, Markdown) returns ok and content",
   (assert) => {
-    assert.expect(69);
+    assert.expect(70);
     const done = assert.async();
     let responseUrl = null;
     fetch("/blog/post/eleven").
@@ -561,7 +572,7 @@ QUnit.test("Get of /blog/post/twenty (Markdown+code) returns ok and highlighting
 });
 
 QUnit.test("Get of /blog/post/nan (no dates, HTML) returns ok and content", (assert) => {
-  assert.expect(66);
+  assert.expect(67);
   const done = assert.async();
   let responseUrl = null;
   fetch("/blog/post/nan").
@@ -609,7 +620,7 @@ QUnit.test("Get of /blog/post/nan (no dates, HTML) returns ok and content", (ass
 });
 
 QUnit.test("Get of /blog/post/code (highlighting) returns ok and content", (assert) => {
-  assert.expect(58);
+  assert.expect(59);
   const done = assert.async();
   let responseUrl = null;
   fetch("/blog/post/code").
@@ -660,7 +671,7 @@ QUnit.test("Get of /blog/post/zero (unpublished) returns 404", (assert) => {
 });
 
 QUnit.test("Get of /blog/post/missing (missing) returns 404 (inline)", (assert) => {
-  assert.expect(55);
+  assert.expect(56);
   const done = assert.async();
   let responseUrl = null;
   fetch("/blog/post/missing").
@@ -690,7 +701,7 @@ QUnit.test("Get of /blog/post/missing (missing) returns 404 (inline)", (assert) 
 QUnit.module("Search");
 
 QUnit.test("Get of /blog/search?query=tw* returns ok, compressed HTML, and 4 posts", (assert) => {
-  assert.expect(47);
+  assert.expect(48);
   const done = assert.async();
   let responseUrl = null;
   fetch("/blog/search?query=tw*").
@@ -716,7 +727,7 @@ QUnit.test("Get of /blog/search?query=tw* returns ok, compressed HTML, and 4 pos
 QUnit.test(
   "Get of /blog/search?query=content&page=thirteen returns ok, compressed HTML, and 10 posts",
   (assert) => {
-    assert.expect(40);
+    assert.expect(41);
     const done = assert.async();
     let responseUrl = null;
     fetch("/blog/search?query=content&page=thirteen").
@@ -737,7 +748,7 @@ QUnit.test(
 );
 
 QUnit.test("Get of /blog/search?query=missing returns ok and \"no results\" message", (assert) => {
-  assert.expect(41);
+  assert.expect(42);
   const done = assert.async();
   let responseUrl = null;
   fetch("/blog/search?query=missing").
@@ -760,7 +771,7 @@ QUnit.test("Get of /blog/search?query=missing returns ok and \"no results\" mess
 QUnit.test(
   "Get of /blog/search?query=ei*+-title%3Aeighteen returns ok, compressed HTML, and 1 post",
   (assert) => {
-    assert.expect(43);
+    assert.expect(44);
     const done = assert.async();
     let responseUrl = null;
     fetch("/blog/search?query=ei*+-title%3Aeighteen").
@@ -794,7 +805,7 @@ QUnit.test(
 QUnit.test(
   "Get of /blog/search?query=ni*+-tag%3Asquare returns ok, compressed HTML, and 1 post",
   (assert) => {
-    assert.expect(43);
+    assert.expect(44);
     const done = assert.async();
     let responseUrl = null;
     fetch("/blog/search?query=ni*+-tag%3Asquare").
@@ -828,7 +839,7 @@ QUnit.test(
 QUnit.test(
   "Get of /blog/search?query=february returns ok, compressed HTML, and 3 posts",
   (assert) => {
-    assert.expect(45);
+    assert.expect(46);
     const done = assert.async();
     let responseUrl = null;
     fetch("/blog/search?query=february").
@@ -862,7 +873,7 @@ QUnit.test(
 QUnit.test(
   "Get of /blog/search?query=2018 returns ok, compressed HTML, and 6 posts",
   (assert) => {
-    assert.expect(48);
+    assert.expect(49);
     const done = assert.async();
     let responseUrl = null;
     fetch("/blog/search?query=2018").
@@ -926,7 +937,7 @@ QUnit.test("Get of /blog returns 3 tag links", (assert) => {
 });
 
 QUnit.test("Get of /blog/tag/even returns ok, compressed HTML, and 10 posts", (assert) => {
-  assert.expect(57);
+  assert.expect(58);
   const done = assert.async();
   let responseUrl = null;
   fetch("/blog/tag/even").
@@ -998,7 +1009,7 @@ QUnit.test("Get of /blog returns 6 archive links", (assert) => {
 });
 
 QUnit.test("Get of /blog/archive/201801 returns ok, compressed HTML, and 3 posts", (assert) => {
-  assert.expect(45);
+  assert.expect(46);
   const done = assert.async();
   let responseUrl = null;
   fetch("/blog/archive/201801").
