@@ -57,6 +57,7 @@ module.exports.getHtmlElements = (props) => {
         <meta name="author" content={strings.author}/>
         {shared.getTwitterOpenGraph(props, context, strings)}
         {shared.getMetaRobots(props.noindex)}
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
       </head>
       <body>
         <h1>{strings.description}</h1>

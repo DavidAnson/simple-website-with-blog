@@ -62,6 +62,7 @@ module.exports.getHtmlElements = (props) => {
         <link rel="alternate" type="application/rss+xml" href="/blog/rss" title={strings.title}/>
         <link rel="stylesheet" href="/blog.css"/>
         <link rel="stylesheet" href="/xcode.css"/>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
       </head>
       <body>
         <div className="column">

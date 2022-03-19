@@ -1,0 +1,10 @@
+<svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    @media (prefers-color-scheme: dark) {
+      rect { fill: gray }
+      path { fill: white }
+    }
+  </style>
+  <rect x="0" y="0" width="14" height="14" rx= "1" ry="1" fill="silver"/>
+  <path d="M 10 5 A 3 3 0 1 0 7 8 A 1 1 0 1 1 6 9 A 1 1 0 0 0 4 9 A 3 3 0 1 0 7 6 A 1 1 0 1 1 8 5 A 1 1 0 0 0 10 5" fill="black"/>
+</svg>

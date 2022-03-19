@@ -52,6 +52,7 @@ app.use(helmet({
       ],
       "style-src": [
         "'self'",
+        "'unsafe-inline'",
         "code.jquery.com"
       ]
     }
