@@ -114,7 +114,6 @@ module.exports.getTwitterOpenGraph = (props, context, strings) => {
     <React.Fragment>
       <meta name="twitter:card" content="summary"/>
       {strings.twitter ? <meta name="twitter:site" content={strings.twitter}/> : null}
-      {strings.twitter ? <meta name="twitter:creator" content={strings.twitter}/> : null}
       <meta property="og:type" content="article"/>
       <meta property="og:title" content={description}/>
       <meta property="og:url" content={props.urlHref}/>

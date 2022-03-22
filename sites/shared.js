@@ -89,7 +89,6 @@ module.exports.getTwitterOpenGraph = (props, context, strings) => {
     return (React.createElement(React.Fragment, null,
         React.createElement("meta", { name: "twitter:card", content: "summary" }),
         strings.twitter ? React.createElement("meta", { name: "twitter:site", content: strings.twitter }) : null,
-        strings.twitter ? React.createElement("meta", { name: "twitter:creator", content: strings.twitter }) : null,
         React.createElement("meta", { property: "og:type", content: "article" }),
         React.createElement("meta", { property: "og:title", content: description }),
         React.createElement("meta", { property: "og:url", content: props.urlHref }),

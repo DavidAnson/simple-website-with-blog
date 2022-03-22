@@ -33,6 +33,7 @@
     "no-confusing-arrow": ["error", {"allowParens": true}],
     "no-extra-parens": ["error", "functions"],
     "no-magic-numbers": "off",
+    "no-plusplus": "off",
     "no-process-env": "off",
     "no-ternary": "off",
     "object-curly-newline": ["error", {
