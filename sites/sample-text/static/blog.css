@@ -54,12 +54,12 @@ body {
 .post > .tags {
   margin-top: 2em;
 }
-.post > .references > p {
+.post > .related > p {
   font-weight: bolder;
   margin-top: 2em;
   margin-bottom: 0;
 }
-.post > .references > ul {
+.post > .related > ul {
   margin-top: 0;
 }
 .post blockquote,

@@ -33,13 +33,13 @@ module.exports.getPublishDate = (post) => {
     : null;
 };
 
-module.exports.getReferences = (show, references, publishedPostFilter) => {
-  const filteredReferences = references.filter(publishedPostFilter);
-  return (show && (filteredReferences.length > 0))
+module.exports.getRelatedList = (show, related, publishedPostFilter) => {
+  const filteredRelated = related.filter(publishedPostFilter);
+  return (show && (filteredRelated.length > 0))
     ? (<ul>
-      {filteredReferences.map((reference) => (
-        <li key={reference.id}>
-          <a href={`/blog/post/${reference.id}`}>{reference.title}</a>
+      {filteredRelated.map((post) => (
+        <li key={post.id}>
+          <a href={`/blog/post/${post.id}`}>{post.title}</a>
         </li>
       ))}
     </ul>)

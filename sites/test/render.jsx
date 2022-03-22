@@ -26,8 +26,8 @@ module.exports.getHtmlElements = (props) => {
   const archives = shared.getArchiveList(props.archives);
   const posts = props.posts.map((post) => {
     const tagLinks = shared.getTagLinks(post.tags);
-    const references =
-      shared.getReferences(Boolean(props.title), post.references, props.publishedPostFilter);
+    const relatedList =
+      shared.getRelatedList(Boolean(props.title), post.related, props.publishedPostFilter);
     return (
       <section key={post.id}>
         <h3>{post.id}</h3>
@@ -37,8 +37,8 @@ module.exports.getHtmlElements = (props) => {
         <blockquote>{post.contentSource}</blockquote>
         <div dangerouslySetInnerHTML={{"__html": post.contentHtml}}></div>
         {tagLinks}
-        <article className="references">
-          {references}
+        <article className="related">
+          {relatedList}
         </article>
       </section>
     );

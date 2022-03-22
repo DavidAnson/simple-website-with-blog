@@ -122,7 +122,7 @@ router["postsLoaded"] = fs.readdir(postsDir).
           post.contentDate = new Date(post.contentDate || post.publishDate || 0);
           post.publishDate = new Date(post.publishDate || 0);
           post.tags = post.tags || [];
-          post.references = [];
+          post.related = [];
           post.title = render.getPostTitle(post);
           return post;
         }).
@@ -179,7 +179,7 @@ router["postsLoaded"] = fs.readdir(postsDir).
   }).
   then(() => {
     postsSortedByPublishDate.forEach((post) => {
-      const references = [];
+      const related = [];
       let match = null;
       while ((match = referenceRe.exec(post.contentHtml)) !== null) {
         const [, , id] = match;
@@ -188,18 +188,18 @@ router["postsLoaded"] = fs.readdir(postsDir).
           throw new Error(`Reference "${id}" in post "${post.id}" is not valid.`);
         }
         const [target] = matches;
-        references.push(target);
-        target.references.push(post);
+        related.push(target);
+        target.related.push(post);
       }
-      post.references = [
-        ...references,
-        ...post.references
+      post.related = [
+        ...related,
+        ...post.related
       ];
     });
   }).
   then(() => {
     postsSortedByPublishDate.forEach((post) => {
-      post.references = [...new Set(post.references)];
+      post.related = [...new Set(post.related)];
     });
   }).
   then(() => {
@@ -292,7 +292,7 @@ const createPost = (id, contentHtml) => {
     "contentDate": noDate,
     "publishDate": noDate,
     "tags": [],
-    "references": []
+    "related": []
   };
 };
 

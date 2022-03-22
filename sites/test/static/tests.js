@@ -485,7 +485,7 @@ QUnit.test("Get of /blog/post/one (publish date) returns ok and compressed HTML"
       assertListTextAndLinks(
         assert,
         doc,
-        "references",
+        "related",
         "/blog/post/",
         ["Test post - nan"],
         ["nan"]
@@ -542,7 +542,7 @@ QUnit.test(
         assertListTextAndLinks(
           assert,
           doc,
-          "references",
+          "related",
           "/blog/post/",
           ["Test post - nan"],
           ["nan"]
@@ -602,7 +602,7 @@ QUnit.test("Get of /blog/post/nan (no dates, HTML) returns ok and content", (ass
       assertListTextAndLinks(
         assert,
         doc,
-        "references",
+        "related",
         "/blog/post/",
         [
           "Test post - one",
