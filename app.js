@@ -101,8 +101,10 @@ app.use(express.static(`${siteRoot}/static`, {
   ],
   "redirect": false,
   "setHeaders": (res, path, stat) => {
-    if (stat.isFile() && (/\.appcache$/iu).test(path)) {
-      res.setHeader("Cache-Control", "no-cache");
+    if ((/\.svg$/iu).test(path) && stat.isFile()) {
+      res.set("Content-Type", "image/svg+xml; charset=UTF-8");
+    } else if ((/\.appcache$/iu).test(path) && stat.isFile()) {
+      res.set("Cache-Control", "no-cache");
     }
   }
 }));

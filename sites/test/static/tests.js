@@ -113,6 +113,49 @@ QUnit.test("Browser supports the iterable protocol", (assert) => {
 
 QUnit.module("Static");
 
+QUnit.test("Content-Type is correct and includes charset where applicable", (assert) => {
+  assert.expect(6);
+  const done = assert.async();
+  const scenarios = [
+    [
+      "/",
+      "text/html; charset=UTF-8"
+    ],
+    [
+      "/index.html",
+      "text/html; charset=UTF-8"
+    ],
+    [
+      "/tests.js",
+      "application/javascript; charset=UTF-8"
+    ],
+    [
+      "/favicon.svg",
+      "image/svg+xml; charset=UTF-8"
+    ],
+    [
+      "/blog/file.txt",
+      "text/plain; charset=UTF-8"
+    ],
+    [
+      "/images/piechart.png",
+      "image/png"
+    ]
+  ];
+  Promise.all(scenarios.map((scenario) => {
+    const [
+      resource,
+      expected
+    ] = scenario;
+    return fetch(resource).
+      then((response) => {
+        const {headers} = response;
+        assert.equal(headers.get("Content-Type"), expected);
+      });
+  })).
+    then(done);
+});
+
 QUnit.test("Get of / returns expected HTTP headers", (assert) => {
   assert.expect(32);
   const done = assert.async();
