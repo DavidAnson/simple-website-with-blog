@@ -78,7 +78,7 @@ const assertElementNameText = (assert, element, name, text) => {
 };
 
 const assertListTextAndLinks = (assert, doc, id, base, texts, links) => {
-  const list = doc.getElementById(id) || doc.getElementsByClassName(id)[0].firstElementChild;
+  const list = doc.getElementById(id) || doc.getElementsByClassName(id)[0].lastElementChild;
   assert.equal(list.children.length, texts.length);
   for (const li of list.children) {
     const value = texts.shift();
@@ -467,7 +467,7 @@ QUnit.test("Get of /blog/post/one (publish date) returns ok and compressed HTML"
       assertSingleTagText(assert, doc, "h5", "2018-02-28T12:00:00.000Z");
       assertSingleTagText(assert, doc, "h5", "2018-02-28T12:00:00.000Z");
       assertSingleTagText(assert, doc, "blockquote", "json");
-      assert.equal(doc.getElementsByTagName("div").length, 2);
+      assert.equal(doc.getElementsByTagName("div").length, 3);
       assert.equal(doc.getElementsByTagName("div")[0].childElementCount, 3);
       const [parent] = doc.getElementsByTagName("div");
       assertElementNameText(assert, parent.childNodes[0], "p", "Content");
@@ -515,7 +515,7 @@ QUnit.test(
         assertSingleTagText(assert, doc, "h5", "2017-11-01T12:00:00.000Z");
         assertSingleTagText(assert, doc, "h6", "2017-11-20T12:00:00.000Z");
         assertSingleTagText(assert, doc, "blockquote", "markdown");
-        assert.equal(doc.getElementsByTagName("div").length, 1);
+        assert.equal(doc.getElementsByTagName("div").length, 2);
         assert.equal(doc.getElementsByTagName("div")[0].childElementCount, 1);
         const content = doc.getElementsByTagName("div")[0].firstElementChild;
         assertElementNameText(
@@ -555,7 +555,7 @@ QUnit.test(
 );
 
 QUnit.test("Get of /blog/post/twenty (Markdown+code) returns ok and highlighting", (assert) => {
-  assert.expect(7);
+  assert.expect(14);
   const done = assert.async();
   fetch("/blog/post/twenty").
     then((response) => {
@@ -567,12 +567,26 @@ QUnit.test("Get of /blog/post/twenty (Markdown+code) returns ok and highlighting
       const doc = new DOMParser().parseFromString(text, "application/xml");
       assert.equal(doc.getElementsByClassName("language-js").length, 1);
       assertPostTags(assert, doc, ["even"]);
+      assertListTextAndLinks(
+        assert,
+        doc,
+        "related",
+        "/blog/post/",
+        [
+          "Test post - eleven",
+          "Test post - one"
+        ],
+        [
+          "eleven",
+          "one"
+        ]
+      );
     }).
     then(done);
 });
 
 QUnit.test("Get of /blog/post/nan (no dates, HTML) returns ok and content", (assert) => {
-  assert.expect(65);
+  assert.expect(68);
   const done = assert.async();
   let responseUrl = null;
   fetch("/blog/post/nan").
@@ -588,7 +602,7 @@ QUnit.test("Get of /blog/post/nan (no dates, HTML) returns ok and content", (ass
       assertSingleTagText(assert, doc, "h5", "1970-01-01T00:00:00.000Z");
       assertSingleTagText(assert, doc, "h6", "1970-01-01T00:00:00.000Z");
       assertSingleTagText(assert, doc, "blockquote", "html");
-      assert.equal(doc.getElementsByTagName("div").length, 1);
+      assert.equal(doc.getElementsByTagName("div").length, 2);
       assert.equal(doc.getElementsByTagName("div")[0].childElementCount, 1);
       const content = doc.getElementsByTagName("div")[0].firstElementChild;
       assertElementNameText(assert, content, "p", "Content for nan, links to one and one");
@@ -598,19 +612,21 @@ QUnit.test("Get of /blog/post/nan (no dates, HTML) returns ok and content", (ass
       assert.equal(content.children[1].getAttribute("href"), href);
       assertElementNameText(assert, content.children[1], "a", "one");
       assert.equal(content.lastElementChild.getAttribute("href"), href);
-      assert.equal(doc.getElementsByTagName("a").length, 14);
+      assert.equal(doc.getElementsByTagName("a").length, 15);
       assertListTextAndLinks(
         assert,
         doc,
         "related",
         "/blog/post/",
         [
+          "Test post - eleven",
           "Test post - one",
-          "Test post - eleven"
+          "Test post - twenty"
         ],
         [
+          "eleven",
           "one",
-          "eleven"
+          "twenty"
         ]
       );
       assert.equal(doc.getElementById("tags").children.length, 3);

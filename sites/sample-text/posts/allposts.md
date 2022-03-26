@@ -1,0 +1,7 @@
+- [simple-website-with-blog](_SWWB_HOST_/blog/post/simple-website-with-blog)
+- [Goals](_SWWB_HOST_/blog/post/goals)
+- [Structure](_SWWB_HOST_/blog/post/structure)
+- [Instructions](_SWWB_HOST_/blog/post/instructions)
+- [Configuration](_SWWB_HOST_/blog/post/configuration)
+- [Dependencies](_SWWB_HOST_/blog/post/dependencies)
+- [Contributing](_SWWB_HOST_/blog/post/contributing)

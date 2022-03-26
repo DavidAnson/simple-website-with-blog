@@ -33,7 +33,7 @@ module.exports.getPublishDate = (post) => {
     : null;
 };
 
-module.exports.getRelatedList = (show, related, publishedPostFilter) => {
+const getRelatedItems = (show, related, publishedPostFilter) => {
   const filteredRelated = related.filter(publishedPostFilter);
   return (show && (filteredRelated.length > 0))
     ? (<ul>
@@ -43,6 +43,18 @@ module.exports.getRelatedList = (show, related, publishedPostFilter) => {
         </li>
       ))}
     </ul>)
+    : null;
+};
+
+module.exports.getRelatedList = (show, label, related, publishedPostFilter) => {
+  const relatedItems = getRelatedItems(show, related, publishedPostFilter);
+  return relatedItems
+    ? (
+      <div className="related">
+        <p>{label}</p>
+        {relatedItems}
+      </div>
+    )
     : null;
 };
 

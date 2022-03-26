@@ -19,18 +19,14 @@ module.exports.getHtmlElements = (props) => {
     const archives = shared.getArchiveList(props.archives);
     const posts = props.posts.map((post) => {
         const tagLinks = shared.getTagLinks(post.tags);
-        const relatedList = shared.getRelatedList(Boolean(props.title), post.related, props.publishedPostFilter);
+        const relatedList = shared.getRelatedList(Boolean(props.title), "Related Posts:", post.related, props.publishedPostFilter);
         return (React.createElement("article", { key: post.id, className: "post" },
             React.createElement("h2", null,
                 React.createElement("a", { href: `/blog/post/${post.id}` }, post.title)),
             shared.getPublishDate(post),
             React.createElement("div", { className: post.contentSource, dangerouslySetInnerHTML: { "__html": post.contentHtml } }),
             tagLinks,
-            relatedList
-                ? (React.createElement("div", { className: "related" },
-                    React.createElement("p", null, "Related Posts:"),
-                    relatedList))
-                : null));
+            relatedList));
     });
     const title = shared.getTitle(props, strings);
     const heading = shared.getHeading(props);

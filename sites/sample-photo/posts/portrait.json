@@ -8,5 +8,9 @@
       "image2x": "portrait-2x.jpg",
       "caption": "A photograph in portrait orientation"
     }
+  ],
+  "related": [
+    "landscape",
+    "twophotos"
   ]
 }

@@ -107,6 +107,7 @@ router["postsLoaded"] = fs.readdir(postsDir).
     }
     return [];
   }).
+  // Read posts from files
   then((files) => Promise.all(files.
     filter((file) => postExtension.test(file)).
     map((file) => {
@@ -122,7 +123,7 @@ router["postsLoaded"] = fs.readdir(postsDir).
           post.contentDate = new Date(post.contentDate || post.publishDate || 0);
           post.publishDate = new Date(post.publishDate || 0);
           post.tags = post.tags || [];
-          post.related = [];
+          post.related = post.related || [];
           post.title = render.getPostTitle(post);
           return post;
         }).
@@ -170,6 +171,7 @@ router["postsLoaded"] = fs.readdir(postsDir).
             });
         });
     }))).
+  // Sort posts by date
   then(() => {
     postsSortedByContentDate.sort((left, right) => (right.contentDate - left.contentDate) ||
       right.id.localeCompare(left.id));
@@ -177,9 +179,21 @@ router["postsLoaded"] = fs.readdir(postsDir).
     postsSortedByPublishDate.sort((left, right) => (right.publishDate - left.publishDate) ||
       right.id.localeCompare(left.id));
   }).
+  // Resolve related posts
   then(() => {
     postsSortedByPublishDate.forEach((post) => {
-      const related = [];
+      post.related = post.related.map((relatedPostId) => {
+        const relatedPost = postsIndexedById[relatedPostId];
+        if (!relatedPost) {
+          throw new Error(`Related post "${relatedPostId}" in post "${post.id}" is not valid.`);
+        }
+        return relatedPost;
+      });
+    });
+  }).
+  // Find referenced posts
+  then(() => {
+    postsSortedByPublishDate.forEach((post) => {
       let match = null;
       while ((match = referenceRe.exec(post.contentHtml)) !== null) {
         const [, , id] = match;
@@ -188,20 +202,19 @@ router["postsLoaded"] = fs.readdir(postsDir).
           throw new Error(`Reference "${id}" in post "${post.id}" is not valid.`);
         }
         const [target] = matches;
-        related.push(target);
+        post.related.push(target);
         target.related.push(post);
       }
-      post.related = [
-        ...related,
-        ...post.related
-      ];
     });
   }).
+  // Remove duplicates from related and sort
   then(() => {
     postsSortedByPublishDate.forEach((post) => {
       post.related = [...new Set(post.related)];
+      post.related.sort((left, right) => left.id.localeCompare(right.id));
     });
   }).
+  // Build search index
   then(() => {
     const dateFormatOptionsYearMonth = {
       "year": "numeric",

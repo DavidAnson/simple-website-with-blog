@@ -4,5 +4,9 @@
   "contentDate": "2017-09-10T12:00Z",
   "tags": [
     "even"
+  ],
+  "related": [
+    "one",
+    "eleven"
   ]
 }

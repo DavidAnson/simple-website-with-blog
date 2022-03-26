@@ -27,10 +27,12 @@ module.exports.getHtmlElements = (props) => {
     const archives = shared.getArchiveList(props.archives);
     const posts = props.posts.map((post) => {
         const publishDate = shared.getPublishDate(post);
+        const relatedList = shared.getRelatedList(true, "See also:", post.related, props.publishedPostFilter);
         return (React.createElement("article", { key: post.id, className: "post" },
             React.createElement("h2", null,
                 React.createElement("a", { href: `/blog/post/${post.id}` }, post.title)),
             React.createElement("div", { dangerouslySetInnerHTML: { "__html": post.contentHtml } }),
+            relatedList,
             publishDate ? React.createElement("p", null,
                 "Posted ",
                 publishDate) : null,

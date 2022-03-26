@@ -27,7 +27,7 @@ module.exports.getHtmlElements = (props) => {
   const posts = props.posts.map((post) => {
     const tagLinks = shared.getTagLinks(post.tags);
     const relatedList =
-      shared.getRelatedList(Boolean(props.title), post.related, props.publishedPostFilter);
+      shared.getRelatedList(Boolean(props.title), "Related:", post.related, props.publishedPostFilter);
     return (
       <section key={post.id}>
         <h3>{post.id}</h3>
@@ -37,9 +37,7 @@ module.exports.getHtmlElements = (props) => {
         <blockquote>{post.contentSource}</blockquote>
         <div dangerouslySetInnerHTML={{"__html": post.contentHtml}}></div>
         {tagLinks}
-        <article className="related">
-          {relatedList}
-        </article>
+        {relatedList}
       </section>
     );
   });

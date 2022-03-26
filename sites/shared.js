@@ -27,11 +27,19 @@ module.exports.getPublishDate = (post) => {
         ? React.createElement("time", { dateTime: publishDateIso }, publishDateFormat)
         : null;
 };
-module.exports.getRelatedList = (show, related, publishedPostFilter) => {
+const getRelatedItems = (show, related, publishedPostFilter) => {
     const filteredRelated = related.filter(publishedPostFilter);
     return (show && (filteredRelated.length > 0))
         ? (React.createElement("ul", null, filteredRelated.map((post) => (React.createElement("li", { key: post.id },
             React.createElement("a", { href: `/blog/post/${post.id}` }, post.title))))))
+        : null;
+};
+module.exports.getRelatedList = (show, label, related, publishedPostFilter) => {
+    const relatedItems = getRelatedItems(show, related, publishedPostFilter);
+    return relatedItems
+        ? (React.createElement("div", { className: "related" },
+            React.createElement("p", null, label),
+            relatedItems))
         : null;
 };
 module.exports.getTagList = (tags) => tags.
