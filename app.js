@@ -57,6 +57,7 @@ app.use(helmet({
       ]
     }
   },
+  "frameguard": false,
   "hsts": {
     // Set maxAge to 1 week to mitigate impact of certificate expiration
     "maxAge": 60 * 60 * 24 * 7

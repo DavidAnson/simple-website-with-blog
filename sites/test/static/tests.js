@@ -158,7 +158,7 @@ QUnit.test("Content-Type is correct and includes charset where applicable", (ass
 });
 
 QUnit.test("Get of / returns expected HTTP headers", (assert) => {
-  assert.expect(32);
+  assert.expect(30);
   const done = assert.async();
   fetch("/").
     then((response) => {
@@ -223,10 +223,6 @@ QUnit.test("Get of / returns expected HTTP headers", (assert) => {
         [
           "X-Download-Options",
           "noopen"
-        ],
-        [
-          "X-Frame-Options",
-          "SAMEORIGIN"
         ],
         [
           "X-Permitted-Cross-Domain-Policies",
