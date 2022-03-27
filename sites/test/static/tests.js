@@ -51,7 +51,8 @@ const assertPageMetadata = (assert, responseUrl, text, noindex, titlePrefix, inn
   assertSingleTagText(assert, doc, "title", title);
   const metas = doc.getElementsByTagName("meta");
   let index = 0;
-  assertMetaAttributes(assert, metas[index++], "viewport", null, "width=device-width");
+  // eslint-disable-next-line max-len
+  assertMetaAttributes(assert, metas[index++], "viewport", null, "width=device-width, initial-scale=1");
   assertMetaAttributes(assert, metas[index++], "color-scheme", null, "light dark");
   assertMetaAttributes(assert, metas[index++], "description", null, description);
   assertMetaAttributes(assert, metas[index++], "author", null, "David Anson");
