@@ -37,6 +37,7 @@ module.exports.getHtmlElements = (props) => {
     };
     return (React.createElement("html", { lang: "en" },
         React.createElement("head", null,
+            React.createElement("meta", { charset: "utf-8" }),
             React.createElement("title", null, title),
             React.createElement("meta", { name: "viewport", content: "width=device-width, initial-scale=1" }),
             React.createElement("meta", { name: "color-scheme", content: "light dark" }),
