@@ -225,6 +225,7 @@ router["postsLoaded"] = fs.readdir(postsDir).
       const commonHtmlStopWordFilter = lunr.generateStopWordFilter(commonHtmlStopWords);
       lunr.Pipeline.registerFunction(commonHtmlStopWordFilter, "commonHtmlStopWords");
       this.pipeline.after(lunr.stopWordFilter, commonHtmlStopWordFilter);
+      this.pipeline.remove(lunr.stopWordFilter);
       this.ref("id");
       this.field("title");
       this.field("content");

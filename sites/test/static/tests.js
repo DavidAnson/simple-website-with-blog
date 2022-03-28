@@ -512,8 +512,8 @@ QUnit.test("Get of /blog/post/one (publish date) returns ok and compressed HTML"
       const doc = assertPageMetadata(assert, responseUrl, text, false, "Test post - one");
       assertSingleTagText(assert, doc, "h3", "one");
       assertSingleTagText(assert, doc, "h4", "Test post - one");
-      assertSingleTagText(assert, doc, "h5", "2018-02-28T12:00:00.000Z");
-      assertSingleTagText(assert, doc, "h5", "2018-02-28T12:00:00.000Z");
+      assertSingleTagText(assert, doc, "h5", "2018-05-28T12:00:00.000Z");
+      assertSingleTagText(assert, doc, "h5", "2018-05-28T12:00:00.000Z");
       assertSingleTagText(assert, doc, "blockquote", "json");
       assert.equal(doc.getElementsByTagName("div").length, 3);
       assert.equal(doc.getElementsByTagName("div")[0].childElementCount, 3);
@@ -901,12 +901,12 @@ QUnit.test(
 );
 
 QUnit.test(
-  "Get of /blog/search?query=february returns ok, compressed HTML, and 3 posts",
+  "Get of /blog/search?query=may returns ok, compressed HTML, and 3 posts",
   (assert) => {
     assert.expect(45);
     const done = assert.async();
     let responseUrl = null;
-    fetch("/blog/search?query=february").
+    fetch("/blog/search?query=may").
       then((response) => {
         responseUrl = response.url;
         assertResponseAndHeaders(assert, response);
@@ -919,7 +919,7 @@ QUnit.test(
           text,
           true,
           null,
-          "Search: february"
+          "Search: may"
         );
         assert.equal(doc.getElementsByTagName("h3").length, 3);
         const postTitles = "one two three".split(" ");
@@ -1064,9 +1064,9 @@ QUnit.test("Get of /blog returns 6 archive links", (assert) => {
     then((text) => {
       assert.ok(text.startsWith("<!DOCTYPE html>"));
       const doc = new DOMParser().parseFromString(text, "application/xml");
-      const texts = ("February 2018,January 2018,December 2017,November 2017," +
+      const texts = ("May 2018,January 2018,December 2017,November 2017," +
         "October 2017,September 2017,August 2017").split(",");
-      const links = "201802 201801 201712 201711 201710 201709 201708".split(" ");
+      const links = "201805 201801 201712 201711 201710 201709 201708".split(" ");
       assertListTextAndLinks(assert, doc, "archives", "/blog/archive/", texts, links);
     }).
     then(done);
