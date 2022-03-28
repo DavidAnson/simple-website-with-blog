@@ -54,7 +54,8 @@ app.use(helmet({
         "'self'",
         "'unsafe-inline'",
         "code.jquery.com"
-      ]
+      ],
+      "upgrade-insecure-requests": redirectToHttps ? [] : null
     }
   },
   "frameguard": false,

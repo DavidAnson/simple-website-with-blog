@@ -3,6 +3,7 @@
 // Suppress [ts] Cannot find name 'QUnit'.
 // eslint-disable-next-line no-var, no-use-before-define
 var QUnit = QUnit;
+const usingHttps = document.location.protocol === "https:";
 
 const assertResponseAndHeaders = (assert, response, contentType) => {
   assert.ok(response.ok);
@@ -202,8 +203,8 @@ QUnit.test("Get of / returns expected HTTP headers", (assert) => {
             "frame-ancestors 'self';" +
             "img-src 'self' data:;" +
             "object-src 'none';" +
-            "script-src-attr 'none';" +
-            "upgrade-insecure-requests"
+            "script-src-attr 'none'" +
+            (usingHttps ? ";upgrade-insecure-requests" : "")
         ],
         [
           "Expect-CT",
