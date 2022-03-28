@@ -14,6 +14,7 @@
   "bugs": "https://github.com/DavidAnson/simple-website-with-blog/issues",
   "scripts": {
     "compile": "tsc --incremental",
+    "docker-npm-install": "docker run --rm --tty --name npm-install --volume $PWD:/home/workdir --workdir /home/workdir --user node node:16 npm install",
     "future": "cross-env SWWB_SHOW_FUTURE_POSTS=true node app.js",
     "lint": "eslint *.js **/*.jsx sites/test/static/tests.js && stylelint sites/**/*.css",
     "photo": "cross-env SWWB_SITE_ROOT=./sites/sample-photo node app.js",
