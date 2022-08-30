@@ -968,6 +968,41 @@ QUnit.test(
   }
 );
 
+QUnit.test(
+  "Get of /blog/search?query= returns ok, compressed HTML, and 10 posts",
+  (assert) => {
+    assert.expect(55);
+    const done = assert.async();
+    let responseUrl = null;
+    fetch("/blog/search?query=").
+      then((response) => {
+        responseUrl = response.url;
+        assertResponseAndHeaders(assert, response);
+        return response.text();
+      }).
+      then((text) => {
+        const doc = assertPageMetadata(assert, responseUrl, text, false);
+        assert.equal(doc.getElementsByTagName("h3").length, 10);
+        const postTitles = "one two three four five six seven eight nine ten".split(" ");
+        for (const item of doc.getElementsByTagName("h3")) {
+          assert.equal(item.innerHTML, postTitles.shift());
+        }
+        assert.equal(doc.getElementsByTagName("a").length, 24);
+        const nav = doc.getElementsByClassName("navigation");
+        assert.equal(nav.length, 1);
+        assert.equal(nav[0].childElementCount, 1);
+        assertElementNameText(assert, nav[0].firstElementChild, "a", "Next Posts \u00BB");
+        assert.equal(
+          nav[0].firstElementChild.getAttribute("href"),
+          "/blog/search?query=&page=twenty"
+        );
+        assert.equal(doc.getElementById("tags").children.length, 3);
+        assert.equal(doc.getElementById("archives").children.length, 7);
+      }).
+      then(done);
+  }
+);
+
 QUnit.test("Get of /blog/search returns 404", (assert) => {
   assert.expect(4);
   const done = assert.async();

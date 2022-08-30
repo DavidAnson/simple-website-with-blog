@@ -351,13 +351,15 @@ router.get("/archive/:period(\\d{6})", (req, res, next) => {
 
 router.get("/search", (req, res, next) => {
   const {query} = req.query;
-  if (!query) {
+  if (typeof query !== "string") {
     return next();
   }
-  const posts = searchIndex.
-    search(query).
-    map((result) => postsIndexedById[result.ref]).
-    filter(getPublishedPostFilter());
+  const posts = (query
+    ? searchIndex.
+      search(query).
+      map((result) => postsIndexedById[result.ref])
+    : postsSortedByPublishDate
+  ).filter(getPublishedPostFilter());
   if (posts.length === 0) {
     const noResults = "No results";
     const contentHtml = ReactDOMServer.renderToStaticMarkup(React.createElement(
