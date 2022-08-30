@@ -87,7 +87,7 @@ const getTitle = (props, strings) => [
     props.title || getHeading(props),
     strings.title
 ].
-    filter((part) => Boolean(part)).
+    filter(Boolean).
     join(" - ");
 module.exports.getTitle = getTitle;
 const getDescription = (props, strings) => props.title || getHeading(props) || strings.description;
