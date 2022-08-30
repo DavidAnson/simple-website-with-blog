@@ -3,8 +3,8 @@
 /* eslint-disable unicorn/no-array-for-each */
 
 const {hostnameToken, showFuturePosts, redirectToHttps, siteRoot} = require("./config");
-const fs = require("fs").promises;
-const path = require("path");
+const fs = require("node:fs").promises;
+const path = require("node:path");
 const express = require("express");
 const highlightJs = require("highlight.js");
 const lunr = require("lunr");
