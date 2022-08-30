@@ -133,6 +133,6 @@ blog["postsLoaded"].
     // Start server
     app.listen(port, () => {
       // eslint-disable-next-line no-console
-      console.log(`simple-website-with-blog listening on port ${port}!`);
+      console.log(`simple-website-with-blog listening on http://localhost:${port}/`);
     });
   });
