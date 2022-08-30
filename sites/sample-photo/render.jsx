@@ -85,8 +85,8 @@ module.exports.getHtmlElements = (props) => {
           <nav className="sidebar">
             <h2>Search</h2>
             <form action="/blog/search">
-              <input type="text" name="query" accessKey="s"
-                placeholder="cat -dog ham*" aria-label="Search"/>
+              <input type="text" name="query" defaultValue={props.query}
+                accessKey="s" placeholder="cat -dog ham*" aria-label="Search"/>
             </form>
             <h2>Archive</h2>
             <ul>{archives}</ul>

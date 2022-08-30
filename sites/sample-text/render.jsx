@@ -82,8 +82,8 @@ module.exports.getHtmlElements = (props) => {
               <p><a href="/blog/post/mit-license">MIT</a></p>
               <h2>Search</h2>
               <form action="/blog/search">
-                <input type="text" name="query" accessKey="s"
-                  placeholder="HTML -CSS Java*" aria-label="Search"/>
+                <input type="text" name="query" defaultValue={props.query}
+                  accessKey="s" placeholder="HTML -CSS Java*" aria-label="Search"/>
               </form>
               <h2>Tags</h2>
               <ul>{tags}</ul>

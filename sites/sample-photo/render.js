@@ -71,7 +71,7 @@ module.exports.getHtmlElements = (props) => {
                 React.createElement("nav", { className: "sidebar" },
                     React.createElement("h2", null, "Search"),
                     React.createElement("form", { action: "/blog/search" },
-                        React.createElement("input", { type: "text", name: "query", accessKey: "s", placeholder: "cat -dog ham*", "aria-label": "Search" })),
+                        React.createElement("input", { type: "text", name: "query", defaultValue: props.query, accessKey: "s", placeholder: "cat -dog ham*", "aria-label": "Search" })),
                     React.createElement("h2", null, "Archive"),
                     React.createElement("ul", null, archives))))));
 };
