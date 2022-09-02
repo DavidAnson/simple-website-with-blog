@@ -496,6 +496,139 @@ QUnit.test("Get of /Blog returns 404", (assert) => {
     then(done);
 });
 
+QUnit.module("Count");
+
+QUnit.test("Get of /blog?count=5 returns ok and 5 posts", (assert) => {
+  assert.expect(42);
+  const done = assert.async();
+  let responseUrl = null;
+  fetch("/blog?count=5").
+    then((response) => {
+      responseUrl = response.url;
+      assertResponseAndHeaders(assert, response);
+      return response.text();
+    }).
+    then((text) => {
+      const doc = assertPageMetadata(assert, responseUrl, text, false);
+      assert.equal(doc.getElementsByTagName("h3").length, 5);
+      const nav = doc.getElementsByClassName("navigation");
+      assert.equal(nav.length, 1);
+      assert.equal(nav[0].childElementCount, 1);
+      assertElementNameText(assert, nav[0].firstElementChild, "a", "Next Posts \u00BB");
+      assert.equal(nav[0].firstElementChild.getAttribute("href"), "/blog?count=5&page=six");
+    }).
+    then(done);
+});
+
+QUnit.test("Get of /blog?count=5&page=two returns ok and 5 posts", (assert) => {
+  assert.expect(45);
+  const done = assert.async();
+  let responseUrl = null;
+  fetch("/blog?count=5&page=two").
+    then((response) => {
+      responseUrl = response.url;
+      assertResponseAndHeaders(assert, response);
+      return response.text();
+    }).
+    then((text) => {
+      const doc = assertPageMetadata(assert, responseUrl, text, false);
+      assert.equal(doc.getElementsByTagName("h3").length, 5);
+      const nav = doc.getElementsByClassName("navigation");
+      assert.equal(nav.length, 1);
+      assert.equal(nav[0].childElementCount, 2);
+      assertElementNameText(assert, nav[0].firstElementChild, "a", "\u00AB Previous Posts");
+      assert.equal(nav[0].firstElementChild.getAttribute("href"), "/blog?count=5");
+      assertElementNameText(assert, nav[0].lastElementChild, "a", "Next Posts \u00BB");
+      assert.equal(nav[0].lastElementChild.getAttribute("href"), "/blog?count=5&page=seven");
+    }).
+    then(done);
+});
+
+QUnit.test("Get of /blog?count=1000 returns ok and 22 posts", (assert) => {
+  assert.expect(38);
+  const done = assert.async();
+  let responseUrl = null;
+  fetch("/blog?count=1000").
+    then((response) => {
+      responseUrl = response.url;
+      assertResponseAndHeaders(assert, response);
+      return response.text();
+    }).
+    then((text) => {
+      const doc = assertPageMetadata(assert, responseUrl, text, false);
+      assert.equal(doc.getElementsByTagName("h3").length, 22);
+      const nav = doc.getElementsByClassName("navigation");
+      assert.equal(nav.length, 0);
+    }).
+    then(done);
+});
+
+QUnit.test("Get of /blog?count=0 returns ok and 10 posts", (assert) => {
+  assert.expect(42);
+  const done = assert.async();
+  let responseUrl = null;
+  fetch("/blog?count=0").
+    then((response) => {
+      responseUrl = response.url;
+      assertResponseAndHeaders(assert, response);
+      return response.text();
+    }).
+    then((text) => {
+      const doc = assertPageMetadata(assert, responseUrl, text, false);
+      assert.equal(doc.getElementsByTagName("h3").length, 10);
+      const nav = doc.getElementsByClassName("navigation");
+      assert.equal(nav.length, 1);
+      assert.equal(nav[0].childElementCount, 1);
+      assertElementNameText(assert, nav[0].firstElementChild, "a", "Next Posts \u00BB");
+      assert.equal(nav[0].firstElementChild.getAttribute("href"), "/blog?page=twenty");
+    }).
+    then(done);
+});
+
+QUnit.test("Get of /blog?count=-1 returns ok and 10 posts", (assert) => {
+  assert.expect(42);
+  const done = assert.async();
+  let responseUrl = null;
+  fetch("/blog?count=-1").
+    then((response) => {
+      responseUrl = response.url;
+      assertResponseAndHeaders(assert, response);
+      return response.text();
+    }).
+    then((text) => {
+      const doc = assertPageMetadata(assert, responseUrl, text, false);
+      assert.equal(doc.getElementsByTagName("h3").length, 10);
+      const nav = doc.getElementsByClassName("navigation");
+      assert.equal(nav.length, 1);
+      assert.equal(nav[0].childElementCount, 1);
+      assertElementNameText(assert, nav[0].firstElementChild, "a", "Next Posts \u00BB");
+      assert.equal(nav[0].firstElementChild.getAttribute("href"), "/blog?page=twenty");
+    }).
+    then(done);
+});
+
+QUnit.test("Get of /blog?count=invalid returns ok and 10 posts", (assert) => {
+  assert.expect(42);
+  const done = assert.async();
+  let responseUrl = null;
+  fetch("/blog?count=invalid").
+    then((response) => {
+      responseUrl = response.url;
+      assertResponseAndHeaders(assert, response);
+      return response.text();
+    }).
+    then((text) => {
+      const doc = assertPageMetadata(assert, responseUrl, text, false);
+      assert.equal(doc.getElementsByTagName("h3").length, 10);
+      const nav = doc.getElementsByClassName("navigation");
+      assert.equal(nav.length, 1);
+      assert.equal(nav[0].childElementCount, 1);
+      assertElementNameText(assert, nav[0].firstElementChild, "a", "Next Posts \u00BB");
+      assert.equal(nav[0].firstElementChild.getAttribute("href"), "/blog?page=twenty");
+    }).
+    then(done);
+});
+
 QUnit.module("Post");
 
 QUnit.test("Get of /blog/post/one (publish date) returns ok and compressed HTML", (assert) => {

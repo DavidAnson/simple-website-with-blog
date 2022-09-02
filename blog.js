@@ -31,6 +31,7 @@ const markdownIt = new MarkdownIt({
   "xhtmlOut": true
 });
 
+const baseTen = 10;
 const postsDir = `${siteRoot}/posts`;
 const postExtension = /\.json$/u;
 const postsSortedByContentDate = [];
@@ -261,9 +262,18 @@ const renderPosts = (req, res, next, posts, noindex, title, period, tag, query) 
   if (page && posts.every(findIndexOfPage)) {
     return next();
   }
-  const pageSize = 10;
-  const prevIndex = currIndex - pageSize;
-  const nextIndex = currIndex + pageSize;
+  const defaultCount = 10;
+  const countParam = "count";
+  const count =
+    Math.max(Number.parseInt(url.searchParams.get(countParam), baseTen), 0) ||
+    defaultCount;
+  if (count === defaultCount) {
+    url.searchParams.delete(countParam);
+  } else {
+    url.searchParams.set(countParam, count);
+  }
+  const prevIndex = currIndex - count;
+  const nextIndex = currIndex + count;
   let prevLink = null;
   if (currIndex > 0) {
     if (prevIndex > 0) {
@@ -337,8 +347,8 @@ router.get("/tag/:tag", (req, res, next) => {
 });
 
 router.get("/archive/:period(\\d{6})", (req, res, next) => {
-  const year = Number.parseInt(req.params.period.slice(0, 4), 10);
-  const month = Number.parseInt(req.params.period.slice(4, 6), 10) - 1;
+  const year = Number.parseInt(req.params.period.slice(0, 4), baseTen);
+  const month = Number.parseInt(req.params.period.slice(4, 6), baseTen) - 1;
   const posts = postsSortedByContentDate.
     filter(getPublishedPostFilter()).
     filter((post) => (post.contentDate.getFullYear() === year) &&
