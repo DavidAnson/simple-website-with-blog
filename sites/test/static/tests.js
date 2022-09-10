@@ -165,7 +165,7 @@ QUnit.test("Content-Type is correct and includes charset where applicable", (ass
 });
 
 QUnit.test("Get of / returns expected HTTP headers", (assert) => {
-  assert.expect(30);
+  assert.expect(28);
   const done = assert.async();
   fetch("/").
     then((response) => {
@@ -196,17 +196,12 @@ QUnit.test("Get of / returns expected HTTP headers", (assert) => {
             "style-src 'self' 'unsafe-inline' code.jquery.com;" +
             "default-src 'self';" +
             "base-uri 'self';" +
-            "block-all-mixed-content;" +
             "font-src 'self' https: data:;" +
             "form-action 'self';" +
             "frame-ancestors 'self';" +
             "img-src 'self' data:;" +
             "object-src 'none';" +
             "script-src-attr 'none'"
-        ],
-        [
-          "Expect-CT",
-          "max-age=0"
         ],
         [
           "Feature-Policy",
