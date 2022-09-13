@@ -15,11 +15,12 @@ module.exports.getContentJsonElements = (post) => {
     return React.createElement(React.Fragment, null, content);
 };
 module.exports.getHtmlElements = (props) => {
-    const tags = shared.getTagList(props.tags);
-    const archives = shared.getArchiveList(props.archives);
+    const queryString = props.questionQueryString(props.searchParams);
+    const tags = shared.getTagList(props.tags, queryString);
+    const archives = shared.getArchiveList(props.archives, queryString);
     const posts = props.posts.map((post) => {
-        const tagLinks = shared.getTagLinks(post.tags);
-        const relatedList = shared.getRelatedList(Boolean(props.title), "Related:", post.related, props.publishedPostFilter);
+        const tagLinks = shared.getTagLinks(post.tags, queryString);
+        const relatedList = shared.getRelatedList(Boolean(props.title), "Related:", post.related, props.publishedPostFilter, queryString);
         return (React.createElement("section", { key: post.id },
             React.createElement("h3", null, post.id),
             React.createElement("h4", null, post.title),

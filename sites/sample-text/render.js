@@ -15,14 +15,15 @@ module.exports.getContentJsonElements = (post) => {
     return React.createElement("div", null, content);
 };
 module.exports.getHtmlElements = (props) => {
-    const tags = shared.getTagList(props.tags);
-    const archives = shared.getArchiveList(props.archives);
+    const queryString = props.questionQueryString(props.searchParams);
+    const tags = shared.getTagList(props.tags, queryString);
+    const archives = shared.getArchiveList(props.archives, queryString);
     const posts = props.posts.map((post) => {
-        const tagLinks = shared.getTagLinks(post.tags);
-        const relatedList = shared.getRelatedList(Boolean(props.title), "Related Posts:", post.related, props.publishedPostFilter);
+        const tagLinks = shared.getTagLinks(post.tags, queryString);
+        const relatedList = shared.getRelatedList(Boolean(props.title), "Related Posts:", post.related, props.publishedPostFilter, queryString);
         return (React.createElement("article", { key: post.id, className: "post" },
             React.createElement("h2", null,
-                React.createElement("a", { href: `/blog/post/${post.id}` }, post.title)),
+                React.createElement("a", { href: `/blog/post/${post.id}${queryString}` }, post.title)),
             shared.getPublishDate(post),
             React.createElement("div", { className: post.contentSource, dangerouslySetInnerHTML: { "__html": post.contentHtml } }),
             tagLinks,
@@ -68,8 +69,7 @@ module.exports.getHtmlElements = (props) => {
                         React.createElement("p", null,
                             React.createElement("a", { href: "/blog/post/mit-license" }, "MIT")),
                         React.createElement("h2", null, "Search"),
-                        React.createElement("form", { action: "/blog/search" },
-                            React.createElement("input", { type: "text", name: "query", defaultValue: props.query, accessKey: "s", placeholder: "HTML -CSS Java*", "aria-label": "Search" })),
+                        shared.getSearchForm(props, "HTML -CSS Java*"),
                         React.createElement("h2", null, "Tags"),
                         React.createElement("ul", null, tags),
                         React.createElement("h2", null, "Archive"),

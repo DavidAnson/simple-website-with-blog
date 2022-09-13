@@ -27,36 +27,36 @@ module.exports.getPublishDate = (post) => {
         ? React.createElement("time", { dateTime: publishDateIso }, publishDateFormat)
         : null;
 };
-const getRelatedItems = (show, related, publishedPostFilter) => {
+const getRelatedItems = (show, related, publishedPostFilter, queryString) => {
     const filteredRelated = related.filter(publishedPostFilter);
     return (show && (filteredRelated.length > 0))
         ? (React.createElement("ul", null, filteredRelated.map((post) => (React.createElement("li", { key: post.id },
-            React.createElement("a", { href: `/blog/post/${post.id}` }, post.title))))))
+            React.createElement("a", { href: `/blog/post/${post.id}${queryString}` }, post.title))))))
         : null;
 };
-module.exports.getRelatedList = (show, label, related, publishedPostFilter) => {
-    const relatedItems = getRelatedItems(show, related, publishedPostFilter);
+module.exports.getRelatedList = (show, label, related, publishedPostFilter, queryString) => {
+    const relatedItems = getRelatedItems(show, related, publishedPostFilter, queryString);
     return relatedItems
         ? (React.createElement("div", { className: "related" },
             React.createElement("p", null, label),
             relatedItems))
         : null;
 };
-module.exports.getTagList = (tags) => tags.
+module.exports.getTagList = (tags, queryString) => tags.
     map((tag) => (React.createElement("li", { key: tag },
-    React.createElement("a", { href: `/blog/tag/${tag}` }, tag))));
-module.exports.getTagLinks = (tags) => {
+    React.createElement("a", { href: `/blog/tag/${tag}${queryString}` }, tag))));
+module.exports.getTagLinks = (tags, queryString) => {
     if (tags.length === 0) {
         return null;
     }
     const tagLinks = tags.map((tag) => (React.createElement(React.Fragment, { key: tag },
         " ",
-        React.createElement("a", { href: `/blog/tag/${tag}` }, tag))));
+        React.createElement("a", { href: `/blog/tag/${tag}${queryString}` }, tag))));
     return React.createElement("div", { className: "tags" },
         "Tags:",
         tagLinks);
 };
-module.exports.getArchiveList = (archives) => archives.
+module.exports.getArchiveList = (archives, queryString) => archives.
     map((period) => {
     const year = period.
         getFullYear().
@@ -67,7 +67,7 @@ module.exports.getArchiveList = (archives) => archives.
         padStart(2, "0");
     const archiveLink = `${year}${month}`;
     return (React.createElement("li", { key: archiveLink },
-        React.createElement("a", { href: `/blog/archive/${archiveLink}` }, dateTimeFormatMonth.format(period))));
+        React.createElement("a", { href: `/blog/archive/${archiveLink}${queryString}` }, dateTimeFormatMonth.format(period))));
 });
 const getHeading = (props) => {
     let heading = null;
@@ -117,6 +117,15 @@ module.exports.getPrevNextLinks = (props) => {
             nextLink && prevLink ? " | " : "",
             nextLink)
         : null;
+};
+module.exports.getSearchForm = (props, placeholder) => {
+    const hiddenInputs = Object.entries(props.searchParams).map((entry) => {
+        const [name, value] = entry;
+        return React.createElement("input", { type: "hidden", key: name, name: name, value: value });
+    });
+    return (React.createElement("form", { action: "/blog/search" },
+        React.createElement("input", { type: "text", key: "query", name: "query", defaultValue: props.query, accessKey: "s", placeholder: placeholder, "aria-label": "Search" }),
+        hiddenInputs));
 };
 module.exports.getRssMetadata = (strings) => {
     const { title, description, author, copyright } = strings;

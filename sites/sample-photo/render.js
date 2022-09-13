@@ -24,13 +24,14 @@ module.exports.getContentJsonElements = (post) => {
     return React.createElement(React.Fragment, null, content);
 };
 module.exports.getHtmlElements = (props) => {
-    const archives = shared.getArchiveList(props.archives);
+    const queryString = props.questionQueryString(props.searchParams);
+    const archives = shared.getArchiveList(props.archives, queryString);
     const posts = props.posts.map((post) => {
         const publishDate = shared.getPublishDate(post);
-        const relatedList = shared.getRelatedList(true, "See also:", post.related, props.publishedPostFilter);
+        const relatedList = shared.getRelatedList(true, "See also:", post.related, props.publishedPostFilter, queryString);
         return (React.createElement("article", { key: post.id, className: "post" },
             React.createElement("h2", null,
-                React.createElement("a", { href: `/blog/post/${post.id}` }, post.title)),
+                React.createElement("a", { href: `/blog/post/${post.id}${queryString}` }, post.title)),
             React.createElement("div", { dangerouslySetInnerHTML: { "__html": post.contentHtml } }),
             relatedList,
             publishDate ? React.createElement("p", null,
@@ -70,8 +71,7 @@ module.exports.getHtmlElements = (props) => {
                         React.createElement("p", { className: "copyright" }, strings.copyright))),
                 React.createElement("nav", { className: "sidebar" },
                     React.createElement("h2", null, "Search"),
-                    React.createElement("form", { action: "/blog/search" },
-                        React.createElement("input", { type: "text", name: "query", defaultValue: props.query, accessKey: "s", placeholder: "cat -dog ham*", "aria-label": "Search" })),
+                    shared.getSearchForm(props, "cat -dog ham*"),
                     React.createElement("h2", null, "Archive"),
                     React.createElement("ul", null, archives))))));
 };

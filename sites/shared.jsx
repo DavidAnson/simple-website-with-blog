@@ -33,21 +33,21 @@ module.exports.getPublishDate = (post) => {
     : null;
 };
 
-const getRelatedItems = (show, related, publishedPostFilter) => {
+const getRelatedItems = (show, related, publishedPostFilter, queryString) => {
   const filteredRelated = related.filter(publishedPostFilter);
   return (show && (filteredRelated.length > 0))
     ? (<ul>
       {filteredRelated.map((post) => (
         <li key={post.id}>
-          <a href={`/blog/post/${post.id}`}>{post.title}</a>
+          <a href={`/blog/post/${post.id}${queryString}`}>{post.title}</a>
         </li>
       ))}
     </ul>)
     : null;
 };
 
-module.exports.getRelatedList = (show, label, related, publishedPostFilter) => {
-  const relatedItems = getRelatedItems(show, related, publishedPostFilter);
+module.exports.getRelatedList = (show, label, related, publishedPostFilter, queryString) => {
+  const relatedItems = getRelatedItems(show, related, publishedPostFilter, queryString);
   return relatedItems
     ? (
       <div className="related">
@@ -58,26 +58,26 @@ module.exports.getRelatedList = (show, label, related, publishedPostFilter) => {
     : null;
 };
 
-module.exports.getTagList = (tags) => tags.
+module.exports.getTagList = (tags, queryString) => tags.
   map((tag) => (
     <li key={tag}>
-      <a href={`/blog/tag/${tag}`}>{tag}</a>
+      <a href={`/blog/tag/${tag}${queryString}`}>{tag}</a>
     </li>
   ));
 
-module.exports.getTagLinks = (tags) => {
+module.exports.getTagLinks = (tags, queryString) => {
   if (tags.length === 0) {
     return null;
   }
   const tagLinks = tags.map((tag) => (
     <React.Fragment key={tag}>
-      {" "}<a href={`/blog/tag/${tag}`}>{tag}</a>
+      {" "}<a href={`/blog/tag/${tag}${queryString}`}>{tag}</a>
     </React.Fragment>
   ));
   return <div className="tags">Tags:{tagLinks}</div>;
 };
 
-module.exports.getArchiveList = (archives) => archives.
+module.exports.getArchiveList = (archives, queryString) => archives.
   map((period) => {
     const year = period.
       getFullYear().
@@ -89,7 +89,9 @@ module.exports.getArchiveList = (archives) => archives.
     const archiveLink = `${year}${month}`;
     return (
       <li key={archiveLink}>
-        <a href={`/blog/archive/${archiveLink}`}>{dateTimeFormatMonth.format(period)}</a>
+        <a href={`/blog/archive/${archiveLink}${queryString}`}>
+          {dateTimeFormatMonth.format(period)}
+        </a>
       </li>
     );
   });
@@ -142,6 +144,20 @@ module.exports.getPrevNextLinks = (props) => {
   return (prevLink || nextLink)
     ? <div className="navigation">{prevLink}{nextLink && prevLink ? " | " : ""}{nextLink}</div>
     : null;
+};
+
+module.exports.getSearchForm = (props, placeholder) => {
+  const hiddenInputs = Object.entries(props.searchParams).map((entry) => {
+    const [name, value] = entry;
+    return <input type="hidden" key={name} name={name} value={value}/>;
+  });
+  return (
+    <form action="/blog/search">
+      <input type="text" key="query" name="query" defaultValue={props.query}
+        accessKey="s" placeholder={placeholder} aria-label="Search"/>
+      {hiddenInputs}
+    </form>
+  );
 };
 
 module.exports.getRssMetadata = (strings) => {

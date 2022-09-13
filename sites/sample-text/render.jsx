@@ -22,15 +22,16 @@ module.exports.getContentJsonElements = (post) => {
 };
 
 module.exports.getHtmlElements = (props) => {
-  const tags = shared.getTagList(props.tags);
-  const archives = shared.getArchiveList(props.archives);
+  const queryString = props.questionQueryString(props.searchParams);
+  const tags = shared.getTagList(props.tags, queryString);
+  const archives = shared.getArchiveList(props.archives, queryString);
   const posts = props.posts.map((post) => {
-    const tagLinks = shared.getTagLinks(post.tags);
+    const tagLinks = shared.getTagLinks(post.tags, queryString);
     const relatedList =
-      shared.getRelatedList(Boolean(props.title), "Related Posts:", post.related, props.publishedPostFilter);
+      shared.getRelatedList(Boolean(props.title), "Related Posts:", post.related, props.publishedPostFilter, queryString);
     return (
       <article key={post.id} className="post">
-        <h2><a href={`/blog/post/${post.id}`}>{post.title}</a></h2>
+        <h2><a href={`/blog/post/${post.id}${queryString}`}>{post.title}</a></h2>
         {shared.getPublishDate(post)}
         <div className={post.contentSource} dangerouslySetInnerHTML={{"__html": post.contentHtml}}>
         </div>
@@ -81,10 +82,7 @@ module.exports.getHtmlElements = (props) => {
               <h2>License</h2>
               <p><a href="/blog/post/mit-license">MIT</a></p>
               <h2>Search</h2>
-              <form action="/blog/search">
-                <input type="text" name="query" defaultValue={props.query}
-                  accessKey="s" placeholder="HTML -CSS Java*" aria-label="Search"/>
-              </form>
+              {shared.getSearchForm(props, "HTML -CSS Java*")}
               <h2>Tags</h2>
               <ul>{tags}</ul>
               <h2>Archive</h2>

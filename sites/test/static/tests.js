@@ -151,10 +151,7 @@ QUnit.test("Content-Type is correct and includes charset where applicable", (ass
     ]
   ];
   Promise.all(scenarios.map((scenario) => {
-    const [
-      resource,
-      expected
-    ] = scenario;
+    const [resource, expected] = scenario;
     return fetch(resource).
       then((response) => {
         const {headers} = response;
@@ -235,10 +232,7 @@ QUnit.test("Get of / returns expected HTTP headers", (assert) => {
         ]
       ];
       for (const nameValue of nameValues) {
-        const [
-          name,
-          value
-        ] = nameValue;
+        const [name, value] = nameValue;
         assert.ok(headers.has(name));
         if (value) {
           assert.equal(headers.get(name), value);
@@ -620,6 +614,31 @@ QUnit.test("Get of /blog?count=invalid returns ok and 10 posts", (assert) => {
       assert.equal(nav[0].childElementCount, 1);
       assertElementNameText(assert, nav[0].firstElementChild, "a", "Next Posts \u00BB");
       assert.equal(nav[0].firstElementChild.getAttribute("href"), "/blog?page=twenty");
+    }).
+    then(done);
+});
+
+QUnit.test("Get of pages with count=5 includes count=5 on all links", (assert) => {
+  assert.expect(192);
+  const done = assert.async();
+  Promise.all([
+    fetch("/blog?count=5"),
+    fetch("/blog?count=5&page=ten"),
+    fetch("/blog/archive/201801?count=5"),
+    fetch("/blog/post/one?count=5"),
+    fetch("/blog/search?count=5&query=tw*"),
+    fetch("/blog/tag/even?count=5")
+  ].map((action) => action.then((response) => response.text()))).
+    then((texts) => {
+      for (const text of texts) {
+        const doc = new DOMParser().parseFromString(text, "application/xml");
+        const links = doc.querySelectorAll("a[href]");
+        for (const link of links) {
+          const href = link.getAttribute("href");
+          assert.ok(href.includes("?count=5"), href);
+          assert.ok(!href.includes("query="), href);
+        }
+      }
     }).
     then(done);
 });
@@ -1097,6 +1116,46 @@ QUnit.test(
 );
 
 QUnit.test(
+  "Get of /blog/search?count=2&query=test&page=five returns ok, compressed HTML, and 2 posts",
+  (assert) => {
+    assert.expect(52);
+    const done = assert.async();
+    let responseUrl = null;
+    fetch("/blog/search?count=2&query=test&page=five").
+      then((response) => {
+        responseUrl = response.url;
+        assertResponseAndHeaders(assert, response);
+        return response.text();
+      }).
+      then((text) => {
+        const doc = assertPageMetadata(assert, responseUrl, text, true, null, "Search: test");
+        assert.equal(doc.getElementsByTagName("h3").length, 2);
+        const postTitles = "five six".split(" ");
+        for (const item of doc.getElementsByTagName("h3")) {
+          assert.equal(item.innerHTML, postTitles.shift());
+        }
+        assert.equal(doc.getElementsByTagName("a").length, 14);
+        const nav = doc.getElementsByClassName("navigation");
+        assert.equal(nav.length, 1);
+        assert.equal(nav[0].childElementCount, 2);
+        assertElementNameText(assert, nav[0].firstElementChild, "a", "\u00AB Previous Posts");
+        assert.equal(
+          nav[0].firstElementChild.getAttribute("href"),
+          "/blog/search?count=2&page=three&query=test"
+        );
+        assertElementNameText(assert, nav[0].lastElementChild, "a", "Next Posts \u00BB");
+        assert.equal(
+          nav[0].lastElementChild.getAttribute("href"),
+          "/blog/search?count=2&page=seven&query=test"
+        );
+        assert.equal(doc.getElementById("tags").children.length, 3);
+        assert.equal(doc.getElementById("archives").children.length, 7);
+      }).
+      then(done);
+  }
+);
+
+QUnit.test(
   "Get of /blog/search?query= returns ok, compressed HTML, and 10 posts",
   (assert) => {
     assert.expect(55);
@@ -1122,7 +1181,7 @@ QUnit.test(
         assertElementNameText(assert, nav[0].firstElementChild, "a", "Next Posts \u00BB");
         assert.equal(
           nav[0].firstElementChild.getAttribute("href"),
-          "/blog/search?query=&page=twenty"
+          "/blog/search?page=twenty"
         );
         assert.equal(doc.getElementById("tags").children.length, 3);
         assert.equal(doc.getElementById("archives").children.length, 7);

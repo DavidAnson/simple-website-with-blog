@@ -35,14 +35,15 @@ module.exports.getContentJsonElements = (post) => {
 };
 
 module.exports.getHtmlElements = (props) => {
-  const archives = shared.getArchiveList(props.archives);
+  const queryString = props.questionQueryString(props.searchParams);
+  const archives = shared.getArchiveList(props.archives, queryString);
   const posts = props.posts.map((post) => {
     const publishDate = shared.getPublishDate(post);
     const relatedList =
-      shared.getRelatedList(true, "See also:", post.related, props.publishedPostFilter);
+      shared.getRelatedList(true, "See also:", post.related, props.publishedPostFilter, queryString);
     return (
       <article key={post.id} className="post">
-        <h2><a href={`/blog/post/${post.id}`}>{post.title}</a></h2>
+        <h2><a href={`/blog/post/${post.id}${queryString}`}>{post.title}</a></h2>
         <div dangerouslySetInnerHTML={{"__html": post.contentHtml}}></div>
         {relatedList}
         {publishDate ? <p>Posted {publishDate}</p> : null}
@@ -84,10 +85,7 @@ module.exports.getHtmlElements = (props) => {
           </main>
           <nav className="sidebar">
             <h2>Search</h2>
-            <form action="/blog/search">
-              <input type="text" name="query" defaultValue={props.query}
-                accessKey="s" placeholder="cat -dog ham*" aria-label="Search"/>
-            </form>
+            {shared.getSearchForm(props, "cat -dog ham*")}
             <h2>Archive</h2>
             <ul>{archives}</ul>
           </nav>

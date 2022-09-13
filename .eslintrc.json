@@ -19,6 +19,7 @@
     "plugin:unicorn/all"
   ],
   "rules": {
+    "array-element-newline": ["error", {"ArrayExpression": "always", "ArrayPattern": "never"}],
     "function-call-argument-newline": "off",
     "indent": ["error", 2],
     "linebreak-style": "off",

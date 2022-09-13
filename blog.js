@@ -245,6 +245,16 @@ router["postsLoaded"] = fs.readdir(postsDir).
     });
   });
 
+const questionQueryString = (searchParams) => {
+  const urlSearchParams = new URLSearchParams();
+  for (const [key, value] of Object.entries(searchParams)) {
+    urlSearchParams.set(key, value);
+  }
+  urlSearchParams.sort();
+  const str = urlSearchParams.toString();
+  return str ? `?${str}` : "";
+};
+
 const renderPosts = (req, res, next, posts, noindex, title, period, tag, query) => {
   const siteUrl = getSiteUrl(req);
   const url = new URL(req.originalUrl, siteUrl);
@@ -262,31 +272,37 @@ const renderPosts = (req, res, next, posts, noindex, title, period, tag, query) 
   if (page && posts.every(findIndexOfPage)) {
     return next();
   }
+  const searchParams = {};
+  const queryParams = query ? {query} : null;
   const defaultCount = 10;
   const countParam = "count";
   const count =
     Math.max(Number.parseInt(url.searchParams.get(countParam), baseTen), 0) ||
     defaultCount;
-  if (count === defaultCount) {
-    url.searchParams.delete(countParam);
-  } else {
-    url.searchParams.set(countParam, count);
+  if (count !== defaultCount) {
+    searchParams[countParam] = count;
   }
   const prevIndex = currIndex - count;
   const nextIndex = currIndex + count;
   let prevLink = null;
   if (currIndex > 0) {
+    const prevLinkParams = {
+      ...searchParams,
+      ...queryParams
+    };
     if (prevIndex > 0) {
-      url.searchParams.set(pageParam, posts[prevIndex].id);
-    } else {
-      url.searchParams.delete(pageParam);
+      prevLinkParams[pageParam] = posts[prevIndex].id;
     }
-    prevLink = `${url.pathname}${url.search}`;
+    prevLink = `${url.pathname}${questionQueryString(prevLinkParams)}`;
   }
   let nextLink = null;
   if (nextIndex < posts.length) {
-    url.searchParams.set(pageParam, posts[nextIndex].id);
-    nextLink = `${url.pathname}${url.search}`;
+    const nextLinkParams = {
+      ...searchParams,
+      ...queryParams
+    };
+    nextLinkParams[pageParam] = posts[nextIndex].id;
+    nextLink = `${url.pathname}${questionQueryString(nextLinkParams)}`;
   }
   const elements = render.getHtmlElements({
     "posts": posts.slice(currIndex, nextIndex),
@@ -299,6 +315,8 @@ const renderPosts = (req, res, next, posts, noindex, title, period, tag, query) 
     period,
     tag,
     query,
+    searchParams,
+    questionQueryString,
     prevLink,
     nextLink
   });
