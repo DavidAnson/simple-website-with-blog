@@ -3,6 +3,7 @@
 /* eslint-disable unicorn/no-array-for-each */
 
 const {hostnameToken, showFuturePosts, redirectToHttps, siteRoot} = require("./config");
+const {createHash} = require("node:crypto");
 const fs = require("node:fs").promises;
 const path = require("node:path");
 const express = require("express");
@@ -33,7 +34,7 @@ const markdownIt = new MarkdownIt({
 
 const baseTen = 10;
 const postsDir = `${siteRoot}/posts`;
-const postExtension = /\.json$/u;
+const postExtensionRe = /\.json$/u;
 const postsSortedByContentDate = [];
 const postsSortedByPublishDate = [];
 const postsIndexedById = {};
@@ -47,6 +48,7 @@ const linkRes = [
   /<object\s[^>]*data\s*=\s*"?([^">\s]+)/giu,
   /<video\s[^>]*poster\s*=\s*"?([^">\s]+)/giu
 ];
+const yyyyMMddRe = /^\d{8}$/u;
 
 const escapeForRegExp = (str) => str.replace(/[-/\\^$*+?.()|[\]{}]/gu, "\\$&");
 const hostnameTokenEscaped =
@@ -63,8 +65,8 @@ const getSiteUrl =
     return `${protocol}://${host}`;
   };
 
-const getPublishedPostFilter = (includeDateless) => {
-  const now = Date.now();
+const getPublishedPostFilter = (includeDateless, dateValue) => {
+  const now = dateValue || Date.now();
   return (post) => {
     const publishDate = post.publishDate.getTime();
     return ((publishDate > 0) && (publishDate <= now)) ||
@@ -92,9 +94,9 @@ const getArchivePeriods = () => {
     filter(getPublishedPostFilter()).
     forEach((post) => {
       const postPeriod = new Date(post.contentDate.getFullYear(), post.contentDate.getMonth());
-      if (postPeriod.valueOf() !== lastPeriodValue) {
+      if (postPeriod.getTime() !== lastPeriodValue) {
         archivePeriods.push(postPeriod);
-        lastPeriodValue = postPeriod.valueOf();
+        lastPeriodValue = postPeriod.getTime();
       }
     });
   return archivePeriods;
@@ -110,9 +112,9 @@ router["postsLoaded"] = fs.readdir(postsDir).
   }).
   // Read posts from files
   then((files) => Promise.all(files.
-    filter((file) => postExtension.test(file)).
+    filter((file) => postExtensionRe.test(file)).
     map((file) => {
-      const id = file.replace(postExtension, "");
+      const id = file.replace(postExtensionRe, "");
       if (!(/[\w-]+/u).test(id)) {
         throw new Error(`Post id "${id}" contains unsupported characters.`);
       }
@@ -429,6 +431,35 @@ router.get("/rss", (req, res, next) => {
   });
   res.setHeader("Content-Type", "application/rss+xml");
   return res.send(feed.xml());
+});
+
+router.get("/flashback", (req, res, next) => {
+  const dateString = req.query.date ||
+    (new Date()).
+      toISOString().
+      slice(0, 10).
+      replaceAll("-", "");
+  if (!yyyyMMddRe.test(dateString)) {
+    return next();
+  }
+  const dateValue = (new Date(
+    Number.parseInt(dateString.slice(0, 4), baseTen),
+    Number.parseInt(dateString.slice(4, 6), baseTen) - 1,
+    Number.parseInt(dateString.slice(6, 8), baseTen)
+  )).getTime();
+  const posts = postsSortedByPublishDate.
+    filter(getPublishedPostFilter(false, dateValue));
+  if (posts.length === 0) {
+    return next();
+  }
+  const random =
+    createHash("sha256").
+      update(dateString).
+      digest().
+      readUInt32BE();
+  const index = random % posts.length;
+  const {id} = posts[index];
+  return res.redirect(`/blog/post/${id}`);
 });
 
 // eslint-disable-next-line no-unused-vars

@@ -72,6 +72,10 @@ module.exports.getHtmlElements = (props) => {
                 React.createElement("nav", { className: "sidebar" },
                     React.createElement("h2", null, "Search"),
                     shared.getSearchForm(props, "cat -dog ham*"),
+                    React.createElement("h2", null, "Links"),
+                    React.createElement("ul", null,
+                        React.createElement("li", null,
+                            React.createElement("a", { href: "/blog/flashback" }, "Flashback"))),
                     React.createElement("h2", null, "Archive"),
                     React.createElement("ul", null, archives))))));
 };

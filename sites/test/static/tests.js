@@ -1394,6 +1394,156 @@ QUnit.test(
   }
 );
 
+QUnit.module("Flashback");
+
+QUnit.test("Get of /blog/flashback redirects to valid post", (assert) => {
+  assert.expect(3);
+  const done = assert.async();
+  fetch("/blog/flashback").
+    then((response) => {
+      assert.ok(response.ok);
+      assert.ok(response.redirected);
+      const {pathname} = new URL(response.url);
+      const postPathRe = /^\/blog\/post\/[a-zA-Z]+$/u;
+      assert.ok(postPathRe.test(pathname), pathname);
+    }).
+    then(done);
+});
+
+QUnit.test("Get of /blog/flashback?date=yyyyMMdd redirects to expected post", (assert) => {
+  assert.expect(54);
+  const done = assert.async();
+  const scenarios = [
+    [
+      "/blog/flashback?date=20220404",
+      "/blog/post/nineteen"
+    ],
+    [
+      "/blog/flashback?date=20220403",
+      "/blog/post/eleven"
+    ],
+    [
+      "/blog/flashback?date=20220402",
+      "/blog/post/eight"
+    ],
+    [
+      "/blog/flashback?date=20220401",
+      "/blog/post/eight"
+    ],
+    [
+      "/blog/flashback?date=20220331",
+      "/blog/post/nineteen"
+    ],
+    [
+      "/blog/flashback?date=20220330",
+      "/blog/post/thirteen"
+    ],
+    [
+      "/blog/flashback?date=20220329",
+      "/blog/post/eight"
+    ],
+    [
+      "/blog/flashback?date=20220328",
+      "/blog/post/eleven"
+    ],
+    [
+      "/blog/flashback?date=20220327",
+      "/blog/post/three"
+    ],
+    [
+      "/blog/flashback?date=20220326",
+      "/blog/post/seventeen"
+    ],
+    [
+      "/blog/flashback?date=20220325",
+      "/blog/post/fourteen"
+    ],
+    [
+      "/blog/flashback?date=20170831",
+      "/blog/post/twentytwo"
+    ],
+    [
+      "/blog/flashback?date=20170901",
+      "/blog/post/twentytwo"
+    ],
+    [
+      "/blog/flashback?date=20170902",
+      "/blog/post/twentytwo"
+    ],
+    [
+      "/blog/flashback?date=20170903",
+      "/blog/post/twentyone"
+    ],
+    [
+      "/blog/flashback?date=20170904",
+      "/blog/post/twentyone"
+    ],
+    [
+      "/blog/flashback?date=20170905",
+      "/blog/post/twentytwo"
+    ],
+    [
+      "/blog/flashback?date=20171115",
+      "/blog/post/seventeen"
+    ]
+  ];
+  Promise.all(scenarios.map((scenario) => {
+    const [requestUrl, redirectUrl] = scenario;
+    return fetch(requestUrl).
+      then((response) => [
+        requestUrl,
+        response,
+        redirectUrl
+      ]);
+  })).
+    then((results) => {
+      for (const result of results) {
+        const [requestUrl, response, redirectUrl] = result;
+        assert.ok(response.ok);
+        assert.ok(response.redirected);
+        assert.equal((new URL(response.url)).pathname, redirectUrl, requestUrl);
+      }
+    }).
+    then(done);
+});
+
+QUnit.test("Get of /blog/flashback?date=[range] redirects to all posts", (assert) => {
+  assert.expect(155);
+  const done = assert.async();
+  const startDate = new Date(2021, 0, 4).getTime();
+  const endDate = new Date(2021, 2, 22).getTime();
+  const scenarios = [];
+  for (let date = startDate; date < endDate; date += (1000 * 60 * 60 * 24)) {
+    scenarios.push(new Date(date).
+      toISOString().
+      slice(0, 10).
+      replaceAll("-", ""));
+  }
+  Promise.all(scenarios.map((scenario) => fetch(`/blog/flashback?date=${scenario}`))).
+    then((results) => {
+      const posts = {};
+      for (const result of results) {
+        assert.ok(result.ok);
+        assert.ok(result.redirected);
+        posts[result.url] = true;
+      }
+      assert.equal(Object.keys(posts).length, 22);
+    }).
+    then(done);
+});
+
+QUnit.test("Get of /blog/flashback?date=[date] before any posts returns 404", (assert) => {
+  assert.expect(3);
+  const done = assert.async();
+  fetch("/blog/flashback?date=20170830").
+    then((response) => {
+      assert.ok(!response.ok);
+      assert.equal(response.status, 404);
+      assert.equal(response.statusText, "Not Found");
+    }).
+    then(done);
+});
+
 QUnit.module("ACME");
 
 QUnit.test(

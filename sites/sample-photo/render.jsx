@@ -86,6 +86,10 @@ module.exports.getHtmlElements = (props) => {
           <nav className="sidebar">
             <h2>Search</h2>
             {shared.getSearchForm(props, "cat -dog ham*")}
+            <h2>Links</h2>
+            <ul>
+              <li><a href="/blog/flashback">Flashback</a></li>
+            </ul>
             <h2>Archive</h2>
             <ul>{archives}</ul>
           </nav>
