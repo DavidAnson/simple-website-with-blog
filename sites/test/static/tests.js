@@ -1544,6 +1544,38 @@ QUnit.test("Get of /blog/flashback?date=[date] before any posts returns 404", (a
     then(done);
 });
 
+QUnit.module("Random");
+
+QUnit.test("Get of /blog/random redirects to valid post", (assert) => {
+  assert.expect(3);
+  const done = assert.async();
+  fetch("/blog/random").
+    then((response) => {
+      assert.ok(response.ok);
+      assert.ok(response.redirected);
+      const {pathname} = new URL(response.url);
+      const postPathRe = /^\/blog\/post\/[a-zA-Z]+$/u;
+      assert.ok(postPathRe.test(pathname), pathname);
+    }).
+    then(done);
+});
+
+QUnit.test("Gets of /blog/random redirect to different posts", (assert) => {
+  assert.expect(21);
+  const done = assert.async();
+  const unique = new Set();
+  Promise.all([..."1234567890"].map(() => fetch("/blog/random"))).
+    then((responses) => {
+      for (const response of responses) {
+        assert.ok(response.ok);
+        assert.ok(response.redirected);
+        unique.add(response.url);
+      }
+      assert.ok(unique.size > 1);
+    }).
+    then(done);
+});
+
 QUnit.module("ACME");
 
 QUnit.test(

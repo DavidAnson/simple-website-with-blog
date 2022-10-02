@@ -3,7 +3,7 @@
 /* eslint-disable unicorn/no-array-for-each */
 
 const {hostnameToken, showFuturePosts, redirectToHttps, siteRoot} = require("./config");
-const {createHash} = require("node:crypto");
+const {createHash, randomInt} = require("node:crypto");
 const fs = require("node:fs").promises;
 const path = require("node:path");
 const express = require("express");
@@ -458,6 +458,16 @@ router.get("/flashback", (req, res, next) => {
       digest().
       readUInt32BE();
   const index = random % posts.length;
+  const {id} = posts[index];
+  return res.redirect(`/blog/post/${id}`);
+});
+
+router.get("/random", (req, res, next) => {
+  const posts = postsSortedByPublishDate.filter(getPublishedPostFilter());
+  if (posts.length === 0) {
+    return next();
+  }
+  const index = randomInt(posts.length);
   const {id} = posts[index];
   return res.redirect(`/blog/post/${id}`);
 });

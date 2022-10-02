@@ -89,6 +89,7 @@ module.exports.getHtmlElements = (props) => {
             <h2>Links</h2>
             <ul>
               <li><a href="/blog/flashback">Flashback</a></li>
+              <li><a href="/blog/random">Random</a></li>
             </ul>
             <h2>Archive</h2>
             <ul>{archives}</ul>

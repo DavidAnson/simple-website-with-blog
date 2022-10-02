@@ -75,7 +75,9 @@ module.exports.getHtmlElements = (props) => {
                     React.createElement("h2", null, "Links"),
                     React.createElement("ul", null,
                         React.createElement("li", null,
-                            React.createElement("a", { href: "/blog/flashback" }, "Flashback"))),
+                            React.createElement("a", { href: "/blog/flashback" }, "Flashback")),
+                        React.createElement("li", null,
+                            React.createElement("a", { href: "/blog/random" }, "Random"))),
                     React.createElement("h2", null, "Archive"),
                     React.createElement("ul", null, archives))))));
 };
