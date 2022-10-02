@@ -38,7 +38,7 @@ The implementation strives to be simple and free of unnecessary dependencies.
 
 ## Instructions
 
-1. Install Node.js version 12+
+1. Install Node.js
 1. Fork and clone repository
 1. Create directory under `/sites` or use one of the samples
 1. Add static content to `/sites/yoursite/static`
