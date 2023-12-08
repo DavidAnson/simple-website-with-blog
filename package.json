@@ -14,13 +14,13 @@
   "bugs": "https://github.com/DavidAnson/simple-website-with-blog/issues",
   "scripts": {
     "compile": "tsc --incremental",
-    "docker-npm-install": "docker run --rm --tty --name npm-install --volume $PWD:/home/workdir --workdir /home/workdir --user node node:16 npm install",
     "future": "cross-env SWWB_SHOW_FUTURE_POSTS=true node app.js",
-    "lint": "eslint *.js **/*.jsx sites/test/static/tests.js && stylelint sites/**/*.css",
+    "lint": "eslint *.js **/*.jsx sites/test/static/tests.js test/*.mjs && stylelint sites/**/*.css",
     "photo": "cross-env SWWB_SITE_ROOT=./sites/sample-photo node app.js",
     "server": "npm run compile && node app.js",
     "start": "node app.js",
     "test": "cross-env SWWB_SITE_ROOT=./sites/test SWWB_ACME_CHALLENGE=abc.123,abcdefghijklmnopqrstuvwxyz0123456789ABCDEFG.HIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmn node app.js",
+    "test-browser": "node test/puppeteer.mjs",
     "text": "cross-env SWWB_SITE_ROOT=./sites/sample-text node app.js",
     "watch": "nodemon --exec npm run server"
   },
