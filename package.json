@@ -13,11 +13,12 @@
   },
   "bugs": "https://github.com/DavidAnson/simple-website-with-blog/issues",
   "scripts": {
+    "ci": "npm run compile && git diff --exit-code && npm run lint",
     "compile": "tsc --incremental",
     "future": "cross-env SWWB_SHOW_FUTURE_POSTS=true node app.js",
     "lint": "eslint *.js **/*.jsx sites/test/static/tests.js test/*.mjs && stylelint sites/**/*.css",
     "photo": "cross-env SWWB_SITE_ROOT=./sites/sample-photo node app.js",
-    "playwright-install": "npm install playwright @playwright/test",
+    "playwright-install": "npm install --no-save playwright @playwright/test && playwright install --with-deps",
     "playwright-test": "playwright test --config ./test/playwright.config.mjs",
     "server": "npm run compile && node app.js",
     "start": "node app.js",
