@@ -28,7 +28,7 @@ a:hover {
   font-size: 1.75em;
   font-weight: normal;
 }
-@media (min-width: 700px) {
+@media (width >= 700px) {
   .content {
     display: flex;
     align-items: flex-start;
@@ -91,7 +91,7 @@ a:hover {
   margin: 5px;
   font-size: 90%;
 }
-@media (min-width: 700px) {
+@media (width >= 700px) {
   .sidebar {
     background-color: #e0e0e0;
     padding: 5px;

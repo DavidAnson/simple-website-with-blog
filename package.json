@@ -27,7 +27,7 @@
     "watch": "nodemon --exec npm run server"
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=16"
   },
   "dependencies": {
     "compression": "1.7.4",
@@ -43,11 +43,11 @@
   },
   "devDependencies": {
     "cross-env": "7.0.3",
-    "eslint": "8.23.0",
-    "eslint-plugin-unicorn": "43.0.2",
+    "eslint": "8.55.0",
+    "eslint-plugin-unicorn": "49.0.0",
     "nodemon": "3.0.2",
-    "stylelint": "14.16.1",
-    "stylelint-config-standard": "29.0.0",
+    "stylelint": "16.0.1",
+    "stylelint-config-standard": "35.0.0",
     "typescript": "5.3.3"
   }
 }

@@ -50,13 +50,13 @@ const linkRes = [
 ];
 const yyyyMMddRe = /^\d{8}$/u;
 
-const escapeForRegExp = (str) => str.replace(/[-/\\^$*+?.()|[\]{}]/gu, "\\$&");
+const escapeForRegExp = (str) => str.replaceAll(/[-/\\^$*+?.()|[\]{}]/gu, "\\$&");
 const hostnameTokenEscaped =
   `${escapeForRegExp(hostnameToken)}|${escapeForRegExp(encodeURIComponent(hostnameToken))}`;
 const hostnameTokenRe = new RegExp(hostnameTokenEscaped, "gu");
 const referenceRe = new RegExp(`(${hostnameTokenEscaped})/blog/post/([\\w-]+)`, "gu");
 
-const formatStringForSearch = (str) => str.replace(/[\W_]+/gu, " ");
+const formatStringForSearch = (str) => str.replaceAll(/[\W_]+/gu, " ");
 
 const getSiteUrl =
   (req) => {
@@ -125,8 +125,8 @@ router["postsLoaded"] = fs.readdir(postsDir).
           post.id = id;
           post.contentDate = new Date(post.contentDate || post.publishDate || 0);
           post.publishDate = new Date(post.publishDate || 0);
-          post.tags = post.tags || [];
-          post.related = post.related || [];
+          post.tags ||= [];
+          post.related ||= [];
           post.title = render.getPostTitle(post);
           return post;
         }).

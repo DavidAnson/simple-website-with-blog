@@ -30,7 +30,7 @@ body {
 .content {
   margin-top: 1.5em;
 }
-@media (min-width: 500px) {
+@media (width >= 500px) {
   .content {
     display: flex;
     align-items: flex-start;
@@ -100,7 +100,7 @@ body {
   font-size: 90%;
   margin-bottom: 2em;
 }
-@media (min-width: 500px) {
+@media (width >= 500px) {
   .sidebar {
     margin-left: 5px;
     border-left: 1px solid #0000000d;
@@ -220,7 +220,7 @@ h6 {
   .post pre {
     background-color: #ffffff18;
   }
-  @media (min-width: 500px) {
+  @media (width >= 500px) {
     .sidebar {
       border-left-color: #ffffff20;
     }
