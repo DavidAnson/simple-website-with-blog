@@ -5,7 +5,6 @@ updates:
     schedule:
       interval: "daily"
     target-branch: "main"
-    versioning-strategy: "increase"
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
