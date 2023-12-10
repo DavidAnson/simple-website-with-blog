@@ -21,10 +21,10 @@ const assertSingleTagText = (assert, document, tag, text) => {
   assert.equal(document.getElementsByTagName(tag)[0].innerHTML, text);
 };
 
-const assertMetaCharset = (assert, metas) => {
-  assert.ok(metas[0].attributes.getNamedItem("charset") &&
+const assertMetaCharset = (assert, metas, charSet = "charSet") => {
+  assert.ok(metas[0].attributes.getNamedItem(charSet) &&
     // eslint-disable-next-line unicorn/text-encoding-identifier-case
-    metas[0].attributes.getNamedItem("charset").value === "utf-8");
+    metas[0].attributes.getNamedItem(charSet).value === "utf-8");
 };
 
 const assertMetaAttributes = (assert, meta, name, property, content) => {
@@ -258,7 +258,7 @@ QUnit.test("Get of / returns ok and compressed HTML", (assert) => {
     then((text) => {
       assert.ok(text.startsWith("<!DOCTYPE html>"));
       const doc = new DOMParser().parseFromString(text, "application/xml");
-      assertMetaCharset(assert, doc.getElementsByTagName("meta"));
+      assertMetaCharset(assert, doc.getElementsByTagName("meta"), "charset");
       assertFavIcon(assert, doc);
     }).
     then(done);
