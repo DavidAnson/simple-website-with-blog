@@ -4,10 +4,12 @@
 
 import { defineConfig, devices } from "@playwright/test";
 
+const testUrl = "http://localhost:3000/";
+
 export default defineConfig({
   "testDir": ".",
   "use": {
-    "baseURL": "http://localhost:3000/"
+    "baseURL": testUrl
   },
   "projects": [
     {
@@ -25,6 +27,6 @@ export default defineConfig({
   ],
   "webServer": {
     "command": "npm run test",
-    "url": "http://localhost:3000/"
+    "url": testUrl
   }
 });
