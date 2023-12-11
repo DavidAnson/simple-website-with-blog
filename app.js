@@ -42,7 +42,7 @@ app.use((req, res, next) => {
   return res.redirect(redirectHostUrl);
 });
 
-// Add security headers and compression
+// Add security headers, feature policies, and compression
 app.use(helmet({
   "contentSecurityPolicy": {
     "directives": {
@@ -58,17 +58,14 @@ app.use(helmet({
       "upgrade-insecure-requests": redirectToHttps ? [] : null
     }
   },
-  "frameguard": false,
-  "hsts": {
+  "referrerPolicy": {
+    "policy": "no-referrer-when-downgrade"
+  },
+  "strictTransportSecurity": {
     // Set maxAge to 1 week to mitigate impact of certificate expiration
     "maxAge": 60 * 60 * 24 * 7
   },
-  "permittedCrossDomainPolicies": {
-    "permittedPolicies": "none"
-  },
-  "referrerPolicy": {
-    "policy": "no-referrer-when-downgrade"
-  }
+  "xFrameOptions": false
 }));
 app.use(featurePolicy({
   "features": {

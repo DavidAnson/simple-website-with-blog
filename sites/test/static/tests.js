@@ -162,7 +162,7 @@ QUnit.test("Content-Type is correct and includes charset where applicable", (ass
 });
 
 QUnit.test("Get of / returns expected HTTP headers", (assert) => {
-  assert.expect(28);
+  assert.expect(29);
   const done = assert.async();
   fetch("/").
     then((response) => {
@@ -243,6 +243,7 @@ QUnit.test("Get of / returns expected HTTP headers", (assert) => {
       assert.ok(headers.has("Strict-Transport-Security"));
       assert.ok(headers.get("Strict-Transport-Security").startsWith("max-age="));
       assert.ok(headers.get("Strict-Transport-Security").endsWith("; includeSubDomains"));
+      assert.ok(!headers.has("X-Frame-Options"));
     }).
     then(done);
 });
