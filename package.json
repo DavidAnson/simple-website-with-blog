@@ -20,6 +20,7 @@
     "photo": "cross-env SWWB_SITE_ROOT=./sites/sample-photo node app.js",
     "playwright-install": "npm install --no-save playwright @playwright/test && playwright install --with-deps",
     "playwright-test": "playwright test --config ./test/playwright.config.mjs",
+    "playwright-update-snapshots": "playwright test --config ./test/playwright.config.mjs --update-snapshots",
     "server": "npm run compile && node app.js",
     "start": "node app.js",
     "test": "cross-env SWWB_SITE_ROOT=./sites/test SWWB_ACME_CHALLENGE=abc.123,abcdefghijklmnopqrstuvwxyz0123456789ABCDEFG.HIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmn node app.js",

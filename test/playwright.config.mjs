@@ -3,30 +3,45 @@
 /* eslint-disable object-curly-newline, object-curly-spacing */
 
 import { defineConfig, devices } from "@playwright/test";
-
-const testUrl = "http://localhost:3000/";
+import { photoPort, photoUrl, testPort, testUrl, textPort, textUrl } from "./playwright.shared.mjs";
 
 export default defineConfig({
   "testDir": ".",
-  "use": {
-    "baseURL": testUrl
-  },
   "projects": [
     {
-      "name": "chromium",
-      "use": { ...devices["Desktop Chrome"] }
+      "name": "Pixel 7 (chromium)",
+      "use": { ...devices["Pixel 7"] }
     },
     {
-      "name": "firefox",
+      "name": "Desktop Firefox (firefox)",
       "use": { ...devices["Desktop Firefox"] }
     },
     {
-      "name": "webkit",
-      "use": { ...devices["Desktop Safari"] }
+      "name": "iPhone 13 (webkit)",
+      "use": { ...devices["iPhone 13"] }
     }
   ],
-  "webServer": {
-    "command": "npm run test",
-    "url": testUrl
-  }
+  "webServer": [
+    {
+      "command": "npm run test",
+      "env": {
+        "PORT": `${testPort}`
+      },
+      "url": testUrl
+    },
+    {
+      "command": "npm run text",
+      "env": {
+        "PORT": `${textPort}`
+      },
+      "url": textUrl,
+    },
+    {
+      "command": "npm run photo",
+      "env": {
+        "PORT": `${photoPort}`
+      },
+      "url": photoUrl
+    }
+  ]
 });
