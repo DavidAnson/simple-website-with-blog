@@ -15,5 +15,4 @@ jobs:
       - uses: actions/setup-node@v4
       - run: npm install
       - run: npm run ci
-      - run: npm run playwright-install
-      - run: npm run playwright-test
+      - run: npm run playwright-test-docker
