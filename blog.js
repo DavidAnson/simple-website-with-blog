@@ -6,6 +6,7 @@ const {hostnameToken, showFuturePosts, redirectToHttps, siteRoot} = require("./c
 const {createHash, randomInt} = require("node:crypto");
 const fs = require("node:fs").promises;
 const path = require("node:path");
+const Ajv = require("ajv");
 const express = require("express");
 const highlightJs = require("highlight.js");
 const lunr = require("lunr");
@@ -102,6 +103,8 @@ const getArchivePeriods = () => {
   return archivePeriods;
 };
 
+const ajv = new Ajv();
+const validatePostSchema = ajv.compile(require("./post-schema.json"));
 // eslint-disable-next-line dot-notation
 router["postsLoaded"] = fs.readdir(postsDir).
   catch((error) => {
@@ -122,6 +125,10 @@ router["postsLoaded"] = fs.readdir(postsDir).
       return fs.readFile(filePath, "utf8").
         then((content) => {
           const post = JSON.parse(content);
+          if (!validatePostSchema(post)) {
+            const message = JSON.stringify(validatePostSchema.errors, null, 2);
+            throw new Error(`Schema validation error in "${file}"\n${message}`);
+          }
           post.id = id;
           post.contentDate = new Date(post.contentDate || post.publishDate || 0);
           post.publishDate = new Date(post.publishDate || 0);

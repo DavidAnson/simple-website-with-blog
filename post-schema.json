@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "simple-website-with-blog post schema",
+  "type": "object",
+  "properties": {
+    "contentDate": {
+      "description": "UTC date/time of content",
+      "type": "string",
+      "pattern": "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\dZ$",
+      "default": "1970-01-01T00:00Z"
+    },
+    "contentJson": {
+      "description": "JSON object for content",
+      "default": null
+    },
+    "publishDate": {
+      "description": "UTC date/time to publish",
+      "type": "string",
+      "pattern": "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\dZ$",
+      "default": "1970-01-01T00:00Z"
+    },
+    "related": {
+      "description": "IDs of related posts",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "tags": {
+      "description": "Tags for post",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "title": {
+      "description": "Title of post",
+      "type": "string"
+    }
+  },
+  "required": [
+    "title"
+  ],
+  "additionalProperties": false
+}
