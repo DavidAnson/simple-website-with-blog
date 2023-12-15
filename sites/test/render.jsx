@@ -16,6 +16,8 @@ const strings = {
 
 module.exports.getPostTitle = (post) => `Test post - ${post.title}`;
 
+module.exports.getContentJsonSchema = () => null;
+
 module.exports.getContentJsonElements = (post) => {
   const content = post.contentJson.map((line, index) => <p key={index}>{line}</p>);
   return <>{content}</>;

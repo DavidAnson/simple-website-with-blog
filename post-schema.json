@@ -23,6 +23,7 @@
       "description": "IDs of related posts",
       "type": "array",
       "items": {
+        "description": "ID of related post",
         "type": "string"
       },
       "default": []
@@ -31,6 +32,7 @@
       "description": "Tags for post",
       "type": "array",
       "items": {
+        "description": "Tag for post",
         "type": "string"
       },
       "default": []

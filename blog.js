@@ -105,6 +105,10 @@ const getArchivePeriods = () => {
 
 const ajv = new Ajv();
 const validatePostSchema = ajv.compile(require("./post-schema.json"));
+const contentSchema = render.getContentJsonSchema();
+const validateContentSchema = contentSchema ?
+  ajv.compile(contentSchema) :
+  () => true;
 // eslint-disable-next-line dot-notation
 router["postsLoaded"] = fs.readdir(postsDir).
   catch((error) => {
@@ -127,7 +131,11 @@ router["postsLoaded"] = fs.readdir(postsDir).
           const post = JSON.parse(content);
           if (!validatePostSchema(post)) {
             const message = JSON.stringify(validatePostSchema.errors, null, 2);
-            throw new Error(`Schema validation error in "${file}"\n${message}`);
+            throw new Error(`Post schema validation error in "${file}"\n${message}`);
+          }
+          if (!validateContentSchema(post.contentJson)) {
+            const message = JSON.stringify(validateContentSchema.errors, null, 2);
+            throw new Error(`Content schema validation error in "${file}"\n${message}`);
           }
           post.id = id;
           post.contentDate = new Date(post.contentDate || post.publishDate || 0);

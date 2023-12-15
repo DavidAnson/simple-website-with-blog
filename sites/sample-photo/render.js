@@ -12,6 +12,9 @@ module.exports.getPostTitle = (post) => {
     const contentDate = shared.dateTimeFormatDay.format(post.contentDate);
     return `${contentDate} - ${post.title}`;
 };
+module.exports.getContentJsonSchema = () => {
+    return require("./content-schema.json");
+};
 module.exports.getContentJsonElements = (post) => {
     const content = post.contentJson.map((photo, index) => {
         const src = `${config.hostnameToken}/photos/${photo.image}`;
