@@ -65,7 +65,8 @@ app.use(helmet({
     // Set maxAge to 1 week to mitigate impact of certificate expiration
     "maxAge": 60 * 60 * 24 * 7
   },
-  "xFrameOptions": false
+  "xFrameOptions": false,
+  "xXssProtection": false
 }));
 // Deprecated, including by helmet
 app.use(featurePolicy({

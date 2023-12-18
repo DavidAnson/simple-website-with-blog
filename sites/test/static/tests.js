@@ -162,7 +162,7 @@ QUnit.test("Content-Type is correct and includes charset where applicable", (ass
 });
 
 QUnit.test("Get of / returns expected HTTP headers", (assert) => {
-  assert.expect(31);
+  assert.expect(29);
   const done = assert.async();
   fetch("/").
     then((response) => {
@@ -231,10 +231,6 @@ QUnit.test("Get of / returns expected HTTP headers", (assert) => {
         [
           "X-Permitted-Cross-Domain-Policies",
           "none"
-        ],
-        [
-          "X-XSS-Protection",
-          "0"
         ]
       ];
       for (const nameValue of nameValues) {
