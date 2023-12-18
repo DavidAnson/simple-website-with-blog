@@ -162,7 +162,7 @@ QUnit.test("Content-Type is correct and includes charset where applicable", (ass
 });
 
 QUnit.test("Get of / returns expected HTTP headers", (assert) => {
-  assert.expect(29);
+  assert.expect(31);
   const done = assert.async();
   fetch("/").
     then((response) => {
@@ -205,6 +205,12 @@ QUnit.test("Get of / returns expected HTTP headers", (assert) => {
           "geolocation 'none';" +
             "payment 'none';" +
             "usb 'none'"
+        ],
+        [
+          "Permissions-Policy",
+          "geolocation=(), " +
+            "payment=(), " +
+            "usb=()"
         ],
         [
           "Referrer-Policy",

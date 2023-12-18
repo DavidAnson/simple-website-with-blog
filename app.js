@@ -67,6 +67,7 @@ app.use(helmet({
   },
   "xFrameOptions": false
 }));
+// Deprecated, including by helmet
 app.use(featurePolicy({
   "features": {
     // Disable features with security/privacy implications
@@ -75,6 +76,11 @@ app.use(featurePolicy({
     "usb": ["'none'"]
   }
 }));
+// Draft specification, not yet supported by helmet
+app.use((req, res, next) => {
+  res.setHeader("Permissions-Policy", "geolocation=(), payment=(), usb=()");
+  next();
+});
 app.use(compression({
   "level": 9,
   "threshold": 0
