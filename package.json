@@ -66,6 +66,12 @@
       "web-recommended"
     ],
     "hints": {
+      "axe/color": [
+        "warning",
+        {
+          "color-contrast-enhanced": "off"
+        }
+      ],
       "compat-api/css": [
         "warning",
         {

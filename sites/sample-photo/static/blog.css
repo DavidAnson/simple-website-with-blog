@@ -13,13 +13,13 @@ body {
 a:link,
 a:visited,
 a:hover {
-  color: #008800;
+  color: #007400;
   text-decoration: none;
 }
 .banner {
   background-color: #ddffdd;
   border-bottom-style: solid;
-  border-color: #008800;
+  border-color: #007400;
   border-width: 3px;
 }
 .banner h1 {
@@ -99,7 +99,7 @@ a:hover {
 }
 .sidebar > h2 {
   background-color: #ddffdd;
-  color: #008800;
+  color: #007400;
   font-size: 100%;
   padding: 2px 5px;
   margin: 0;
