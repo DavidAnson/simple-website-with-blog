@@ -29,7 +29,10 @@
     "start": "node app.js",
     "test": "cross-env SWWB_SITE_ROOT=./sites/test SWWB_ACME_CHALLENGE=abc.123,abcdefghijklmnopqrstuvwxyz0123456789ABCDEFG.HIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmn node app.js",
     "text": "cross-env SWWB_SITE_ROOT=./sites/sample-text node app.js",
-    "watch": "nodemon --exec npm run server"
+    "watch": "nodemon --exec npm run server",
+    "webhint-install": "npm install --no-save hint @hint/configuration-web-recommended playwright puppeteer start-server-and-test serve && playwright install --with-deps && puppeteer browsers install chrome",
+    "webhint-run": "start-server-and-test 'npm run text' 3000 'xvfb-run hint http://localhost:3000/blog'",
+    "webhint-view": "serve /workspaces/simple-website-with-blog/hint-report"
   },
   "engines": {
     "node": ">=16"
@@ -55,5 +58,42 @@
     "stylelint": "16.0.2",
     "stylelint-config-standard": "35.0.0",
     "typescript": "5.3.3"
+  },
+  "hintConfig": {
+    "extends": [
+      "web-recommended"
+    ],
+    "hints": {
+      "compat-api/css": [
+        "warning",
+        {
+          "ignore": [
+            "text-size-adjust"
+          ]
+        }
+      ],
+      "http-compression": [
+        "warning",
+        {
+          "html": {
+            "brotli": false,
+            "zopfli": false
+          },
+          "resource": {
+            "brotli": false,
+            "zopfli": false
+          }
+        }
+      ],
+      "no-html-only-headers": [
+        "warning",
+        {
+          "ignore": [
+            "Content-Security-Policy",
+            "Feature-Policy"
+          ]
+        }
+      ]
+    }
   }
 }
