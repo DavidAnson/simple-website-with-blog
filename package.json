@@ -95,6 +95,12 @@
             "Feature-Policy"
           ]
         }
+      ],
+      "strict-transport-security": [
+        "warning",
+        {
+          "minMaxAgeValue": 604800
+        }
       ]
     }
   }
