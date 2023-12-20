@@ -1,0 +1,9 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "simple-website-with-blog post content schema for test",
+  "type": "array",
+  "items": {
+    "description": "Test content",
+    "type": "string"
+  }
+}

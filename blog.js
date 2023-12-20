@@ -133,7 +133,7 @@ router["postsLoaded"] = fs.readdir(postsDir).
             const message = JSON.stringify(validatePostSchema.errors, null, 2);
             throw new Error(`Post schema validation error in "${file}"\n${message}`);
           }
-          if (!validateContentSchema(post.contentJson)) {
+          if (post.contentJson && !validateContentSchema(post.contentJson)) {
             const message = JSON.stringify(validateContentSchema.errors, null, 2);
             throw new Error(`Content schema validation error in "${file}"\n${message}`);
           }
