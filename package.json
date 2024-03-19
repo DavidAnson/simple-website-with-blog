@@ -47,7 +47,7 @@
     "helmet": "7.1.0",
     "highlight.js": "11.9.0",
     "lunr": "2.3.9",
-    "markdown-it": "14.0.0",
+    "markdown-it": "14.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "rss": "1.2.2"
