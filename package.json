@@ -57,7 +57,7 @@
     "eslint": "8.57.0",
     "eslint-plugin-unicorn": "51.0.1",
     "nodemon": "3.1.0",
-    "stylelint": "16.3.0",
+    "stylelint": "16.3.1",
     "stylelint-config-standard": "36.0.0",
     "typescript": "5.4.3"
   },
