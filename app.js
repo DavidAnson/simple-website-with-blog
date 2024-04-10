@@ -124,7 +124,7 @@ app.use("/blog", blog);
 app.use((req, res, next) => {
   res.sendStatus(404);
 });
-// eslint-disable-next-line max-params, no-unused-vars
+// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   // eslint-disable-next-line no-console
   console.error(err.stack);

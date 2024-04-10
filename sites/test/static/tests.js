@@ -58,7 +58,6 @@ const assertPageMetadata = (assert, responseUrl, text, noindex, titlePrefix, inn
   const metas = doc.getElementsByTagName("meta");
   assertMetaCharset(assert, metas);
   let index = 1;
-  // eslint-disable-next-line max-len
   assertMetaAttributes(assert, metas[index++], "viewport", null, "width=device-width, initial-scale=1");
   assertMetaAttributes(assert, metas[index++], "color-scheme", null, "light dark");
   assertMetaAttributes(assert, metas[index++], "description", null, description);
@@ -72,6 +71,7 @@ const assertPageMetadata = (assert, responseUrl, text, noindex, titlePrefix, inn
   assertMetaAttributes(assert, metas[index++], null, "og:site_name", siteName);
   assertMetaAttributes(assert, metas[index++], null, "og:description", description);
   if (noindex) {
+    // eslint-disable-next-line no-useless-assignment
     assertMetaAttributes(assert, metas[index++], "robots", null, "noindex");
   }
   assertFavIcon(assert, doc);
@@ -1380,11 +1380,10 @@ QUnit.test(
           assert.equal(item.textContent.replace(/^Test post - /u, ""), titles.shift());
         }
         for (const link of doc.getElementsByTagName("link")) {
-          // eslint-disable-next-line unicorn/no-unsafe-regex
           assert.ok((/^https?:\/\/[^/]+\/blog(?:\/post\/[a-z]+)?$/u).test(link.textContent));
         }
         const uriRe = /[^"<>[\]]+\/[^"<>[\]]+/gu;
-        let match = null;
+        let match;
         while ((match = uriRe.exec(text)) !== null) {
           const [url] = match;
           if ((url !== "simple-website-with-blog/test") &&

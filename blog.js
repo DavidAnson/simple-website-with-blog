@@ -44,7 +44,6 @@ const commonHtmlStopWords =
   "alt br div h1 h2 h3 h4 h5 h6 href img li ol pre src srcset ul".split(" ");
 const linkRes = [
   /<(?:a|area|link)\s[^>]*href\s*=\s*"?([^">\s]+)/giu,
-  // eslint-disable-next-line max-len
   /<(?:audio|embed|iframe|img|input|script|source|track|video)\s[^>]*(?:src|srcset)\s*=\s*"?([^">\s]+)/giu,
   /<object\s[^>]*data\s*=\s*"?([^">\s]+)/giu,
   /<video\s[^>]*poster\s*=\s*"?([^">\s]+)/giu
@@ -173,7 +172,7 @@ router["postsLoaded"] = fs.readdir(postsDir).
             then(() => {
               const contentHtml = post.contentHtml.replace(hostnameTokenRe, "https://example.com");
               linkRes.forEach((linkRe) => {
-                let match = null;
+                let match;
                 while ((match = linkRe.exec(contentHtml)) !== null) {
                   const [, url] = match;
                   try {
@@ -212,7 +211,7 @@ router["postsLoaded"] = fs.readdir(postsDir).
   // Find referenced posts
   then(() => {
     postsSortedByPublishDate.forEach((post) => {
-      let match = null;
+      let match;
       while ((match = referenceRe.exec(post.contentHtml)) !== null) {
         const [, , id] = match;
         const matches = postsSortedByPublishDate.filter((pst) => pst.id === id);
@@ -487,7 +486,6 @@ router.get("/random", (req, res, next) => {
   return res.redirect(`/blog/post/${id}`);
 });
 
-// eslint-disable-next-line no-unused-vars
 router.use((req, res, next) => {
   const statusCode = 404;
   const statusText = "Not Found";
