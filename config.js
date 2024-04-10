@@ -1,5 +1,7 @@
 "use strict";
 
+const process = require("node:process");
+
 module.exports = {
   "port": process.env.PORT || 3000,
   "acmeChallenge": process.env.SWWB_ACME_CHALLENGE || "",

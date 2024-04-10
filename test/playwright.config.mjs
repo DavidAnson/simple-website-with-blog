@@ -1,7 +1,5 @@
 // @ts-check
 
-/* eslint-disable object-curly-newline, object-curly-spacing */
-
 import { defineConfig, devices } from "@playwright/test";
 import { photoPort, photoUrl, testPort, testUrl, textPort, textUrl } from "./playwright.shared.mjs";
 

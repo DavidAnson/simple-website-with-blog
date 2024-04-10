@@ -1,7 +1,5 @@
 // @ts-check
 
-/* eslint-disable object-curly-newline, object-curly-spacing */
-
 import { expect, test } from "@playwright/test";
 import { photoUrl, testUrl, textUrl } from "./playwright.shared.mjs";
 

@@ -16,7 +16,7 @@
     "ci": "npm run compile && git diff --exit-code && npm run lint",
     "compile": "tsc --incremental",
     "future": "cross-env SWWB_SHOW_FUTURE_POSTS=true node app.js",
-    "lint": "eslint *.js **/*.jsx sites/test/static/tests.js test/*.mjs && stylelint sites/**/*.css",
+    "lint": "eslint *.js **/*.jsx eslint.config.mjs sites/test/static/tests.js test/*.mjs && stylelint sites/**/*.css",
     "photo": "cross-env SWWB_SITE_ROOT=./sites/sample-photo node app.js",
     "playwright-install-bare": "npm run playwright-install-npm && playwright install",
     "playwright-install-deps": "npm run playwright-install-npm && playwright install --with-deps",
