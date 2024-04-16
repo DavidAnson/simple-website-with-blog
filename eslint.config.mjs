@@ -5,9 +5,7 @@ import unicorn from "eslint-plugin-unicorn";
 
 export default [
   js.configs.all,
-  {
-    "rules": unicorn.configs.all.rules,
-  },
+  unicorn.configs["flat/all"],
   {
     "languageOptions": {
       "ecmaVersion": 2021,
@@ -26,9 +24,6 @@ export default [
     },
     "linterOptions": {
       "reportUnusedDisableDirectives": true
-    },
-    "plugins": {
-      unicorn
     },
     "rules": {
       "array-element-newline": [ "error", { "ArrayExpression": "always", "ArrayPattern": "never" } ],
