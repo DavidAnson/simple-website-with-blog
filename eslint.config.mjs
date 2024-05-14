@@ -52,6 +52,7 @@ export default [
       "unicorn/no-unreadable-array-destructuring": "off",
       "unicorn/prefer-module": "off",
       "unicorn/prefer-query-selector": "off",
+      "unicorn/prefer-string-raw": "off",
       "unicorn/prefer-top-level-await": "off",
       "unicorn/prevent-abbreviations": "off"
     }
