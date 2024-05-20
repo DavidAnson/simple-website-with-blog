@@ -53,7 +53,7 @@
     "rss": "1.2.2"
   },
   "devDependencies": {
-    "@eslint/js": "9.2.0",
+    "@eslint/js": "9.3.0",
     "cross-env": "7.0.3",
     "eslint": "9.2.0",
     "eslint-plugin-unicorn": "53.0.0",
