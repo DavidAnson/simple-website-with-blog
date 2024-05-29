@@ -57,7 +57,7 @@
     "cross-env": "7.0.3",
     "eslint": "9.3.0",
     "eslint-plugin-unicorn": "53.0.0",
-    "nodemon": "3.1.1",
+    "nodemon": "3.1.2",
     "stylelint": "16.6.1",
     "stylelint-config-standard": "36.0.0",
     "typescript": "5.4.5"
