@@ -45,7 +45,7 @@
     "express": "4.19.2",
     "feature-policy": "0.6.0",
     "helmet": "7.1.0",
-    "highlight.js": "11.9.0",
+    "highlight.js": "11.10.0",
     "lunr": "2.3.9",
     "markdown-it": "14.1.0",
     "react": "18.3.1",
