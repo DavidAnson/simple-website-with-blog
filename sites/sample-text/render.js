@@ -6,6 +6,7 @@ const strings = {
     "description": "The blog of a simple website",
     "author": "David Anson",
     "twitter": "@DavidAns",
+    "fediverse": "@DavidAnson@mastodon.social",
     "avatar": "/avatar.png",
     "copyright": `Copyright \u00a9 2006-${new Date().getFullYear()} by David Anson`
 };
@@ -43,7 +44,7 @@ module.exports.getHtmlElements = (props) => {
             React.createElement("meta", { name: "color-scheme", content: "light dark" }),
             React.createElement("meta", { name: "description", content: shared.getDescription(props, strings) }),
             React.createElement("meta", { name: "author", content: strings.author }),
-            shared.getTwitterOpenGraph(props, context, strings),
+            shared.getOpenGraph(props, context, strings),
             shared.getMetaRobots(props.noindex),
             React.createElement("link", { rel: "alternate", type: "application/rss+xml", href: "/blog/rss", title: strings.title }),
             React.createElement("link", { rel: "stylesheet", href: "/blog.css" }),

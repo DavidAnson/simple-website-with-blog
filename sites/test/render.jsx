@@ -10,6 +10,7 @@ const strings = {
   "description": "Test blog",
   "author": "David Anson",
   "twitter": "@DavidAns",
+  "fediverse": "@DavidAnson@mastodon.social",
   "avatar": "/images/piechart.png",
   "copyright": "Copyright \u00a9 David Anson"
 };
@@ -60,7 +61,7 @@ module.exports.getHtmlElements = (props) => {
         <meta name="color-scheme" content="light dark"/>
         <meta name="description" content={shared.getDescription(props, strings)}/>
         <meta name="author" content={strings.author}/>
-        {shared.getTwitterOpenGraph(props, context, strings)}
+        {shared.getOpenGraph(props, context, strings)}
         {shared.getMetaRobots(props.noindex)}
         <link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
       </head>

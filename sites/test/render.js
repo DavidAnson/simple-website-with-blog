@@ -6,6 +6,7 @@ const strings = {
     "description": "Test blog",
     "author": "David Anson",
     "twitter": "@DavidAns",
+    "fediverse": "@DavidAnson@mastodon.social",
     "avatar": "/images/piechart.png",
     "copyright": "Copyright \u00a9 David Anson"
 };
@@ -47,7 +48,7 @@ module.exports.getHtmlElements = (props) => {
             React.createElement("meta", { name: "color-scheme", content: "light dark" }),
             React.createElement("meta", { name: "description", content: shared.getDescription(props, strings) }),
             React.createElement("meta", { name: "author", content: strings.author }),
-            shared.getTwitterOpenGraph(props, context, strings),
+            shared.getOpenGraph(props, context, strings),
             shared.getMetaRobots(props.noindex),
             React.createElement("link", { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" })),
         React.createElement("body", null,

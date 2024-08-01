@@ -122,10 +122,11 @@ const getDescription =
   (props, strings) => props.title || getHeading(props) || strings.description;
 module.exports.getDescription = getDescription;
 
-module.exports.getTwitterOpenGraph = (props, context, strings) => {
+module.exports.getOpenGraph = (props, context, strings) => {
   const description = getDescription(props, strings);
   return (
     <React.Fragment>
+      {strings.fediverse ? <meta name="fediverse:creator" content={strings.fediverse}/> : null}
       <meta name="twitter:card" content="summary"/>
       {strings.twitter ? <meta name="twitter:site" content={strings.twitter}/> : null}
       <meta property="og:type" content="article"/>

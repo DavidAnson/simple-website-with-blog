@@ -54,7 +54,7 @@ module.exports.getHtmlElements = (props) => {
             React.createElement("meta", { name: "viewport", content: "width=device-width, initial-scale=1" }),
             React.createElement("meta", { name: "description", content: shared.getDescription(props, strings) }),
             React.createElement("meta", { name: "author", content: strings.author }),
-            shared.getTwitterOpenGraph(props, context, strings),
+            shared.getOpenGraph(props, context, strings),
             shared.getMetaRobots(props.noindex),
             React.createElement("link", { rel: "alternate", type: "application/rss+xml", href: "/blog/rss", title: strings.title }),
             React.createElement("link", { rel: "stylesheet", href: "/blog.css" }),

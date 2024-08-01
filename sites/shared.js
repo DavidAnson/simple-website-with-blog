@@ -92,9 +92,10 @@ const getTitle = (props, strings) => [
 module.exports.getTitle = getTitle;
 const getDescription = (props, strings) => props.title || getHeading(props) || strings.description;
 module.exports.getDescription = getDescription;
-module.exports.getTwitterOpenGraph = (props, context, strings) => {
+module.exports.getOpenGraph = (props, context, strings) => {
     const description = getDescription(props, strings);
     return (React.createElement(React.Fragment, null,
+        strings.fediverse ? React.createElement("meta", { name: "fediverse:creator", content: strings.fediverse }) : null,
         React.createElement("meta", { name: "twitter:card", content: "summary" }),
         strings.twitter ? React.createElement("meta", { name: "twitter:site", content: strings.twitter }) : null,
         React.createElement("meta", { property: "og:type", content: "article" }),

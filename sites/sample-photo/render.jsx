@@ -68,7 +68,7 @@ module.exports.getHtmlElements = (props) => {
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <meta name="description" content={shared.getDescription(props, strings)}/>
         <meta name="author" content={strings.author}/>
-        {shared.getTwitterOpenGraph(props, context, strings)}
+        {shared.getOpenGraph(props, context, strings)}
         {shared.getMetaRobots(props.noindex)}
         <link rel="alternate" type="application/rss+xml" href="/blog/rss" title={strings.title}/>
         <link rel="stylesheet" href="/blog.css"/>
