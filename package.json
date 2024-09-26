@@ -30,7 +30,7 @@
     "test": "cross-env SWWB_SITE_ROOT=./sites/test SWWB_ACME_CHALLENGE=abc.123,abcdefghijklmnopqrstuvwxyz0123456789ABCDEFG.HIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmn node app.js",
     "text": "cross-env SWWB_SITE_ROOT=./sites/sample-text node app.js",
     "watch": "nodemon --exec npm run server",
-    "webhint-install": "sudo apt update && sudo apt install xvfb && npm install --no-save hint @hint/configuration-web-recommended puppeteer start-server-and-test serve && puppeteer browsers install chrome",
+    "webhint-install": "npm install --no-save hint @hint/configuration-web-recommended puppeteer start-server-and-test serve && puppeteer browsers install chrome",
     "webhint-invoke": "xvfb-run hint http://localhost:3000/ && xvfb-run hint http://localhost:3000/blog",
     "webhint-run-photo": "start-server-and-test 'npm run photo' 3000 'npm run webhint-invoke'",
     "webhint-run-text": "start-server-and-test 'npm run text' 3000 'npm run webhint-invoke'",
