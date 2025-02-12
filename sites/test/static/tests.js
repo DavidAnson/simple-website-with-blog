@@ -4,9 +4,11 @@
 // eslint-disable-next-line no-var, no-use-before-define
 var QUnit = QUnit;
 
+const contentEncodingRe = /^(br|gzip)$/u;
+
 const assertResponseAndHeaders = (assert, response, contentType) => {
   assert.ok(response.ok);
-  assert.equal(response.headers.get("Content-Encoding"), "gzip");
+  assert.ok(contentEncodingRe.test(response.headers.get("Content-Encoding")));
   assert.equal(response.headers.get("Content-Type"), contentType || "text/html; charset=utf-8");
 };
 
@@ -171,10 +173,6 @@ QUnit.test("Get of / returns expected HTTP headers", (assert) => {
       const nameValues = [
         // Content headers
         [
-          "Content-Encoding",
-          "gzip"
-        ],
-        [
           "Content-Type",
           "text/html; charset=UTF-8"
         ],
@@ -241,6 +239,8 @@ QUnit.test("Get of / returns expected HTTP headers", (assert) => {
           assert.equal(headers.get(name), value);
         }
       }
+      assert.ok(headers.has("Content-Encoding"));
+      assert.ok(contentEncodingRe.test(headers.get("Content-Encoding")));
       assert.ok(headers.has("ETag"));
       assert.ok(headers.get("ETag").startsWith("W/\""));
       assert.ok(headers.has("Strict-Transport-Security"));
