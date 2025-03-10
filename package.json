@@ -55,7 +55,7 @@
   "devDependencies": {
     "@eslint/js": "9.21.0",
     "cross-env": "7.0.3",
-    "eslint": "9.21.0",
+    "eslint": "9.22.0",
     "eslint-plugin-unicorn": "57.0.0",
     "nodemon": "3.1.9",
     "stylelint": "16.15.0",
