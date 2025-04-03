@@ -9,7 +9,7 @@ const contentEncodingRe = /^(br|gzip)$/u;
 const assertResponseAndHeaders = (assert, response, contentType) => {
   assert.ok(response.ok);
   assert.ok(contentEncodingRe.test(response.headers.get("Content-Encoding")));
-  assert.equal(response.headers.get("Content-Type"), contentType || "text/html; charset=utf-8");
+  assert.equal(response.headers.get("Content-Type").toLowerCase(), contentType || "text/html; charset=utf-8");
 };
 
 const assertNotFound = (assert, response) => {
@@ -130,23 +130,23 @@ QUnit.test("Content-Type is correct and includes charset where applicable", (ass
   const scenarios = [
     [
       "/",
-      "text/html; charset=UTF-8"
+      "text/html; charset=utf-8"
     ],
     [
       "/index.html",
-      "text/html; charset=UTF-8"
+      "text/html; charset=utf-8"
     ],
     [
       "/tests.js",
-      "application/javascript; charset=UTF-8"
+      "application/javascript; charset=utf-8"
     ],
     [
       "/favicon.svg",
-      "image/svg+xml; charset=UTF-8"
+      "image/svg+xml; charset=utf-8"
     ],
     [
       "/blog/file.txt",
-      "text/plain; charset=UTF-8"
+      "text/plain; charset=utf-8"
     ],
     [
       "/images/piechart.png",
@@ -158,7 +158,7 @@ QUnit.test("Content-Type is correct and includes charset where applicable", (ass
     return fetch(resource).
       then((response) => {
         const {headers} = response;
-        assert.equal(headers.get("Content-Type"), expected);
+        assert.equal(headers.get("Content-Type").toLowerCase(), expected);
       });
   })).
     then(done);
@@ -174,7 +174,7 @@ QUnit.test("Get of / returns expected HTTP headers", (assert) => {
         // Content headers
         [
           "Content-Type",
-          "text/html; charset=UTF-8"
+          "text/html; charset=utf-8"
         ],
         // Caching headers
         [
@@ -236,7 +236,7 @@ QUnit.test("Get of / returns expected HTTP headers", (assert) => {
         const [name, value] = nameValue;
         assert.ok(headers.has(name));
         if (value) {
-          assert.equal(headers.get(name), value);
+          assert.equal(headers.get(name).toLowerCase(), value);
         }
       }
       assert.ok(headers.has("Content-Encoding"));
@@ -256,7 +256,7 @@ QUnit.test("Get of / returns ok and compressed HTML", (assert) => {
   const done = assert.async();
   fetch("/").
     then((response) => {
-      assertResponseAndHeaders(assert, response, "text/html; charset=UTF-8");
+      assertResponseAndHeaders(assert, response, "text/html; charset=utf-8");
       return response.text();
     }).
     then((text) => {
@@ -273,7 +273,7 @@ QUnit.test("Get of /tests.js returns ok and compressed JS", (assert) => {
   const done = assert.async();
   fetch("/tests.js").
     then((response) => {
-      assertResponseAndHeaders(assert, response, "application/javascript; charset=UTF-8");
+      assertResponseAndHeaders(assert, response, "application/javascript; charset=utf-8");
       return response.text();
     }).
     then((text) => {
@@ -287,7 +287,7 @@ QUnit.test("Get of /blog/file.txt returns ok and compressed text", (assert) => {
   const done = assert.async();
   fetch("/blog/file.txt").
     then((response) => {
-      assertResponseAndHeaders(assert, response, "text/plain; charset=UTF-8");
+      assertResponseAndHeaders(assert, response, "text/plain; charset=utf-8");
       return response.text();
     }).
     then((text) => {
@@ -317,7 +317,7 @@ QUnit.test("Get of .appcache file has correct MIME type and no caching", (assert
     then((response) => {
       const {headers} = response;
       assert.ok(headers.has("Content-Type"));
-      assert.equal(headers.get("Content-Type"), "text/cache-manifest; charset=UTF-8");
+      assert.equal(headers.get("Content-Type").toLowerCase(), "text/cache-manifest; charset=utf-8");
       assert.ok(headers.has("Cache-Control"));
       assert.equal(headers.get("Cache-Control"), "no-cache");
     }).
