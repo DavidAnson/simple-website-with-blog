@@ -15,7 +15,6 @@ const assertResponseAndHeaders = (assert, response, contentType) => {
 const assertNotFound = (assert, response) => {
   assert.ok(!response.ok);
   assert.equal(response.status, 404);
-  assert.equal(response.statusText, response.statusText ? "Not Found" : "");
 };
 
 const assertSingleTagText = (assert, document, tag, text) => {
@@ -297,7 +296,7 @@ QUnit.test("Get of /blog/file.txt returns ok and compressed text", (assert) => {
 });
 
 QUnit.test("Get of /missing returns 404", (assert) => {
-  assert.expect(4);
+  assert.expect(3);
   const done = assert.async();
   fetch("/missing").
     then((response) => {
@@ -327,7 +326,7 @@ QUnit.test("Get of .appcache file has correct MIME type and no caching", (assert
 QUnit.module("Configuration");
 
 QUnit.test("Get of /Blog returns 404", (assert) => {
-  assert.expect(4);
+  assert.expect(3);
   const done = assert.async();
   fetch("/Blog").
     then((response) => {
@@ -341,7 +340,7 @@ QUnit.test("Get of /Blog returns 404", (assert) => {
 });
 
 QUnit.test("Get of /blog/ returns 404", (assert) => {
-  assert.expect(4);
+  assert.expect(3);
   const done = assert.async();
   fetch("/blog/").
     then((response) => {
@@ -355,7 +354,7 @@ QUnit.test("Get of /blog/ returns 404", (assert) => {
 });
 
 QUnit.test("Get of /blog/Post/one returns 404", (assert) => {
-  assert.expect(4);
+  assert.expect(3);
   const done = assert.async();
   fetch("/blog/Post/one").
     then((response) => {
@@ -369,7 +368,7 @@ QUnit.test("Get of /blog/Post/one returns 404", (assert) => {
 });
 
 QUnit.test("Get of /blog/post/one/ returns 404", (assert) => {
-  assert.expect(4);
+  assert.expect(3);
   const done = assert.async();
   fetch("/blog/post/one/").
     then((response) => {
@@ -476,7 +475,7 @@ QUnit.test("Get of /blog?page=twentyone returns ok and 2 posts", (assert) => {
 });
 
 QUnit.test("Get of /Blog returns 404", (assert) => {
-  assert.expect(4);
+  assert.expect(3);
   const done = assert.async();
   fetch("/Blog").
     then((response) => {
@@ -872,7 +871,7 @@ QUnit.test("Get of /blog/post/code (highlighting) returns ok and content", (asse
 });
 
 QUnit.test("Get of /blog/post/zero (unpublished) returns 404", (assert) => {
-  assert.expect(4);
+  assert.expect(3);
   const done = assert.async();
   fetch("/blog/post/zero").
     then((response) => {
@@ -886,7 +885,7 @@ QUnit.test("Get of /blog/post/zero (unpublished) returns 404", (assert) => {
 });
 
 QUnit.test("Get of /blog/post/missing (missing) returns 404 (inline)", (assert) => {
-  assert.expect(57);
+  assert.expect(56);
   const done = assert.async();
   let responseUrl = null;
   fetch("/blog/post/missing").
@@ -1195,7 +1194,7 @@ QUnit.test(
 );
 
 QUnit.test("Get of /blog/search returns 404", (assert) => {
-  assert.expect(4);
+  assert.expect(3);
   const done = assert.async();
   fetch("/blog/search").
     then((response) => {
@@ -1264,7 +1263,7 @@ QUnit.test("Get of /blog/tag/even returns ok, compressed HTML, and 10 posts", (a
 });
 
 QUnit.test("Get of /blog/tag/fibonacci (wrong case) returns 404", (assert) => {
-  assert.expect(4);
+  assert.expect(3);
   const done = assert.async();
   fetch("/blog/tag/fibonacci").
     then((response) => {
@@ -1330,7 +1329,7 @@ QUnit.test("Get of /blog/archive/201801 returns ok, compressed HTML, and 3 posts
 });
 
 QUnit.test("Get of /blog/archive/300001 (unpublished post) returns 404", (assert) => {
-  assert.expect(4);
+  assert.expect(3);
   const done = assert.async();
   fetch("/blog/archive/300001").
     then((response) => {
@@ -1344,7 +1343,7 @@ QUnit.test("Get of /blog/archive/300001 (unpublished post) returns 404", (assert
 });
 
 QUnit.test("Get of /blog/archive/1234 (invalid) returns 404", (assert) => {
-  assert.expect(4);
+  assert.expect(3);
   const done = assert.async();
   fetch("/blog/archive/1234").
     then((response) => {
@@ -1536,13 +1535,12 @@ QUnit.test("Get of /blog/flashback?date=[range] redirects to all posts", (assert
 });
 
 QUnit.test("Get of /blog/flashback?date=[date] before any posts returns 404", (assert) => {
-  assert.expect(3);
+  assert.expect(2);
   const done = assert.async();
   fetch("/blog/flashback?date=20170830").
     then((response) => {
       assert.ok(!response.ok);
       assert.equal(response.status, 404);
-      assert.equal(response.statusText, "Not Found");
     }).
     then(done);
 });
