@@ -137,7 +137,7 @@ QUnit.test("Content-Type is correct and includes charset where applicable", (ass
     ],
     [
       "/tests.js",
-      "application/javascript; charset=utf-8"
+      "text/javascript; charset=utf-8"
     ],
     [
       "/favicon.svg",
@@ -272,7 +272,7 @@ QUnit.test("Get of /tests.js returns ok and compressed JS", (assert) => {
   const done = assert.async();
   fetch("/tests.js").
     then((response) => {
-      assertResponseAndHeaders(assert, response, "application/javascript; charset=utf-8");
+      assertResponseAndHeaders(assert, response, "text/javascript; charset=utf-8");
       return response.text();
     }).
     then((text) => {
