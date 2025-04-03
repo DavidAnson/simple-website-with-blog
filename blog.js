@@ -380,9 +380,11 @@ router.get("/tag/:tag", (req, res, next) => {
   return renderPosts(req, res, next, posts, true, null, null, tag);
 });
 
-router.get("/archive/:period(\\d{6})", (req, res, next) => {
-  const year = Number.parseInt(req.params.period.slice(0, 4), baseTen);
-  const month = Number.parseInt(req.params.period.slice(4, 6), baseTen) - 1;
+router.get(/^\/archive\/(\d{6})$/u, (req, res, next) => {
+  // eslint-disable-next-line prefer-destructuring
+  const period = req.params[0];
+  const year = Number.parseInt(period.slice(0, 4), baseTen);
+  const month = Number.parseInt(period.slice(4, 6), baseTen) - 1;
   const posts = postsSortedByContentDate.
     filter(getPublishedPostFilter()).
     filter((post) => (post.contentDate.getFullYear() === year) &&
