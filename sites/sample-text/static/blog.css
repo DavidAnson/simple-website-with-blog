@@ -147,15 +147,6 @@ body {
 .markdown pre > code {
   background-color: transparent;
 }
-.delay img {
-  padding: 0;
-}
-.delay .TipHeader {
-  font-weight: bolder;
-}
-.delay .TipTip {
-  color: #e63e00;
-}
 h1 {
   font-size: 170%;
 }
