@@ -315,9 +315,9 @@ const renderPosts = (req, res, next, posts, noindex, title, period, tag, query) 
   if (nextIndex < posts.length) {
     const nextLinkParams = {
       ...searchParams,
-      ...queryParams
+      ...queryParams,
+      [pageParam]: posts[nextIndex].id
     };
-    nextLinkParams[pageParam] = posts[nextIndex].id;
     nextLink = `${url.pathname}${questionQueryString(nextLinkParams)}`;
   }
   const elements = render.getHtmlElements({
