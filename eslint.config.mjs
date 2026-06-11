@@ -49,6 +49,7 @@ export default [
 
       "unicorn/no-array-callback-reference": "off",
       "unicorn/no-null": "off",
+      "unicorn/no-this-outside-of-class": "off",
       "unicorn/no-unreadable-array-destructuring": "off",
       "unicorn/prefer-module": "off",
       "unicorn/prefer-query-selector": "off",
