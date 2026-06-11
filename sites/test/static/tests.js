@@ -1,5 +1,7 @@
 "use strict";
 
+/* eslint-disable unicorn/better-dom-traversing */
+
 // Suppress [ts] Cannot find name 'QUnit'.
 // eslint-disable-next-line no-var, no-use-before-define
 var QUnit = QUnit;
