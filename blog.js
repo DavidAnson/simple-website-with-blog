@@ -1,5 +1,7 @@
 "use strict";
 
+/* eslint-disable unicorn/name-replacements */
+
 const {hostnameToken, showFuturePosts, redirectToHttps, siteRoot} = require("./config");
 const {createHash, randomInt} = require("node:crypto");
 const fs = require("node:fs").promises;
@@ -93,6 +95,7 @@ const getArchivePeriods = () => {
   let lastPeriodValue = 0;
   const publishedPostFilter = getPublishedPostFilter();
   for (const post of postsSortedByContentDate) {
+    // eslint-disable-next-line unicorn/prefer-continue
     if (publishedPostFilter(post)) {
       const postPeriod = new Date(post.contentDate.getFullYear(), post.contentDate.getMonth());
       if (postPeriod.getTime() !== lastPeriodValue) {

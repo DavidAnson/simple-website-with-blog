@@ -1,6 +1,6 @@
 "use strict";
 
-/* eslint-disable unicorn/better-dom-traversing, unicorn/prefer-unicode-code-point-escapes */
+/* eslint-disable unicorn/better-dom-traversing, unicorn/name-replacements, unicorn/no-array-front-mutation, unicorn/prefer-unicode-code-point-escapes */
 
 // Suppress [ts] Cannot find name 'QUnit'.
 // eslint-disable-next-line no-var, no-use-before-define

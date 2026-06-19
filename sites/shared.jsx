@@ -139,6 +139,7 @@ module.exports.getOpenGraph = (props, context, strings) => {
 };
 
 module.exports.getPrevNextLinks = (props) => {
+  // eslint-disable-next-line unicorn/name-replacements
   const prevLink = props.prevLink ? <a href={props.prevLink}>{"\u{AB}"} Previous Posts</a> : null;
   const nextLink = props.nextLink ? <a href={props.nextLink}>Next Posts {"\u{BB}"}</a> : null;
   return (prevLink || nextLink)
