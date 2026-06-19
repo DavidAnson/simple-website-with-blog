@@ -51,9 +51,13 @@ export default [
       "unicorn/no-null": "off",
       "unicorn/no-this-outside-of-class": "off",
       "unicorn/no-unreadable-array-destructuring": "off",
+      "unicorn/no-unreadable-new-expression": "off",
+      "unicorn/no-unsafe-string-replacement": "off",
+      "unicorn/prefer-await": "off",
       "unicorn/prefer-module": "off",
       "unicorn/prefer-query-selector": "off",
       "unicorn/prefer-string-raw": "off",
+      "unicorn/prefer-temporal": "off",
       "unicorn/prefer-top-level-await": "off",
       "unicorn/prevent-abbreviations": "off"
     }

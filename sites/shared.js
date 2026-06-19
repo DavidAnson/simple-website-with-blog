@@ -107,11 +107,11 @@ module.exports.getOpenGraph = (props, context, strings) => {
 };
 module.exports.getPrevNextLinks = (props) => {
     const prevLink = props.prevLink ? React.createElement("a", { href: props.prevLink },
-        "\u00AB",
+        "\u{AB}",
         " Previous Posts") : null;
     const nextLink = props.nextLink ? React.createElement("a", { href: props.nextLink },
         "Next Posts ",
-        "\u00BB") : null;
+        "\u{BB}") : null;
     return (prevLink || nextLink)
         ? React.createElement("div", { className: "navigation" },
             prevLink,
