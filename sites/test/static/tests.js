@@ -1,6 +1,6 @@
 "use strict";
 
-/* eslint-disable unicorn/better-dom-traversing */
+/* eslint-disable unicorn/better-dom-traversing, unicorn/prefer-unicode-code-point-escapes */
 
 // Suppress [ts] Cannot find name 'QUnit'.
 // eslint-disable-next-line no-var, no-use-before-define
@@ -8,10 +8,10 @@ var QUnit = QUnit;
 
 const contentEncodingRe = /^(br|gzip)$/u;
 
-const assertResponseAndHeaders = (assert, response, contentType) => {
+const assertResponseAndHeaders = (assert, response, contentType = "text/html; charset=utf-8") => {
   assert.ok(response.ok);
   assert.ok(contentEncodingRe.test(response.headers.get("Content-Encoding")));
-  assert.equal(response.headers.get("Content-Type").toLowerCase(), contentType || "text/html; charset=utf-8");
+  assert.equal(response.headers.get("Content-Type").toLowerCase(), contentType);
 };
 
 const assertNotFound = (assert, response) => {
@@ -21,7 +21,7 @@ const assertNotFound = (assert, response) => {
 
 const assertSingleTagText = (assert, document, tag, text) => {
   assert.equal(document.getElementsByTagName(tag).length, 1);
-  assert.equal(document.getElementsByTagName(tag)[0].innerHTML, text);
+  assert.equal(document.getElementsByTagName(tag)[0].getHTML(), text);
 };
 
 const assertMetaCharset = (assert, metas, charSet = "charSet") => {
@@ -50,7 +50,7 @@ const assertFavIcon = (assert, document) => {
   )));
 };
 
-const assertPageMetadata = (assert, responseUrl, text, noindex, titlePrefix, innerTitle) => {
+const assertPageMetadata = (assert, responseUrl, text, noindex, titlePrefix = "", innerTitle = "") => {
   const unifiedTitlePrefix = (titlePrefix || innerTitle) ? `${titlePrefix || innerTitle} - ` : "";
   const siteName = "simple-website-with-blog/test";
   const title = `${unifiedTitlePrefix}${siteName}`;
@@ -89,7 +89,7 @@ const assertElementNameText = (assert, element, name, text) => {
   assert.equal(element.textContent, text);
 };
 
-const assertListTextAndLinks = (assert, doc, id, base, texts, links) => {
+const assertListTextAndLinks = (assert, doc, id, base, texts, links = null) => {
   const list = doc.getElementById(id) || doc.getElementsByClassName(id)[0].lastElementChild;
   assert.equal(list.children.length, texts.length);
   for (const li of list.children) {
@@ -400,7 +400,7 @@ QUnit.test("Get of /blog returns ok, compressed HTML, and 10 posts", (assert) =>
       assert.equal(doc.getElementsByTagName("h3").length, 10);
       const postTitles = "one two three four five six seven eight nine ten".split(" ");
       for (const item of doc.getElementsByTagName("h3")) {
-        assert.equal(item.innerHTML, postTitles.shift());
+        assert.equal(item.getHTML(), postTitles.shift());
       }
       assert.equal(doc.getElementsByTagName("a").length, 24);
       const nav = doc.getElementsByClassName("navigation");
@@ -431,7 +431,7 @@ QUnit.test("Get of /blog?page=twenty returns ok and 10 posts", (assert) => {
         "twenty nineteen eighteen seventeen sixteen fifteen fourteen thirteen twelve eleven".
           split(" ");
       for (const item of doc.getElementsByTagName("h3")) {
-        assert.equal(item.innerHTML, postTitles.shift());
+        assert.equal(item.getHTML(), postTitles.shift());
       }
       assert.equal(doc.getElementsByTagName("a").length, 20);
       const nav = doc.getElementsByClassName("navigation");
@@ -462,7 +462,7 @@ QUnit.test("Get of /blog?page=twentyone returns ok and 2 posts", (assert) => {
       assert.equal(doc.getElementsByTagName("h3").length, 2);
       const postTitles = "twentyone twentytwo".split(" ");
       for (const item of doc.getElementsByTagName("h3")) {
-        assert.equal(item.innerHTML, postTitles.shift());
+        assert.equal(item.getHTML(), postTitles.shift());
       }
       assert.equal(doc.getElementsByTagName("a").length, 13);
       const nav = doc.getElementsByClassName("navigation");
@@ -931,7 +931,7 @@ QUnit.test("Get of /blog/search?query=tw* returns ok, compressed HTML, and 4 pos
       assert.equal(doc.getElementsByTagName("h3").length, 5);
       const postTitles = "two twentytwo twentyone twenty twelve".split(" ");
       for (const item of doc.getElementsByTagName("h3")) {
-        assert.equal(item.innerHTML, postTitles.shift());
+        assert.equal(item.getHTML(), postTitles.shift());
       }
       assert.equal(doc.getElementsByTagName("a").length, 16);
       assert.equal(doc.getElementById("tags").children.length, 3);
@@ -1008,7 +1008,7 @@ QUnit.test(
         assert.equal(doc.getElementsByTagName("h3").length, 1);
         const postTitles = "eight".split(" ");
         for (const item of doc.getElementsByTagName("h3")) {
-          assert.equal(item.innerHTML, postTitles.shift());
+          assert.equal(item.getHTML(), postTitles.shift());
         }
         assert.equal(doc.getElementsByTagName("a").length, 12);
         assert.equal(doc.getElementById("tags").children.length, 3);
@@ -1042,7 +1042,7 @@ QUnit.test(
         assert.equal(doc.getElementsByTagName("h3").length, 1);
         const postTitles = "nineteen".split(" ");
         for (const item of doc.getElementsByTagName("h3")) {
-          assert.equal(item.innerHTML, postTitles.shift());
+          assert.equal(item.getHTML(), postTitles.shift());
         }
         assert.equal(doc.getElementsByTagName("a").length, 10);
         assert.equal(doc.getElementById("tags").children.length, 3);
@@ -1076,7 +1076,7 @@ QUnit.test(
         assert.equal(doc.getElementsByTagName("h3").length, 3);
         const postTitles = "one two three".split(" ");
         for (const item of doc.getElementsByTagName("h3")) {
-          assert.equal(item.innerHTML, postTitles.shift());
+          assert.equal(item.getHTML(), postTitles.shift());
         }
         assert.equal(doc.getElementsByTagName("a").length, 15);
         assert.equal(doc.getElementById("tags").children.length, 3);
@@ -1110,7 +1110,7 @@ QUnit.test(
         assert.equal(doc.getElementsByTagName("h3").length, 6);
         const postTitles = "one two three four five six".split(" ");
         for (const item of doc.getElementsByTagName("h3")) {
-          assert.equal(item.innerHTML, postTitles.shift());
+          assert.equal(item.getHTML(), postTitles.shift());
         }
         assert.equal(doc.getElementsByTagName("a").length, 19);
         assert.equal(doc.getElementById("tags").children.length, 3);
@@ -1137,7 +1137,7 @@ QUnit.test(
         assert.equal(doc.getElementsByTagName("h3").length, 2);
         const postTitles = "five six".split(" ");
         for (const item of doc.getElementsByTagName("h3")) {
-          assert.equal(item.innerHTML, postTitles.shift());
+          assert.equal(item.getHTML(), postTitles.shift());
         }
         assert.equal(doc.getElementsByTagName("a").length, 14);
         const nav = doc.getElementsByClassName("navigation");
@@ -1177,7 +1177,7 @@ QUnit.test(
         assert.equal(doc.getElementsByTagName("h3").length, 10);
         const postTitles = "one two three four five six seven eight nine ten".split(" ");
         for (const item of doc.getElementsByTagName("h3")) {
-          assert.equal(item.innerHTML, postTitles.shift());
+          assert.equal(item.getHTML(), postTitles.shift());
         }
         assert.equal(doc.getElementsByTagName("a").length, 24);
         const nav = doc.getElementsByClassName("navigation");
@@ -1250,7 +1250,7 @@ QUnit.test("Get of /blog/tag/even returns ok, compressed HTML, and 10 posts", (a
       const postTitles =
         "two four six eight ten twelve fourteen sixteen eighteen twenty".split(" ");
       for (const item of doc.getElementsByTagName("h3")) {
-        assert.equal(item.innerHTML, postTitles.shift());
+        assert.equal(item.getHTML(), postTitles.shift());
       }
       assert.equal(doc.getElementsByTagName("a").length, 25);
       const nav = doc.getElementsByClassName("navigation");
@@ -1321,7 +1321,7 @@ QUnit.test("Get of /blog/archive/201801 returns ok, compressed HTML, and 3 posts
       assert.equal(doc.getElementsByTagName("h3").length, 3);
       const postTitles = "four five six".split(" ");
       for (const item of doc.getElementsByTagName("h3")) {
-        assert.equal(item.innerHTML, postTitles.shift());
+        assert.equal(item.getHTML(), postTitles.shift());
       }
       assert.equal(doc.getElementsByTagName("a").length, 14);
       assert.equal(doc.getElementById("tags").children.length, 3);

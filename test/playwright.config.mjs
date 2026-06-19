@@ -23,21 +23,21 @@ export default defineConfig({
     {
       "command": "npm run test",
       "env": {
-        "PORT": `${testPort}`
+        "PORT": String(testPort)
       },
       "url": testUrl
     },
     {
       "command": "npm run text",
       "env": {
-        "PORT": `${textPort}`
+        "PORT": String(textPort)
       },
       "url": textUrl,
     },
     {
       "command": "npm run photo",
       "env": {
-        "PORT": `${photoPort}`
+        "PORT": String(photoPort)
       },
       "url": photoUrl
     }

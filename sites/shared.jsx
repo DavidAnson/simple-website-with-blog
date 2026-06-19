@@ -139,8 +139,8 @@ module.exports.getOpenGraph = (props, context, strings) => {
 };
 
 module.exports.getPrevNextLinks = (props) => {
-  const prevLink = props.prevLink ? <a href={props.prevLink}>{"\u00AB"} Previous Posts</a> : null;
-  const nextLink = props.nextLink ? <a href={props.nextLink}>Next Posts {"\u00BB"}</a> : null;
+  const prevLink = props.prevLink ? <a href={props.prevLink}>{"\u{AB}"} Previous Posts</a> : null;
+  const nextLink = props.nextLink ? <a href={props.nextLink}>Next Posts {"\u{BB}"}</a> : null;
   return (prevLink || nextLink)
     ? <div className="navigation">{prevLink}{nextLink && prevLink ? " | " : ""}{nextLink}</div>
     : null;
