@@ -189,16 +189,15 @@ QUnit.test("Get of / returns expected HTTP headers", (assert) => {
         // Security headers
         [
           "Content-Security-Policy",
-          "script-src 'self' code.jquery.com;" +
-            "style-src 'self' 'unsafe-inline' code.jquery.com;" +
-            "default-src 'self';" +
-            "base-uri 'self';" +
+          "default-src 'self';base-uri 'self';" +
             "font-src 'self' https: data:;" +
             "form-action 'self';" +
             "frame-ancestors 'self';" +
             "img-src 'self' data:;" +
             "object-src 'none';" +
-            "script-src-attr 'none'"
+            "script-src 'self' code.jquery.com;" +
+            "script-src-attr 'none';" +
+            "style-src 'self' 'unsafe-inline' code.jquery.com"
         ],
         [
           "Feature-Policy",
