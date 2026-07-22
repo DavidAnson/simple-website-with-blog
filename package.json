@@ -49,7 +49,7 @@
     "lunr": "2.3.9",
     "markdown-it": "14.3.0",
     "react": "19.2.7",
-    "react-dom": "19.2.7",
+    "react-dom": "19.2.8",
     "rss": "1.2.2"
   },
   "devDependencies": {
