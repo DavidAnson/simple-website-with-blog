@@ -47,6 +47,7 @@ export default [
       "prefer-named-capture-group": "off",
       "sort-keys": "off",
 
+      "unicorn/consistent-arrow-return-style": "off",
       "unicorn/name-replacements": [ "error", { "replacements": { "err": false, "props": false, "req": false, "res": false } } ],
       "unicorn/no-array-callback-reference": "off",
       "unicorn/no-null": "off",
