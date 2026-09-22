@@ -309,6 +309,7 @@ const renderPosts = (req, res, next, posts, noindex, title, period, tag, query) 
       ...searchParams,
       ...queryParams
     };
+    // eslint-disable-next-line unicorn/no-immediate-mutation
     if (prevIndex > 0) {
       prevLinkParams[pageParam] = posts[prevIndex].id;
     }
@@ -366,6 +367,7 @@ router.get("/post/:id", (req, res, next) => {
   const posts = postsSortedByContentDate.
     filter(getPublishedPostFilter(true, 0)).
     filter((post) => post.id === req.params.id);
+  // eslint-disable-next-line unicorn/prefer-ternary
   if (posts.length === 0) {
     return next();
   }
@@ -377,6 +379,7 @@ router.get("/tag/:tag", (req, res, next) => {
   const posts = postsSortedByContentDate.
     filter(getPublishedPostFilter()).
     filter((post) => post.tags.includes(tag));
+  // eslint-disable-next-line unicorn/prefer-ternary
   if (posts.length === 0) {
     return next();
   }
@@ -392,6 +395,7 @@ router.get(/^\/archive\/(\d{6})$/u, (req, res, next) => {
     filter(getPublishedPostFilter()).
     filter((post) => (post.contentDate.getFullYear() === year) &&
       (post.contentDate.getMonth() === month));
+  // eslint-disable-next-line unicorn/prefer-ternary
   if (posts.length === 0) {
     return next();
   }

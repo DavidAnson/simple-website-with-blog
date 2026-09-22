@@ -24,6 +24,7 @@ app.use((req, res, next) => {
 // Redirect HTTP traffic to HTTPS
 if (redirectToHttps) {
   app.use((req, res, next) => {
+    // eslint-disable-next-line unicorn/prefer-ternary
     if (req.secure) {
       return next();
     }
@@ -34,8 +35,9 @@ if (redirectToHttps) {
 // Redirect to remove "www." prefix from host name
 app.use((req, res, next) => {
   const originalHostUrl = `//${req.headers.host}${req.originalUrl}`;
-  const redirectHost = req.headers.host.replace(/^www\./iu, "");
+  const redirectHost = req.headers.host?.replace(/^www\./iu, "");
   const redirectHostUrl = `//${redirectHost}${req.originalUrl}`;
+  // eslint-disable-next-line unicorn/prefer-ternary
   if (redirectHostUrl === originalHostUrl) {
     return next();
   }
