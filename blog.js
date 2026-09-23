@@ -309,7 +309,6 @@ const renderPosts = (req, res, next, posts, noindex, title, period, tag, query) 
       ...searchParams,
       ...queryParams
     };
-    // eslint-disable-next-line unicorn/no-immediate-mutation
     if (prevIndex > 0) {
       prevLinkParams[pageParam] = posts[prevIndex].id;
     }
