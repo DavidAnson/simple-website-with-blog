@@ -31,6 +31,7 @@ const markdownIt = new MarkdownIt({
     }
     return "";
   },
+  "html": false,
   "xhtmlOut": true
 });
 
