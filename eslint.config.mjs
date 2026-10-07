@@ -5,7 +5,7 @@ import unicorn from "eslint-plugin-unicorn";
 
 export default [
   js.configs.all,
-  unicorn.configs["flat/all"],
+  unicorn.configs.all,
   {
     "languageOptions": {
       "ecmaVersion": 2021,
