@@ -256,7 +256,7 @@ QUnit.test("Get of / returns ok and compressed HTML", (assert) => {
   const done = assert.async();
   fetch("/").
     then((response) => {
-      assertResponseAndHeaders(assert, response, "text/html; charset=utf-8");
+      assertResponseAndHeaders(assert, response);
       return response.text();
     }).
     then((text) => {
