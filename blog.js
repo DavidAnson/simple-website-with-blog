@@ -328,7 +328,7 @@ const renderPosts = (req, res, next, posts, noindex, title, period, tag, query) 
     "tags": getTagNames(),
     "archives": getArchivePeriods(),
     "noindex": noindex || (Object.keys(req.query).length > 0),
-    "publishedPostFilter": getPublishedPostFilter(true, 0),
+    "publishedPostFilter": getPublishedPostFilter(true),
     urlHref,
     title,
     period,
@@ -364,7 +364,7 @@ router.get("/", (req, res, next) => {
 
 router.get("/post/:id", (req, res, next) => {
   const posts = postsSortedByContentDate.
-    filter(getPublishedPostFilter(true, 0)).
+    filter(getPublishedPostFilter(true)).
     filter((post) => post.id === req.params.id);
   // eslint-disable-next-line unicorn/prefer-ternary
   if (posts.length === 0) {
