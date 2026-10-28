@@ -3,7 +3,6 @@
 import { defineConfig, devices } from "@playwright/test";
 import { photoPort, photoUrl, testPort, testUrl, textPort, textUrl } from "./playwright.shared.mjs";
 
-// eslint-disable-next-line unicorn/no-top-level-side-effects
 export default defineConfig({
   "testDir": ".",
   "projects": [
